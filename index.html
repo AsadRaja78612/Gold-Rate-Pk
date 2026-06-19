@@ -1,91 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Gold Rate Live</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+async function getRate(){
 
-<style>
-body{
-    font-family: Arial;
-    background:#111;
-    color:white;
-    text-align:center;
-    padding:20px;
+    let res = await fetch("https://metals-api.com/api/latest");
+    let data = await res.json();
+
+    // ✔️ REAL GOLD PRICE (IMPORTANT FIX)
+    let usdPerOunce = data.rates["Gold(USDXAU)"];
+
+    let usdToPkr = 280;
+
+    const OUNCE_TO_GRAM = 31.1035;
+    const GRAM_TO_TOLA = 11.6638;
+
+    // conversions
+    let usdPerGram = usdPerOunce / OUNCE_TO_GRAM;
+    let pkrPerGram = usdPerGram * usdToPkr;
+    let pkrPerTola = pkrPerGram * GRAM_TO_TOLA;
+
+    // UI
+    document.getElementById("usdOunce").innerText = usdPerOunce.toFixed(2);
+    document.getElementById("gram").innerText = pkrPerGram.toFixed(0);
+    document.getElementById("tola").innerText = pkrPerTola.toFixed(0);
+
 }
-.box{
-    background:#1e1e1e;
-    padding:20px;
-    margin-top:15px;
-    border-radius:12px;
-}
-h1{color:gold;}
-.rate{font-size:20px;margin:10px;}
-button{
-    padding:10px 15px;
-    background:green;
-    color:white;
-    border:none;
-    border-radius:8px;
-}
-</style>
-</head>
-
-<body>
-
-<h1>💰 Gold Rate Live</h1>
-
-<div class="box">
-    <div class="rate">USD/Ounce: $<span id="usdOunce"></span></div>
-    <div class="rate">Per Tola: Rs <span id="tola"></span></div>
-    <div class="rate">Per Gram: Rs <span id="gram"></span></div>
-</div>
-
-<div class="box">
-    <button onclick="updateRate()">🔄 Refresh</button>
-</div>
-
-<div class="box">
-    <a id="wa" target="_blank">
-        <button>📲 WhatsApp</button>
-    </a>
-</div>
-
-<script>
-
-// ✔️ FIXED REAL STRUCTURE
-let usdOunce = 2350;     // base international price
-let usdToPkr = 280;
-
-// constants
-const OZ_TO_GRAM = 31.1035;
-const GRAM_TO_TOLA = 11.6638;
-
-function updateRate(){
-
-    let usdGram = usdOunce / OZ_TO_GRAM;
-
-    let pkrGram = usdGram * usdToPkr;
-    let pkrTola = pkrGram * GRAM_TO_TOLA;
-    let pkrOunce = usdOunce * usdToPkr;
-
-    document.getElementById("usdOunce").innerText = usdOunce.toFixed(2);
-    document.getElementById("tola").innerText = pkrTola.toFixed(0);
-    document.getElementById("gram").innerText = pkrGram.toFixed(0);
-
-    let msg =
-`Gold Rate Update:
-USD/Ounce: $${usdOunce}
-Per Tola: Rs ${pkrTola.toFixed(0)}
-Per Gram: Rs ${pkrGram.toFixed(0)}`;
-
-    document.getElementById("wa").href =
-    "https://wa.me/923115855885?text=" + encodeURIComponent(msg);
-}
-
-updateRate();
-
-</script>
-
-</body>
-</html>
