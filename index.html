@@ -1,50 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gold Rate Pakistan</title>
+    <title>Gold Rate Pakistan Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
 
-<body style="font-family: Arial; text-align:center; background:#111; color:white; padding:20px;">
-
-    <h1>💰 Live Gold Rate Pakistan</h1>
-
-    <h2>24K Gold</h2>
-    <h1 id="gold">Loading...</h1>
-
-    <p>Auto updated (approx value)</p>
-
-    <script>
-        async function getGoldPrice() {
-            try {
-                // international gold price API
-                let res = await fetch("https://api.gold-api.com/price/XAU");
-                let data = await res.json();
-
-                let priceUSD = data.price;
-
-                // convert ounce to gram
-                let perGramUSD = priceUSD / 31.1035;
-
-                // PKR rate (approx)
-                let usdToPkr = 280;
-
-                let goldPKR = perGramUSD * usdToPkr;
-
-                document.getElementById("gold").innerHTML =
-                    "Rs " + goldPKR.toFixed(2);
-            }
-            catch (e) {
-                document.getElementById("gold").innerHTML =
-                    "Data load nahi ho raha";
-            }
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #0f172a;
+            color: white;
         }
 
-        getGoldPrice();
+        header {
+            background: #111827;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
 
-        // auto refresh every 60 seconds
-        setInterval(getGoldPrice, 60000);
-    </script>
+        .container {
+            padding: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .card {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .price {
+            font-size: 18px;
+            color: gold;
+            margin-top: 5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>💰 Gold Rate Pakistan Dashboard</header>
+
+<div class="container">
+
+    <select id="city" onchange="updateRates()">
+        <option>Lahore</option>
+        <option>Karachi</option>
+        <option>Islamabad</option>
+    </select>
+
+    <div class="grid">
+        <div class="card">
+            <h3>24K</h3>
+            <div class="price" id="gold24">Loading...</div>
+        </div>
+
+        <div class="card">
+            <h3>22K</h3>
+            <div class="price" id="gold22">Loading...</div>
+        </div>
+
+        <div class="card">
+            <h3>21K</h3>
+            <div class="price" id="gold21">Loading...</div>
+        </div>
+
+        <div class="card">
+            <h3>Daily Change</h3>
+            <div class="price" id="change">+0%</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+let basePrice = 37385;
+
+function updateRates() {
+
+    let city = document.getElementById("city").value;
+
+    // city variation (simple simulation)
+    let cityFactor = 1;
+
+    if(city === "Karachi") cityFactor = 1.01;
+    if(city === "Lahore") cityFactor = 1.00;
+    if(city === "Islamabad") cityFactor = 1.005;
+
+    let gold24 = basePrice * cityFactor;
+    let gold22 = gold24 * 0.916;
+    let gold21 = gold24 * 0.875;
+
+    document.getElementById("gold24").innerHTML = "Rs " + gold24.toFixed(2);
+    document.getElementById("gold22").innerHTML = "Rs " + gold22.toFixed(2);
+    document.getElementById("gold21").innerHTML = "Rs " + gold21.toFixed(2);
+
+    document.getElementById("change").innerHTML = "+0.8%";
+}
+
+updateRates();
+
+</script>
 
 </body>
 </html>
