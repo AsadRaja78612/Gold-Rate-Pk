@@ -3,58 +3,58 @@
 <head>
   <title>Live Gold Rate Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     body {
       font-family: Arial;
-      background: #0f172a;
+      background: #0b1220;
       color: white;
       text-align: center;
-      margin: 0;
       padding: 20px;
     }
     .card {
       background: #111827;
-      padding: 20px;
+      padding: 18px;
       margin: 10px auto;
-      width: 90%;
-      max-width: 500px;
+      width: 92%;
+      max-width: 520px;
       border-radius: 12px;
-      box-shadow: 0 0 10px #000;
     }
     .price {
-      font-size: 28px;
+      font-size: 26px;
       color: gold;
       font-weight: bold;
+      margin-top: 8px;
     }
     a {
       color: #25D366;
-      text-decoration: none;
       font-weight: bold;
+      text-decoration: none;
     }
   </style>
 </head>
+
 <body>
 
 <h2>📊 Live Gold Rate Dashboard</h2>
 
 <div class="card">
-  <div>🌍 International Gold (USD/oz)</div>
-  <div class="price" id="goldPrice">Loading...</div>
+  🌍 International Gold (USD/oz)
+  <div class="price" id="usd">Loading...</div>
 </div>
 
 <div class="card">
-  <div>🇵🇰 PKR Rate (Per 10g)</div>
-  <div class="price" id="pkrRate">Loading...</div>
+  🇵🇰 PKR Rate (Per 10g)
+  <div class="price" id="pkr">Loading...</div>
 </div>
 
 <div class="card">
-  <div>🪙 21K Gold (11.664g Tola)</div>
-  <div class="price" id="tolaRate">Loading...</div>
+  🪙 21K Gold (11.664g Tola)
+  <div class="price" id="tola">Loading...</div>
 </div>
 
 <div class="card">
-  📱 WhatsApp Update:
-  <br>
+  📱 WhatsApp Update <br><br>
   <a href="https://wa.me/923115855885" target="_blank">
     Click to Join Community
   </a>
@@ -65,60 +65,72 @@
 </div>
 
 <script>
-const API_KEY = "YOUR_API_KEY"; // metals-api key
-let chart;
+
 let history = [];
+let chart;
 
-async function fetchGold() {
+// 🔥 LIVE GOLD API (no key)
+async function getGold() {
+  let res = await fetch("https://api.metals.live/v1/spot/gold");
+  let data = await res.json();
+  return data[0].price; // USD per oz
+}
+
+// 🔥 LIVE USD → PKR
+async function getPKR() {
+  let res = await fetch("https://api.exchangerate.host/latest?base=USD&symbols=PKR");
+  let data = await res.json();
+  return data.rates.PKR;
+}
+
+async function update() {
+
   try {
-    let res = await fetch(`https://metals-api.com/api/latest?access_key=${API_KEY}&base=USD&symbols=XAU`);
-    let data = await res.json();
+    let goldUSD = await getGold();
+    let usdToPkr = await getPKR();
 
-    let goldPerOz = 1 / data.rates.XAU; // inverse rate
-    let usdToPkr = 280; // manual approx (you can update)
+    let perGram = goldUSD / 31.1035;
 
-    let perGram = goldPerOz / 31.1035;
-    let tola21k = perGram * 11.664 * 0.875; // 21K purity
+    let pkr10g = perGram * usdToPkr * 10;
+    let tola21k = perGram * 11.664 * 0.875;
 
-    let pkrRate = perGram * usdToPkr * 10;
+    document.getElementById("usd").innerText = goldUSD.toFixed(2) + " USD";
+    document.getElementById("pkr").innerText = "Rs " + pkr10g.toFixed(0);
+    document.getElementById("tola").innerText = "Rs " + tola21k.toFixed(0);
 
-    document.getElementById("goldPrice").innerText = goldPerOz.toFixed(2) + " USD";
-    document.getElementById("pkrRate").innerText = "Rs " + pkrRate.toFixed(0);
-    document.getElementById("tolaRate").innerText = "Rs " + tola21k.toFixed(0);
-
-    updateChart(pkrRate);
+    updateChart(pkr10g);
 
   } catch (e) {
-    document.getElementById("goldPrice").innerText = "API Error";
+    console.log(e);
+    alert("API issue - try again");
   }
 }
 
-function updateChart(value) {
+function updateChart(val) {
   let time = new Date().toLocaleTimeString();
-  history.push({ time, value });
 
-  if (history.length > 10) history.shift();
+  history.push({ time, val });
+  if(history.length > 10) history.shift();
 
-  let ctx = document.getElementById('chart').getContext('2d');
+  if(chart) chart.destroy();
 
-  if (chart) chart.destroy();
-
-  chart = new Chart(ctx, {
-    type: 'line',
+  chart = new Chart(document.getElementById("chart"), {
+    type: "line",
     data: {
-      labels: history.map(h => h.time),
+      labels: history.map(x => x.time),
       datasets: [{
-        label: 'Gold PKR Trend',
-        data: history.map(h => h.value),
-        borderColor: 'gold',
+        label: "Gold PKR Trend",
+        data: history.map(x => x.val),
+        borderColor: "gold",
         fill: false
       }]
     }
   });
 }
 
-fetchGold();
-setInterval(fetchGold, 60000);
+update();
+setInterval(update, 10000);
+
 </script>
 
 </body>
