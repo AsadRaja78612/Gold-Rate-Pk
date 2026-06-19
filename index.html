@@ -1,113 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gold Rate Live</title>
-
-<style>
-body {
-    margin: 0;
-    font-family: Arial;
-    background: radial-gradient(circle, #2c2c2c, #000);
-    color: white;
-    text-align: center;
-}
-
-.header {
-    padding: 18px;
-    font-size: 24px;
-    font-weight: bold;
-    background: gold;
-    color: black;
-}
-
-.container {
-    width: 92%;
-    max-width: 520px;
-    margin: 20px auto;
-    background: rgba(255,255,255,0.08);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(255,215,0,0.3);
-}
-
-.price {
-    font-size: 34px;
-    margin: 10px 0;
-    color: gold;
-}
-
-button {
-    padding: 10px 18px;
-    background: gold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-canvas {
-    margin-top: 20px;
-    background: white;
-    border-radius: 10px;
-}
-</style>
+  <title>Live Gold Rate Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .card {
+      background: #111827;
+      padding: 20px;
+      margin: 10px auto;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #000;
+    }
+    .price {
+      font-size: 28px;
+      color: gold;
+      font-weight: bold;
+    }
+    a {
+      color: #25D366;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">💰 Live Gold Rate (PKR)</div>
+<h2>📊 Live Gold Rate Dashboard</h2>
 
-<div class="container">
-    <div>Current Gold Price</div>
-    <div class="price" id="price">Loading...</div>
-
-    <button onclick="updateGold()">Update Rate</button>
-
-    <canvas id="chart" width="400" height="220"></canvas>
+<div class="card">
+  <div>🌍 International Gold (USD/oz)</div>
+  <div class="price" id="goldPrice">Loading...</div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="card">
+  <div>🇵🇰 PKR Rate (Per 10g)</div>
+  <div class="price" id="pkrRate">Loading...</div>
+</div>
+
+<div class="card">
+  <div>🪙 21K Gold (11.664g Tola)</div>
+  <div class="price" id="tolaRate">Loading...</div>
+</div>
+
+<div class="card">
+  📱 WhatsApp Update:
+  <br>
+  <a href="https://wa.me/923115855885" target="_blank">
+    Click to Join Community
+  </a>
+</div>
+
+<div class="card">
+  <canvas id="chart"></canvas>
+</div>
 
 <script>
-let gold = 375000;
-let labels = [];
+const API_KEY = "YOUR_API_KEY"; // metals-api key
+let chart;
+let history = [];
 
-const ctx = document.getElementById("chart").getContext("2d");
+async function fetchGold() {
+  try {
+    let res = await fetch(`https://metals-api.com/api/latest?access_key=${API_KEY}&base=USD&symbols=XAU`);
+    let data = await res.json();
 
-const chart = new Chart(ctx, {
-    type: "line",
-    data: {
-        labels: [],
-        datasets: [{
-            label: "Gold Price Trend",
-            data: [],
-            borderColor: "gold",
-            backgroundColor: "rgba(255,215,0,0.2)",
-            fill: true,
-            tension: 0.3
-        }]
-    }
-});
+    let goldPerOz = 1 / data.rates.XAU; // inverse rate
+    let usdToPkr = 280; // manual approx (you can update)
 
-function updateGold() {
-    let change = (Math.random() * 3000 - 1500);
-    gold = Math.round(gold + change);
+    let perGram = goldPerOz / 31.1035;
+    let tola21k = perGram * 11.664 * 0.875; // 21K purity
 
-    document.getElementById("price").innerText = gold + " PKR";
+    let pkrRate = perGram * usdToPkr * 10;
 
-    let time = new Date().toLocaleTimeString();
+    document.getElementById("goldPrice").innerText = goldPerOz.toFixed(2) + " USD";
+    document.getElementById("pkrRate").innerText = "Rs " + pkrRate.toFixed(0);
+    document.getElementById("tolaRate").innerText = "Rs " + tola21k.toFixed(0);
 
-    chart.data.labels.push(time);
-    chart.data.datasets[0].data.push(gold);
+    updateChart(pkrRate);
 
-    chart.update();
+  } catch (e) {
+    document.getElementById("goldPrice").innerText = "API Error";
+  }
 }
 
-// auto start
-updateGold();
-setInterval(updateGold, 4000);
+function updateChart(value) {
+  let time = new Date().toLocaleTimeString();
+  history.push({ time, value });
+
+  if (history.length > 10) history.shift();
+
+  let ctx = document.getElementById('chart').getContext('2d');
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: history.map(h => h.time),
+      datasets: [{
+        label: 'Gold PKR Trend',
+        data: history.map(h => h.value),
+        borderColor: 'gold',
+        fill: false
+      }]
+    }
+  });
+}
+
+fetchGold();
+setInterval(fetchGold, 60000);
 </script>
 
 </body>
