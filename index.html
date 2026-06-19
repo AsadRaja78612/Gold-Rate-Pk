@@ -1,166 +1,109 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gold Rate Pakistan</title>
+<title>Gold Rate Live</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#0f172a;
-color:white;
+body {
+  margin:0;
+  font-family: Arial;
+  background: linear-gradient(135deg,#0f0f0f,#1c1c1c);
+  color: gold;
 }
 
-.header{
-background:#111827;
-padding:15px;
-text-align:center;
-font-size:24px;
-font-weight:bold;
+.header {
+  text-align:center;
+  padding:20px;
+  font-size:24px;
+  font-weight:bold;
 }
 
-.container{
-padding:15px;
+.card {
+  background: rgba(255,255,255,0.05);
+  margin:20px;
+  padding:20px;
+  border-radius:15px;
+  box-shadow: 0 0 10px rgba(255,215,0,0.2);
 }
 
-select{
-width:100%;
-padding:12px;
-border-radius:10px;
-border:none;
-margin-bottom:15px;
-font-size:16px;
+.price {
+  font-size:30px;
+  text-align:center;
+  margin:10px 0;
 }
 
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
+.btn {
+  display:block;
+  text-align:center;
+  padding:12px;
+  margin:10px auto;
+  width:80%;
+  background:gold;
+  color:black;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:bold;
 }
 
-.card{
-background:#1f2937;
-padding:15px;
-border-radius:12px;
-text-align:center;
+select {
+  width:100%;
+  padding:10px;
+  border-radius:10px;
 }
 
-.price{
-font-size:22px;
-font-weight:bold;
-color:gold;
-}
-
-.market{
-font-size:20px;
-font-weight:bold;
-}
-
-.graph{
-margin-top:20px;
-background:#1f2937;
-padding:15px;
-border-radius:12px;
-}
-
-.bar{
-height:20px;
-background:gold;
-margin:8px 0;
-border-radius:10px;
-}
+.up { color: #00ff99; }
+.down { color: #ff4d4d; }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-💰 Gold Rate Pakistan
-</div>
+<div class="header">💰 Live Gold Rate</div>
 
-<div class="container">
+<div class="card">
 
-<select id="city" onchange="updateRates()">
-<option>Lahore</option>
-<option>Karachi</option>
-<option>Islamabad</option>
+<select id="currency">
+<option value="PKR">PKR</option>
+<option value="USD">USD</option>
+<option value="AED">AED</option>
 </select>
 
-<div class="grid">
+<div class="price" id="goldPrice">Loading...</div>
 
-<div class="card">
-<h3>24K</h3>
-<div id="gold24" class="price">Rs 37500</div>
-</div>
+<div id="status"></div>
 
-<div class="card">
-<h3>22K</h3>
-<div id="gold22" class="price">Rs 34350</div>
-</div>
-
-<div class="card">
-<h3>21K</h3>
-<div id="gold21" class="price">Rs 32812</div>
-</div>
-
-<div class="card">
-<h3>Market</h3>
-<div id="change" class="market">📈 +0.25%</div>
-</div>
-
-</div>
-
-<div class="graph">
-<h3>Weekly Trend</h3>
-
-<div class="bar" style="width:70%"></div>
-<div class="bar" style="width:85%"></div>
-<div class="bar" style="width:75%"></div>
-<div class="bar" style="width:95%"></div>
-<div class="bar" style="width:90%"></div>
-
-</div>
+<a class="btn" href="https://wa.me/" target="_blank">
+📢 Join WhatsApp Updates
+</a>
 
 </div>
 
 <script>
 
-let base = 37500;
+let price = 37500;
 
-function updateRates(){
+function updatePrice(){
+  let change = (Math.random()*2 - 1);
+  let old = price;
+  price = price + (price * change / 100);
 
-let city=document.getElementById("city").value;
+  let status = document.getElementById("status");
 
-let factor=1;
+  if(price > old){
+    status.innerHTML = "▲ Price Up";
+    status.className = "up";
+  } else {
+    status.innerHTML = "▼ Price Down";
+    status.className = "down";
+  }
 
-if(city==="Karachi") factor=1.01;
-if(city==="Islamabad") factor=1.005;
-
-let g24=base*factor;
-let g22=g24*0.916;
-let g21=g24*0.875;
-
-document.getElementById("gold24").innerHTML="Rs "+g24.toFixed(0);
-document.getElementById("gold22").innerHTML="Rs "+g22.toFixed(0);
-document.getElementById("gold21").innerHTML="Rs "+g21.toFixed(0);
+  document.getElementById("goldPrice").innerHTML =
+    price.toFixed(2) + " PKR";
 }
 
-updateRates();
-
-setInterval(function(){
-
-let change=(Math.random()*2-1);
-
-base=base+(base*change/100);
-
-document.getElementById("change").innerHTML=
-(change>=0?"📈 ":"📉 ")+change.toFixed(2)+"%";
-
-updateRates();
-
-},10000);
+setInterval(updatePrice, 5000);
+updatePrice();
 
 </script>
 
