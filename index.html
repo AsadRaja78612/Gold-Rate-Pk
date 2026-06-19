@@ -1,37 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold Rate Pakistan</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+}
+
+.header{
+background:#111827;
+padding:15px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
+padding:15px;
+}
+
+select{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+margin-bottom:15px;
+font-size:16px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.card{
+background:#1f2937;
+padding:15px;
+border-radius:12px;
+text-align:center;
+}
+
+.price{
+font-size:22px;
+font-weight:bold;
+color:gold;
+}
+
+.market{
+font-size:20px;
+font-weight:bold;
+}
+
+.graph{
+margin-top:20px;
+background:#1f2937;
+padding:15px;
+border-radius:12px;
+}
+
+.bar{
+height:20px;
+background:gold;
+margin:8px 0;
+border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+💰 Gold Rate Pakistan
+</div>
+
+<div class="container">
+
+<select id="city" onchange="updateRates()">
+<option>Lahore</option>
+<option>Karachi</option>
+<option>Islamabad</option>
+</select>
+
+<div class="grid">
+
+<div class="card">
+<h3>24K</h3>
+<div id="gold24" class="price">Rs 37500</div>
+</div>
+
+<div class="card">
+<h3>22K</h3>
+<div id="gold22" class="price">Rs 34350</div>
+</div>
+
+<div class="card">
+<h3>21K</h3>
+<div id="gold21" class="price">Rs 32812</div>
+</div>
+
+<div class="card">
+<h3>Market</h3>
+<div id="change" class="market">📈 +0.25%</div>
+</div>
+
+</div>
+
+<div class="graph">
+<h3>Weekly Trend</h3>
+
+<div class="bar" style="width:70%"></div>
+<div class="bar" style="width:85%"></div>
+<div class="bar" style="width:75%"></div>
+<div class="bar" style="width:95%"></div>
+<div class="bar" style="width:90%"></div>
+
+</div>
+
+</div>
+
 <script>
 
 let base = 37500;
 
-function getGold() {
+function updateRates(){
 
-    let randomChange = (Math.random() * 2 - 1);
+let city=document.getElementById("city").value;
 
-    base = base + (base * randomChange / 100);
+let factor=1;
 
-    updateUI(base, randomChange);
+if(city==="Karachi") factor=1.01;
+if(city==="Islamabad") factor=1.005;
+
+let g24=base*factor;
+let g22=g24*0.916;
+let g21=g24*0.875;
+
+document.getElementById("gold24").innerHTML="Rs "+g24.toFixed(0);
+document.getElementById("gold22").innerHTML="Rs "+g22.toFixed(0);
+document.getElementById("gold21").innerHTML="Rs "+g21.toFixed(0);
 }
 
-function updateUI(price, change) {
+updateRates();
 
-    let city = document.getElementById("city").value;
+setInterval(function(){
 
-    let factor = 1;
-    if(city === "Karachi") factor = 1.01;
-    if(city === "Islamabad") factor = 1.005;
+let change=(Math.random()*2-1);
 
-    let g24 = price * factor;
-    let g22 = g24 * 0.916;
-    let g21 = g24 * 0.875;
+base=base+(base*change/100);
 
-    document.getElementById("gold24").innerHTML = "Rs " + g24.toFixed(0);
-    document.getElementById("gold22").innerHTML = "Rs " + g22.toFixed(0);
-    document.getElementById("gold21").innerHTML = "Rs " + g21.toFixed(0);
+document.getElementById("change").innerHTML=
+(change>=0?"📈 ":"📉 ")+change.toFixed(2)+"%";
 
-    document.getElementById("change").innerHTML =
-        change.toFixed(2) + "% " + (change >= 0 ? "📈" : "📉");
-}
+updateRates();
 
-getGold();
-setInterval(getGold, 10000);
+},10000);
 
 </script>
+
+</body>
+</html>
