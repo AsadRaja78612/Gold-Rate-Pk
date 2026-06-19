@@ -8,29 +8,47 @@
 <style>
 body{
     font-family: Arial;
-    background:#111;
+    background:#0f0f0f;
     color:#fff;
     text-align:center;
     padding:20px;
 }
-.box{
+
+h1{color:gold;}
+
+.card{
     background:#1e1e1e;
     padding:20px;
     border-radius:12px;
-    margin-top:20px;
+    margin-top:15px;
 }
-h1{color:gold;}
+
 .rate{
-    font-size:22px;
-    margin:10px 0;
+    font-size:20px;
+    margin:8px 0;
 }
+
 button{
-    padding:12px 18px;
-    background:green;
-    color:white;
+    padding:12px 16px;
     border:none;
     border-radius:8px;
     cursor:pointer;
+    margin-top:10px;
+}
+
+.whatsapp{
+    background:green;
+    color:white;
+}
+
+.refresh{
+    background:gold;
+    color:black;
+}
+
+select{
+    padding:10px;
+    border-radius:8px;
     margin-top:10px;
 }
 </style>
@@ -38,36 +56,69 @@ button{
 
 <body>
 
-<h1>💰 Live Gold Rate System</h1>
+<h1>💰 Gold Rate System</h1>
 
-<div class="box">
-    <h2>Current 24K Gold Rate</h2>
-    <div class="rate">Per Tola: <span id="tola"></span> PKR</div>
-    <div class="rate">Per Gram: <span id="gram"></span> PKR</div>
-    <div class="rate">Per Ounce: <span id="ounce"></span> PKR</div>
+<div class="card">
+    <h2>Currency Select</h2>
+    <select id="currency" onchange="updateRates()">
+        <option value="PKR">PKR</option>
+        <option value="USD">USD</option>
+    </select>
 </div>
 
-<div class="box">
-    <h2>WhatsApp Contact</h2>
-    <p>For latest update or order</p>
-    
-    <a href="https://wa.me/923115855885" target="_blank">
-        <button>📲 WhatsApp Now</button>
+<div class="card">
+    <h2>Live Rates</h2>
+
+    <div class="rate">Per Tola: <span id="tola"></span></div>
+    <div class="rate">Per Gram: <span id="gram"></span></div>
+    <div class="rate">Per Ounce: <span id="ounce"></span></div>
+
+    <button class="refresh" onclick="updateRates()">🔄 Refresh Rate</button>
+</div>
+
+<div class="card">
+    <h2>WhatsApp Order</h2>
+    <p>Latest gold rate & updates</p>
+
+    <a id="waLink" target="_blank">
+        <button class="whatsapp">📲 WhatsApp Now</button>
     </a>
 </div>
 
 <script>
-// ===== BASE GOLD RATE (CHANGE ONLY THIS) =====
-let perTola = 385000;   // 24K tola rate
 
-// conversions
-let gramRate = perTola / 11.6638;
-let ounceRate = gramRate * 31.1035;
+// base rate PKR
+let baseTolaPKR = 385000;
 
-// show on UI
-document.getElementById("tola").innerText = perTola.toFixed(0);
-document.getElementById("gram").innerText = gramRate.toFixed(0);
-document.getElementById("ounce").innerText = ounceRate.toFixed(0);
+// USD conversion (approx)
+let usdRate = 280;
+
+function updateRates(){
+
+    let currency = document.getElementById("currency").value;
+
+    let tola = baseTolaPKR;
+    
+    if(currency === "USD"){
+        tola = baseTolaPKR / usdRate;
+    }
+
+    let gram = tola / 11.6638;
+    let ounce = gram * 31.1035;
+
+    document.getElementById("tola").innerText = tola.toFixed(2) + " " + currency;
+    document.getElementById("gram").innerText = gram.toFixed(2) + " " + currency;
+    document.getElementById("ounce").innerText = ounce.toFixed(2) + " " + currency;
+
+    // WhatsApp link with message
+    let msg = `Hello, latest gold rate is:\nPer Tola: ${tola.toFixed(2)} ${currency}`;
+    document.getElementById("waLink").href =
+        "https://wa.me/923115855885?text=" + encodeURIComponent(msg);
+}
+
+// first load
+updateRates();
+
 </script>
 
 </body>
