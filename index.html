@@ -1,10 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gold Rate PK</title>
+    <title>Gold Rate Pakistan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
-    <h1>💰 Daily Gold Rate Pakistan</h1>
-    <p>Yahan daily gold rate update hoga</p>
+
+<body style="font-family: Arial; text-align:center; background:#111; color:white; padding:20px;">
+
+    <h1>💰 Live Gold Rate Pakistan</h1>
+
+    <h2>24K Gold</h2>
+    <h1 id="gold">Loading...</h1>
+
+    <p>Auto updated (approx value)</p>
+
+    <script>
+        async function getGoldPrice() {
+            try {
+                // international gold price API
+                let res = await fetch("https://api.gold-api.com/price/XAU");
+                let data = await res.json();
+
+                let priceUSD = data.price;
+
+                // convert ounce to gram
+                let perGramUSD = priceUSD / 31.1035;
+
+                // PKR rate (approx)
+                let usdToPkr = 280;
+
+                let goldPKR = perGramUSD * usdToPkr;
+
+                document.getElementById("gold").innerHTML =
+                    "Rs " + goldPKR.toFixed(2);
+            }
+            catch (e) {
+                document.getElementById("gold").innerHTML =
+                    "Data load nahi ho raha";
+            }
+        }
+
+        getGoldPrice();
+
+        // auto refresh every 60 seconds
+        setInterval(getGoldPrice, 60000);
+    </script>
+
 </body>
 </html>
