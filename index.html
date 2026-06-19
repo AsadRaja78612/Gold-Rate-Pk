@@ -1,110 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>Gold Rate Live</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin:0;
-  font-family: Arial;
-  background: linear-gradient(135deg,#0f0f0f,#1c1c1c);
-  color: gold;
+body{
+    font-family: Arial;
+    background:#111;
+    color:#fff;
+    text-align:center;
+    padding:20px;
 }
-
-.header {
-  text-align:center;
-  padding:20px;
-  font-size:24px;
-  font-weight:bold;
+.box{
+    background:#1e1e1e;
+    padding:20px;
+    border-radius:12px;
+    margin-top:20px;
 }
-
-.card {
-  background: rgba(255,255,255,0.05);
-  margin:20px;
-  padding:20px;
-  border-radius:15px;
-  box-shadow: 0 0 10px rgba(255,215,0,0.2);
+h1{color:gold;}
+.rate{
+    font-size:22px;
+    margin:10px 0;
 }
-
-.price {
-  font-size:30px;
-  text-align:center;
-  margin:10px 0;
+button{
+    padding:12px 18px;
+    background:green;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin-top:10px;
 }
-
-.btn {
-  display:block;
-  text-align:center;
-  padding:12px;
-  margin:10px auto;
-  width:80%;
-  background:gold;
-  color:black;
-  border-radius:10px;
-  text-decoration:none;
-  font-weight:bold;
-}
-
-select {
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-}
-
-.up { color: #00ff99; }
-.down { color: #ff4d4d; }
 </style>
 </head>
 
 <body>
 
-<div class="header">💰 Live Gold Rate</div>
+<h1>💰 Live Gold Rate System</h1>
 
-<div class="card">
+<div class="box">
+    <h2>Current 24K Gold Rate</h2>
+    <div class="rate">Per Tola: <span id="tola"></span> PKR</div>
+    <div class="rate">Per Gram: <span id="gram"></span> PKR</div>
+    <div class="rate">Per Ounce: <span id="ounce"></span> PKR</div>
+</div>
 
-<select id="currency">
-<option value="PKR">PKR</option>
-<option value="USD">USD</option>
-<option value="AED">AED</option>
-</select>
-
-<div class="price" id="goldPrice">Loading...</div>
-
-<div id="status"></div>
-
-<a class="btn" href="https://wa.me/" target="_blank">
-📢 Join WhatsApp Updates
-</a>
-
+<div class="box">
+    <h2>WhatsApp Contact</h2>
+    <p>For latest update or order</p>
+    
+    <a href="https://wa.me/923115855885" target="_blank">
+        <button>📲 WhatsApp Now</button>
+    </a>
 </div>
 
 <script>
+// ===== BASE GOLD RATE (CHANGE ONLY THIS) =====
+let perTola = 385000;   // 24K tola rate
 
-let price = 37500;
+// conversions
+let gramRate = perTola / 11.6638;
+let ounceRate = gramRate * 31.1035;
 
-function updatePrice(){
-  let change = (Math.random()*2 - 1);
-  let old = price;
-  price = price + (price * change / 100);
-
-  let status = document.getElementById("status");
-
-  if(price > old){
-    status.innerHTML = "▲ Price Up";
-    status.className = "up";
-  } else {
-    status.innerHTML = "▼ Price Down";
-    status.className = "down";
-  }
-
-  document.getElementById("goldPrice").innerHTML =
-    price.toFixed(2) + " PKR";
-}
-
-setInterval(updatePrice, 5000);
-updatePrice();
-
+// show on UI
+document.getElementById("tola").innerText = perTola.toFixed(0);
+document.getElementById("gram").innerText = gramRate.toFixed(0);
+document.getElementById("ounce").innerText = ounceRate.toFixed(0);
 </script>
 
 </body>
