@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gold Rate Pakistan Dashboard</title>
+    <title>Gold Market Pakistan LIVE</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -10,7 +10,7 @@
         body {
             font-family: Arial;
             margin: 0;
-            background: #0f172a;
+            background: #0b1220;
             color: white;
         }
 
@@ -24,6 +24,13 @@
 
         .container {
             padding: 15px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
 
         .grid {
@@ -42,14 +49,6 @@
         .price {
             font-size: 18px;
             color: gold;
-            margin-top: 5px;
-        }
-
-        select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
         }
 
         canvas {
@@ -63,11 +62,11 @@
 
 <body>
 
-<header>💰 Gold Rate Pakistan Dashboard</header>
+<header>💰 LIVE GOLD MARKET PAKISTAN</header>
 
 <div class="container">
 
-    <select id="city" onchange="updateRates()">
+    <select id="city" onchange="update()">
         <option>Lahore</option>
         <option>Karachi</option>
         <option>Islamabad</option>
@@ -90,57 +89,88 @@
         </div>
 
         <div class="card">
-            <h3>Daily Change</h3>
-            <div class="price" id="change">+0.8%</div>
+            <h3>Market</h3>
+            <div class="price" id="change">LIVE</div>
         </div>
     </div>
 
-    <canvas id="chart" height="120"></canvas>
+    <canvas id="chart"></canvas>
 
 </div>
 
 <script>
 
-let basePrice = 37500;
+let base = 0;
+let last = 0;
 
-function updateRates() {
+// LIVE GOLD API
+async function getGold() {
+    try {
+        let res = await fetch("https://api.metals.live/v1/spot/gold");
+        let data = await res.json();
+
+        let usd = data[0].price;
+        let gram = usd / 31.1035;
+        let pkr = gram * 280;
+
+        base = pkr;
+
+        update();
+        drawChart(pkr);
+
+    } catch(e) {
+        document.getElementById("gold24").innerHTML = "Error";
+    }
+}
+
+// CITY UPDATE
+function update() {
 
     let city = document.getElementById("city").value;
 
-    let cityFactor = 1;
+    let factor = 1;
+    if(city === "Karachi") factor = 1.01;
+    if(city === "Islamabad") factor = 1.005;
 
-    if(city === "Karachi") cityFactor = 1.01;
-    if(city === "Lahore") cityFactor = 1.00;
-    if(city === "Islamabad") cityFactor = 1.005;
+    let g24 = base * factor;
+    let g22 = g24 * 0.916;
+    let g21 = g24 * 0.875;
 
-    let gold24 = basePrice * cityFactor;
-    let gold22 = gold24 * 0.916;
-    let gold21 = gold24 * 0.875;
+    document.getElementById("gold24").innerHTML = "Rs " + g24.toFixed(0);
+    document.getElementById("gold22").innerHTML = "Rs " + g22.toFixed(0);
+    document.getElementById("gold21").innerHTML = "Rs " + g21.toFixed(0);
 
-    document.getElementById("gold24").innerHTML = "Rs " + gold24.toFixed(2);
-    document.getElementById("gold22").innerHTML = "Rs " + gold22.toFixed(2);
-    document.getElementById("gold21").innerHTML = "Rs " + gold21.toFixed(2);
+    let change = ((g24 - last) / (last || g24)) * 100;
+    last = g24;
 
-    document.getElementById("change").innerHTML = "+0.8%";
+    document.getElementById("change").innerHTML =
+        change.toFixed(2) + "% " + (change >= 0 ? "📈" : "📉");
 }
 
-updateRates();
+// GRAPH
+let chart;
+function drawChart(value){
 
-// chart
-let ctx = document.getElementById('chart').getContext('2d');
+    let ctx = document.getElementById('chart').getContext('2d');
 
-new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        datasets: [{
-            label: "Gold Price Trend",
-            data: [37000, 37200, 37500, 37400, 37600, 37800, 37500],
-            borderColor: "gold",
-            fill: false
-        }]
-    }
-});
+    if(chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ["Now"],
+            datasets: [{
+                label: "Live Gold",
+                data: [value],
+                borderColor: "gold"
+            }]
+        }
+    });
+}
+
+// AUTO REFRESH
+getGold();
+setInterval(getGold, 60000);
 
 </script>
 
