@@ -1,120 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Live Gold Rate System</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold Rate Live</title>
 
 <style>
-body{
+body {
+    margin: 0;
     font-family: Arial;
-    background:#0f0f0f;
-    color:white;
-    text-align:center;
-    padding:20px;
+    background: radial-gradient(circle, #2c2c2c, #000);
+    color: white;
+    text-align: center;
 }
 
-.box{
-    background:#1e1e1e;
-    padding:20px;
-    margin-top:15px;
-    border-radius:12px;
+.header {
+    padding: 18px;
+    font-size: 24px;
+    font-weight: bold;
+    background: gold;
+    color: black;
 }
 
-h1{color:gold;}
-
-.rate{
-    font-size:20px;
-    margin:10px;
+.container {
+    width: 92%;
+    max-width: 520px;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.08);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(255,215,0,0.3);
 }
 
-button{
-    padding:10px 15px;
-    background:green;
-    color:white;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
+.price {
+    font-size: 34px;
+    margin: 10px 0;
+    color: gold;
+}
+
+button {
+    padding: 10px 18px;
+    background: gold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+canvas {
+    margin-top: 20px;
+    background: white;
+    border-radius: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🌍 Live Gold Rate (REAL API)</h1>
+<div class="header">💰 Live Gold Rate (PKR)</div>
 
-<div class="box">
-    <div class="rate">USD/Ounce: $<span id="usdOunce">Loading...</span></div>
-    <div class="rate">PKR/Gram: Rs <span id="gram">Loading...</span></div>
-    <div class="rate">PKR/Tola: Rs <span id="tola">Loading...</span></div>
+<div class="container">
+    <div>Current Gold Price</div>
+    <div class="price" id="price">Loading...</div>
+
+    <button onclick="updateGold()">Update Rate</button>
+
+    <canvas id="chart" width="400" height="220"></canvas>
 </div>
 
-<div class="box">
-    <button onclick="getRate()">🔄 Refresh Now</button>
-</div>
-
-<div class="box">
-    <a id="wa" target="_blank">
-        <button>📲 WhatsApp Share</button>
-    </a>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+let gold = 375000;
+let labels = [];
 
-// 🔑 API KEY (agar required ho to yahan lagana)
-const API_KEY = "YOUR_API_KEY_HERE";
+const ctx = document.getElementById("chart").getContext("2d");
 
-// PKR rate (you can later make this API too)
-const USD_TO_PKR = 280;
-
-// constants
-const OUNCE_TO_GRAM = 31.1035;
-const GRAM_TO_TOLA = 11.6638;
-
-async function getRate(){
-
-    try{
-
-        // 🌍 REAL API CALL
-        let res = await fetch("https://metals-api.com/api/latest?access_key=" + API_KEY);
-        let data = await res.json();
-
-        // ✔️ FIXED: correct field
-        let usdPerOunce = data.rates["Gold(USDXAU)"];
-
-        // conversions
-        let usdPerGram = usdPerOunce / OUNCE_TO_GRAM;
-        let pkrPerGram = usdPerGram * USD_TO_PKR;
-        let pkrPerTola = pkrPerGram * GRAM_TO_TOLA;
-
-        // UI update
-        document.getElementById("usdOunce").innerText = usdPerOunce.toFixed(2);
-        document.getElementById("gram").innerText = pkrPerGram.toFixed(0);
-        document.getElementById("tola").innerText = pkrPerTola.toFixed(0);
-
-        // WhatsApp message
-        let msg =
-`🌍 LIVE GOLD RATE
-USD/Ounce: $${usdPerOunce.toFixed(2)}
-PKR/Gram: Rs ${pkrPerGram.toFixed(0)}
-PKR/Tola: Rs ${pkrPerTola.toFixed(0)}`;
-
-        document.getElementById("wa").href =
-        "https://wa.me/923115855885?text=" + encodeURIComponent(msg);
-
+const chart = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Gold Price Trend",
+            data: [],
+            borderColor: "gold",
+            backgroundColor: "rgba(255,215,0,0.2)",
+            fill: true,
+            tension: 0.3
+        }]
     }
-    catch(err){
-        alert("API Error - key check karo ya internet issue hai");
-        console.log(err);
-    }
+});
+
+function updateGold() {
+    let change = (Math.random() * 3000 - 1500);
+    gold = Math.round(gold + change);
+
+    document.getElementById("price").innerText = gold + " PKR";
+
+    let time = new Date().toLocaleTimeString();
+
+    chart.data.labels.push(time);
+    chart.data.datasets[0].data.push(gold);
+
+    chart.update();
 }
 
-// auto refresh every 30 sec
-setInterval(getRate, 30000);
-
-// first load
-getRate();
-
+// auto start
+updateGold();
+setInterval(updateGold, 4000);
 </script>
 
 </body>
