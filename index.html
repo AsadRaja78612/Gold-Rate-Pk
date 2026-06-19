@@ -1,123 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Live Gold International Rate</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-    font-family: Arial;
-    background:#0c0c0c;
-    color:white;
-    text-align:center;
-    padding:20px;
-}
-.card{
-    background:#1f1f1f;
-    padding:20px;
-    margin-top:15px;
-    border-radius:12px;
-}
-h1{color:gold;}
-.rate{
-    font-size:20px;
-    margin:8px;
-}
-button{
-    padding:10px 15px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-}
-.whatsapp{background:green;color:white;}
-.refresh{background:gold;color:black;}
-</style>
-</head>
-
-<body>
-
-<h1>🌍 Live International Gold Rate</h1>
-
-<div class="card">
-    <h2>Market Status</h2>
-    <div id="status">🔄 Connecting market...</div>
-</div>
-
-<div class="card">
-    <h2>Rates (Auto Live)</h2>
-
-    <div class="rate">USD per Ounce: $<span id="usdOunce"></span></div>
-    <div class="rate">PKR per Tola: Rs <span id="tola"></span></div>
-    <div class="rate">PKR per Gram: Rs <span id="gram"></span></div>
-    <div class="rate">PKR per Ounce: Rs <span id="ounce"></span></div>
-
-    <button class="refresh" onclick="updateRate()">🔄 Refresh Now</button>
-</div>
-
-<div class="card">
-    <h2>WhatsApp Update</h2>
-
-    <a id="wa" target="_blank">
-        <button class="whatsapp">📲 Send Rate</button>
-    </a>
-</div>
-
 <script>
 
-// =====================
-// LIVE MARKET SIMULATION (API READY)
-// =====================
+// REAL STRUCTURE (NO RANDOM)
 
-// Real international gold price (approx base USD/oz)
-// Future me yahan API connect ho jayega
-let goldUSD = 2350 + Math.random()*20;
-
-// PKR rate (can also be API later)
+let usdPerOunce = 2350;   // <-- yahan real API lagay gi baad me
 let usdToPkr = 280;
 
-// =====================
-// CALCULATIONS
-// =====================
+// constants
+const ounceToGram = 31.1035;
+const gramToTola = 11.6638;
+
 function updateRate(){
 
-    // simulate live movement
-    goldUSD = 2300 + Math.random()*100;
+    // USD per gram
+    let usdPerGram = usdPerOunce / ounceToGram;
 
-    let ounceUSD = goldUSD;
+    // PKR values
+    let pkrPerGram = usdPerGram * usdToPkr;
+    let pkrPerOunce = usdPerOunce * usdToPkr;
+    let pkrPerTola = (pkrPerGram * gramToTola);
 
-    let gramUSD = ounceUSD / 31.1035;
-    let tolaUSD = gramUSD * 11.6638;
+    // UI update
+    document.getElementById("usdOunce").innerText = usdPerOunce.toFixed(2);
+    document.getElementById("tola").innerText = pkrPerTola.toFixed(0);
+    document.getElementById("gram").innerText = pkrPerGram.toFixed(0);
+    document.getElementById("ounce").innerText = pkrPerOunce.toFixed(0);
 
-    let tolaPKR = tolaUSD * usdToPkr;
-    let gramPKR = gramUSD * usdToPkr;
-    let ouncePKR = ounceUSD * usdToPkr;
+    document.getElementById("status").innerText = "🟢 Accurate Market Formula Active";
 
-    document.getElementById("usdOunce").innerText = ounceUSD.toFixed(2);
-    document.getElementById("tola").innerText = tolaPKR.toFixed(0);
-    document.getElementById("gram").innerText = gramPKR.toFixed(0);
-    document.getElementById("ounce").innerText = ouncePKR.toFixed(0);
-
-    document.getElementById("status").innerText = "🟢 Live Market Active";
-
-    // WhatsApp message
+    // WhatsApp
     let msg =
-`🌍 Gold Live Update
-Per Tola: Rs ${tolaPKR.toFixed(0)}
-Per Gram: Rs ${gramPKR.toFixed(0)}
-Per Ounce: Rs ${ouncePKR.toFixed(0)}`;
+`🌍 Gold Rate Update
+USD/Ounce: $${usdPerOunce}
+PKR/Tola: Rs ${pkrPerTola.toFixed(0)}
+PKR/Gram: Rs ${pkrPerGram.toFixed(0)}`;
 
     document.getElementById("wa").href =
     "https://wa.me/923115855885?text=" + encodeURIComponent(msg);
 }
 
-// AUTO UPDATE EVERY 10 SEC
-setInterval(updateRate, 10000);
-
-// FIRST LOAD
+setInterval(updateRate, 15000);
 updateRate();
 
 </script>
-
-</body>
-</html>
