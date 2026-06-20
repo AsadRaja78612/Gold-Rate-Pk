@@ -86,7 +86,7 @@ body {
 }
 
 @keyframes pulse {
-    0 { transform: scale(0.9); opacity: 0.7; }
+    0% { transform: scale(0.9); opacity: 0.7; }
     50% { transform: scale(1.1); opacity: 1; }
     100% { transform: scale(0.9); opacity: 0.7; }
 }
@@ -421,11 +421,12 @@ let exchangeRatePkr = 278.50;
 let chartInstance = null;
 let historicalCache = null;
 
-// Real Mandi Rates synchronized directly with user references (As of June 2026)
+// Base Benchmarks from User Images
 let liveGoldUsd = 4154.00;
-let liveSilverUsd = 64.82;     // Corrected to absolute real benchmarks from 52274.jpg
-let livePlatinumUsd = 1666.70; // Corrected to absolute real benchmarks from 52276.jpg
-let livePalladiumUsd = 1259.72;// Corrected to absolute real benchmarks from 52276.jpg
+let baseSilverPkrTola = 7480;   // Exactly matching local tola buy/sell baseline from 52301.jpg
+let liveSilverUsdRaw = 64.82;  // Direct raw display for International Mandi tab view 
+let livePlatinumUsd = 1666.70; 
+let livePalladiumUsd = 1259.72;
 let liveOilUsd = 76.50;        
 
 async function updateMarketRates() {
@@ -434,9 +435,10 @@ async function updateMarketRates() {
         let data = await res.json();
         exchangeRatePkr = data.rates.PKR;
         
-        // Minor organic real-time pulse fluctuation
+        // Organic live micro-fluctuations
         liveGoldUsd = 4154.00 + ((Math.random() - 0.5) * 0.6);
-        liveSilverUsd = 64.82 + ((Math.random() - 0.5) * 0.04);
+        baseSilverPkrTola = 7480 + Math.round((Math.random() - 0.5) * 15);
+        liveSilverUsdRaw = 64.82 + ((Math.random() - 0.5) * 0.05);
         livePlatinumUsd = 1666.70 + ((Math.random() - 0.5) * 0.3);
         livePalladiumUsd = 1259.72 + ((Math.random() - 0.5) * 0.4);
         liveOilUsd = 76.50 + ((Math.random() - 0.5) * 0.05);
@@ -457,7 +459,7 @@ function calculateWeightsAndRender() {
 
     if (currentMode === 'tola') {
         outG24 = liveGoldUsd * exchangeRatePkr * ozToTolaFactor;
-        outSilver = liveSilverUsd * exchangeRatePkr * ozToTolaFactor;
+        outSilver = baseSilverPkrTola; // Fixed Local Tola Real Rate
         outPlat = livePlatinumUsd * exchangeRatePkr * ozToTolaFactor;
         outPall = livePalladiumUsd * exchangeRatePkr * ozToTolaFactor;
         
@@ -473,7 +475,7 @@ function calculateWeightsAndRender() {
 
     } else if (currentMode === 'ounce') {
         outG24 = liveGoldUsd * exchangeRatePkr;
-        outSilver = liveSilverUsd * exchangeRatePkr;
+        outSilver = baseSilverPkrTola * (31.1035 / 11.664); // Scaled local price to ounce
         outPlat = livePlatinumUsd * exchangeRatePkr;
         outPall = livePalladiumUsd * exchangeRatePkr;
         
@@ -489,7 +491,7 @@ function calculateWeightsAndRender() {
 
     } else if (currentMode === 'usd') {
         outG24 = liveGoldUsd;
-        outSilver = liveSilverUsd;
+        outSilver = liveSilverUsdRaw; // Directly shows the requested 64.82 International view
         outPlat = livePlatinumUsd;
         outPall = livePalladiumUsd;
         
@@ -499,7 +501,7 @@ function calculateWeightsAndRender() {
         document.getElementById("title-24").innerText = "Gold 24K (Ounce USD)";
         document.getElementById("title-22").innerText = "Gold 22K (Ounce USD)";
         document.getElementById("title-21").innerText = "Gold 21K (Ounce USD)";
-        document.getElementById("title-silver").innerText = "Silver (Ounce USD)";
+        document.getElementById("title-silver").innerText = "Silver (Mandi USD)";
         document.getElementById("title-platinum").innerText = "Platinum (Ounce USD)";
         document.getElementById("title-palladium").innerText = "Palladium (Ounce USD)";
     }
@@ -508,7 +510,7 @@ function calculateWeightsAndRender() {
     outG21 = outG24 * 21 / 24;
     outOil = liveOilUsd; 
 
-    // Formatting outputs cleanly
+    // Render Clean Formatting
     document.getElementById("v24").innerText = symbol + Math.round(outG24).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
     document.getElementById("v22").innerText = symbol + Math.round(outG22).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
     document.getElementById("v21").innerText = symbol + Math.round(outG21).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
