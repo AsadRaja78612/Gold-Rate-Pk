@@ -51,6 +51,12 @@ text-decoration:none;
 font-weight:bold;
 }
 
+.footer{
+margin-top:15px;
+font-size:13px;
+color:#9ca3af;
+}
+
 canvas{
 background:white;
 border-radius:10px;
@@ -71,11 +77,6 @@ padding:10px;
 </div>
 
 <div class="card">
-🥈 Silver (Tola)
-<div class="price" id="silver">Loading...</div>
-</div>
-
-<div class="card">
 🥇 Gold 22K (Tola)
 <div class="price" id="g22">Loading...</div>
 </div>
@@ -86,11 +87,28 @@ padding:10px;
 </div>
 
 <div class="card">
-📱 WhatsApp
+🥈 Silver (Tola)
+<div class="price" id="silver">Loading...</div>
+</div>
+
+<div class="card">
+📱 WhatsApp Contact
+
 <br>
-<a href="https://wa.me/923115855885">0311-5855885</a>
+
+<a href="https://wa.me/923115855885">
+📞 0311-5855885
+</a>
+
 <br><br>
-<a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC">Join Community</a>
+
+<a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC">
+👥 Join Community
+</a>
+
+<div class="footer">
+Asad Raja | Connect for this number
+</div>
 </div>
 
 <div class="card">
@@ -102,47 +120,34 @@ padding:10px;
 let history=[];
 let chart;
 
-// safe gold API
-async function getGold(){
+// safe data
+async function getData(){
 try{
-let res=await fetch("https://api.metals.live/v1/spot/gold");
-let data=await res.json();
-if(Array.isArray(data)) return data[0].price;
-throw new Error();
+let res = await fetch("rate.json");
+return await res.json();
 }catch{
-return 4300; // fallback USD
-}
-}
-
-// safe silver API
-async function getSilver(){
-try{
-let res=await fetch("https://api.metals.live/v1/spot/silver");
-let data=await res.json();
-if(Array.isArray(data)) return data[0].price;
-throw new Error();
-}catch{
-return 30; // fallback USD
+return {
+usdToPkr:285,
+goldUsd:4300,
+silverUsd:30
+};
 }
 }
 
 async function update(){
 
-let goldUSD = await getGold();
-let silverUSD = await getSilver();
+let data = await getData();
 
-const usdToPkr = 285;
+let usdToPkr = data.usdToPkr;
 
-// gold per gram (24K)
-let goldGram = (goldUSD / 31.1035) * usdToPkr;
+// GOLD
+let goldGram = (data.goldUsd / 31.1035) * usdToPkr;
 let goldTola24 = goldGram * 11.664;
+let gold22 = goldTola24 * 22/24;
+let gold21 = goldTola24 * 21/24;
 
-// karat conversions
-let gold22 = goldTola24 * (22/24);
-let gold21 = goldTola24 * (21/24);
-
-// silver
-let silverGram = (silverUSD / 31.1035) * usdToPkr;
+// SILVER (FIXED)
+let silverGram = (data.silverUsd / 31.1035) * usdToPkr;
 let silverTola = silverGram * 11.664;
 
 // UI
@@ -177,7 +182,7 @@ type:"line",
 data:{
 labels:history.map(x=>x.time),
 datasets:[{
-label:"Gold Trend",
+label:"Gold Trend (PKR)",
 data:history.map(x=>x.val),
 borderColor:"gold",
 fill:false
