@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pakistan Gold Rate - Live Dashboard</title>
 
+<!-- FontAwesome Icons for App Look -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <!-- Chart.js for smooth data trend -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
-    --bg-color: #f4f6f9;
+    --bg-color: #eef2f6; /* Premium App Soft Background color */
     --card-bg: #ffffff;
     --text-main: #1f2937;
     --text-muted: #6b7280;
@@ -28,6 +30,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 30px;
 }
 
 /* Application Top Header */
@@ -36,30 +39,30 @@ body {
     max-width: 480px;
     background: #111827;
     color: white;
-    padding: 15px 20px;
+    padding: 16px 20px;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
 .brand {
-    font-size: 18px;
+    font-size: 19px;
     font-weight: bold;
     color: var(--gold);
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
 }
 
 /* Live Global Mandi Bar */
 .live-mandi-bar {
     background: rgba(255, 215, 0, 0.15);
     border: 1px solid var(--gold);
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
     font-size: 13px;
     font-weight: 600;
@@ -76,6 +79,13 @@ body {
     border-radius: 50%;
     display: inline-block;
     box-shadow: 0 0 8px var(--green);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.7; }
 }
 
 /* App Container */
@@ -89,7 +99,7 @@ body {
 /* Modern App Navigation Tabs */
 .app-tabs {
     display: flex;
-    background: #e5e7eb;
+    background: #e2e8f0;
     padding: 4px;
     border-radius: 25px;
     margin-bottom: 15px;
@@ -99,7 +109,7 @@ body {
     flex: 1;
     border: none;
     background: transparent;
-    padding: 10px;
+    padding: 11px;
     border-radius: 22px;
     font-size: 13px;
     font-weight: 600;
@@ -111,7 +121,7 @@ body {
 .tab-item.active {
     background: white;
     color: var(--text-main);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.06);
 }
 
 /* Premium App Style Cards */
@@ -119,9 +129,9 @@ body {
     background: var(--card-bg);
     border-radius: 16px;
     padding: 16px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    border: 1px solid #edf2f7;
+    border: 1px solid #e2e8f0;
     display: flex;
     flex-direction: column;
 }
@@ -167,10 +177,60 @@ body {
 .chart-container {
     background: white;
     border-radius: 16px;
-    padding: 12px;
+    padding: 14px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    border: 1px solid #edf2f7;
+    border: 1px solid #e2e8f0;
     margin-bottom: 15px;
+}
+
+/* Owner/Contact Styled Card */
+.contact-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+.contact-title {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.owner-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.owner-avatar {
+    width: 42px;
+    height: 42px;
+    background: #fef3c7;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--gold-dark);
+    font-size: 18px;
+}
+
+.owner-info .name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.owner-info .role {
+    font-size: 12px;
+    color: var(--text-muted);
 }
 
 /* Quick Action Social Buttons */
@@ -192,12 +252,17 @@ body {
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
-    box-shadow: 0 2px 4px rgba(37, 211, 102, 0.2);
+    box-shadow: 0 4px 6px rgba(37, 211, 102, 0.15);
+    transition: transform 0.2s;
+}
+
+.btn-action:active {
+    transform: scale(0.98);
 }
 
 .btn-community {
     background: #3b82f6;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.15);
 }
 </style>
 </head>
@@ -205,7 +270,7 @@ body {
 
 <!-- Application Top bar -->
 <div class="app-header">
-    <div class="brand">✨ پاک گولڈ ریٹ</div>
+    <div class="brand"><i class="fa-solid fa-chart-line"></i> پاک گولڈ ریٹ</div>
     <div class="live-mandi-bar">
         <span class="pulse-dot"></span>
         <span>Mandi: $<span id="mandi-ticker">4,154.00</span></span>
@@ -260,10 +325,24 @@ body {
         <canvas id="cryptoStyleChart" style="width:100%; height:200px;"></canvas>
     </div>
 
-    <!-- Action Shortcuts -->
-    <div class="action-grid">
-        <a href="https://wa.me/923115855885" class="btn-action">💬 WhatsApp</a>
-        <a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC" class="btn-action btn-community">👥 Group</a>
+    <!-- Customized Professional Contact Card -->
+    <div class="contact-card">
+        <div class="contact-title">رابطہ کار / ڈیش بورڈ ایڈمن</div>
+        <div class="owner-profile">
+            <div class="owner-avatar">
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <div class="owner-info">
+                <div class="name">Raja Asad</div>
+                <div class="role">Rawalpindi Sarafa Market</div>
+            </div>
+        </div>
+        
+        <!-- Action Shortcuts Buttons -->
+        <div class="action-grid">
+            <a href="https://wa.me/923115855885" class="btn-action"><i class="fa-brands fa-whatsapp"></i> 0311-5855885</a>
+            <a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC" class="btn-action btn-community"><i class="fa-solid fa-users"></i> Join Group</a>
+        </div>
     </div>
 
 </div>
@@ -275,19 +354,15 @@ let exchangeRatePkr = 278.50;
 let chartInstance = null;
 let historicalCache = null;
 
-// Clean professional tracking engine
 async function updateMarketRates() {
     try {
-        // Fetch accurate live USD to PKR rate
         let res = await fetch("https://open.er-api.com/v6/latest/USD");
         let data = await res.json();
         exchangeRatePkr = data.rates.PKR;
         
-        // Micro fluctuation generator to simulate live trading room movement ($4154 benchmark)
         let liveFluctuation = (Math.random() - 0.5) * 0.5;
         liveMandiUsd = 4154.00 + liveFluctuation;
 
-        // Display exact live Mandi value on the top application banner bar
         document.getElementById("mandi-ticker").innerText = liveMandiUsd.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         calculateWeightsAndRender();
@@ -297,7 +372,6 @@ async function updateMarketRates() {
 }
 
 function calculateWeightsAndRender() {
-    // Exact standard international weights formula metrics
     let pkrPerOunce = liveMandiUsd * exchangeRatePkr;
     let pkrPerTola = (pkrPerOunce / 31.1035) * 11.664;
 
@@ -327,7 +401,6 @@ function calculateWeightsAndRender() {
     target22 = target24 * 22 / 24;
     target21 = target24 * 21 / 24;
 
-    // Elements update dynamically inside their DOM wrappers without causing any parent container shaking
     document.getElementById("v24").innerText = symbol + Math.round(target24).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
     document.getElementById("v22").innerText = symbol + Math.round(target22).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
     document.getElementById("v21").innerText = symbol + Math.round(target21).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
@@ -368,7 +441,7 @@ function renderBaseChart() {
                 borderColor: '#b8931d',
                 borderWidth: 2,
                 pointRadius: 2,
-                backgroundColor: 'rgba(212, 175, 55, 0.05)',
+                backgroundColor: 'rgba(212, 175, 55, 0.04)',
                 fill: true,
                 tension: 0.3
             }]
@@ -376,11 +449,11 @@ function renderBaseChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: { duration: 0 }, // Animation disabled to completely prevent element shaking
+            animation: { duration: 0 }, 
             plugins: { legend: { display: false } },
             scales: {
                 x: { grid: { display: false } },
-                y: { grid: { color: '#f3f4f6' } }
+                y: { grid: { color: '#f1f5f9' } }
             }
         }
     });
@@ -403,15 +476,11 @@ function appendChartPlotData(latestPriceValue) {
         dataArr.shift();
     }
 
-    // Single step safe update routine to keep UI rigid and static
     chartInstance.update('none');
 }
 
-// Initial System Boots
 renderBaseChart();
 updateMarketRates();
-
-// Clean background update intervals every 3 seconds
 setInterval(updateMarketRates, 3000);
 </script>
 
