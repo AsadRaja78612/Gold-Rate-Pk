@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pakistan Commodity Rate - Live Dashboard</title>
+<title>Pakistan Gold Rate - Live Dashboard</title>
 
 <!-- FontAwesome Icons for App Look -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -287,10 +287,10 @@ body {
 
 <!-- Application Top bar -->
 <div class="app-header">
-    <div class="brand"><i class="fa-solid fa-chart-line"></i> پاک کموڈٹی ریٹ</div>
+    <div class="brand"><i class="fa-solid fa-coins"></i> پاکستان گولڈ ریٹ</div>
     <div class="live-mandi-bar">
         <span class="pulse-dot"></span>
-        <span>Gold: $<span id="mandi-ticker">4,154.00</span></span>
+        <span>Gold: $<span id="mandi-ticker">4,153.74</span></span>
     </div>
 </div>
 
@@ -422,15 +422,15 @@ let chartInstance = null;
 let historicalCache = null;
 
 // Ground-Truth Market Benchmarks directly from User Screenshots
-let liveGoldUsd = 4154.00;
-let baseSilverPkrTola = 7480;       // Local Tola buy/sell benchmark (52301.jpg)
-let liveSilverUsdRaw = 64.82;       // International Mandi benchmark (52301.jpg)
+let liveGoldUsd = 4153.74;
+let baseSilverPkrTola = 7476;       
+let liveSilverUsdRaw = 64.82;       
 
-let basePlatinumPkrTola = 173857;   // Local Tola benchmark (52336.jpg)
-let livePlatinumUsdRaw = 1666.70;   // International Mandi benchmark (52276.jpg)
+let basePlatinumPkrTola = 173857;   
+let livePlatinumUsdRaw = 1666.70;   
 
-let basePalladiumPkrTola = 131404;  // Local Tola benchmark (52336.jpg)
-let livePalladiumUsdRaw = 1259.72;  // International Mandi benchmark (52336.jpg)
+let basePalladiumPkrTola = 131404;  
+let livePalladiumUsdRaw = 1259.72;  
 
 let liveOilUsd = 76.50;        
 
@@ -441,8 +441,8 @@ async function updateMarketRates() {
         exchangeRatePkr = data.rates.PKR;
         
         // Organic realistic micro-ticks for real-time feel
-        liveGoldUsd = 4154.00 + ((Math.random() - 0.5) * 0.6);
-        baseSilverPkrTola = 7480 + Math.round((Math.random() - 0.5) * 10);
+        liveGoldUsd = 4153.74 + ((Math.random() - 0.5) * 0.6);
+        baseSilverPkrTola = 7476 + Math.round((Math.random() - 0.5) * 8);
         liveSilverUsdRaw = 64.82 + ((Math.random() - 0.5) * 0.03);
         
         basePlatinumPkrTola = 173857 + Math.round((Math.random() - 0.5) * 20);
@@ -501,9 +501,9 @@ function calculateWeightsAndRender() {
 
     } else if (currentMode === 'usd') {
         outG24 = liveGoldUsd;
-        outSilver = liveSilverUsdRaw;      // Shows 64.82 directly as requested
-        outPlat = livePlatinumUsdRaw;    // Shows 1666.70 directly as requested
-        outPall = livePalladiumUsdRaw;    // Shows 1259.72 directly as requested (Mandi USD)
+        outSilver = liveSilverUsdRaw;      
+        outPlat = livePlatinumUsdRaw;    
+        outPall = livePalladiumUsdRaw;    
         
         symbol = "$";
         decimals = 2;
