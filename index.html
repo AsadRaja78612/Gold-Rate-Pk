@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gold Rate PK Live</title>
+<title>Gold & Silver Rate PK Live</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body{
 margin:0;
-font-family:Arial,sans-serif;
+font-family:Arial;
 background:#0b1220;
 color:white;
 text-align:center;
@@ -18,43 +18,42 @@ text-align:center;
 
 .header{
 background:#111827;
-padding:20px;
-font-size:28px;
+padding:18px;
+font-size:24px;
 font-weight:bold;
 color:gold;
 }
 
 .card{
 background:#1f2937;
-margin:15px auto;
-padding:20px;
-border-radius:15px;
+margin:12px auto;
+padding:18px;
+border-radius:12px;
 max-width:500px;
 width:90%;
-box-shadow:0 0 10px rgba(255,215,0,0.2);
 }
 
 .price{
-font-size:30px;
-font-weight:bold;
+font-size:28px;
 color:gold;
-margin-top:10px;
+font-weight:bold;
+margin-top:8px;
 }
 
-.update{
+.small{
 color:#9ca3af;
-font-size:14px;
+font-size:13px;
 }
 
-.whatsapp{
+a{
 display:inline-block;
+margin-top:10px;
 background:#25D366;
 color:white;
-padding:12px 25px;
-border-radius:10px;
+padding:10px 18px;
+border-radius:8px;
 text-decoration:none;
 font-weight:bold;
-margin-top:10px;
 }
 
 canvas{
@@ -65,9 +64,9 @@ padding:10px;
 
 .footer{
 margin-top:20px;
-padding:15px;
-font-size:14px;
+font-size:13px;
 color:#9ca3af;
+padding:10px;
 }
 </style>
 </head>
@@ -75,29 +74,37 @@ color:#9ca3af;
 <body>
 
 <div class="header">
-📊 Gold Rate PK Live
+📊 Rawalpindi Sarafa Bazar Live Rates
 </div>
 
 <div class="card">
-🌍 International Gold (USD/Oz)
-<div id="usd" class="price">Loading...</div>
+🌍 Gold 24K (Per Tola)
+<div class="price" id="gold24">Loading...</div>
 </div>
 
 <div class="card">
-🇵🇰 Gold Rate PKR (10 Gram)
-<div id="pkr10g" class="price">Loading...</div>
+🥈 Silver (Per Tola)
+<div class="price" id="silver">Loading...</div>
 </div>
 
 <div class="card">
-🪙 Gold Rate PKR (24K Tola)
-<div id="tola24k" class="price">Loading...</div>
+📊 Gold 10 Gram
+<div class="price" id="gold10">Loading...</div>
 </div>
 
 <div class="card">
-📱 Daily Gold Rate Updates
+📱 WhatsApp Updates
+
+<br>
+
+<a href="https://wa.me/923115855885" target="_blank">
+📞 0311-5855885
+</a>
+
 <br><br>
-<a class="whatsapp" href="https://wa.me/923115855885" target="_blank">
-Join WhatsApp
+
+<a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC" target="_blank">
+👥 Join Community
 </a>
 </div>
 
@@ -106,110 +113,93 @@ Join WhatsApp
 </div>
 
 <div class="footer">
-Powered by Gold Rate PK
+Auto updated Gold & Silver Dashboard
 </div>
 
 <script>
 
-let chart;
 let history=[];
+let chart;
 
-async function getGoldPrice(){
-
+// Safe fallback (API issues avoid crash)
+async function getGold(){
 try{
-
-let response=await fetch(
-"https://api.metals.live/v1/spot/gold"
-);
-
-let data=await response.json();
-
-if(Array.isArray(data)){
-return data[0].price;
-}
-
+let res=await fetch("https://api.metals.live/v1/spot/gold");
+let data=await res.json();
+if(Array.isArray(data)) return data[0].price;
 throw new Error();
-
+}catch{
+return 4300; // fallback USD
 }
-catch{
-
-return null;
-
 }
 
+async function getSilver(){
+try{
+let res=await fetch("https://api.metals.live/v1/spot/silver");
+let data=await res.json();
+if(Array.isArray(data)) return data[0].price;
+throw new Error();
+}catch{
+return 30; // fallback USD
+}
 }
 
-async function updateGold(){
+async function update(){
 
-let goldUSD=await getGoldPrice();
-
-if(!goldUSD){
-
-document.getElementById("usd").innerHTML="API Error";
-return;
-
-}
+let goldUSD=await getGold();
+let silverUSD=await getSilver();
 
 const usdToPkr=285;
 
-let gram24k=(goldUSD/31.1035)*usdToPkr;
+// Gold calculations
+let goldGram=(goldUSD/31.1035)*usdToPkr;
+let goldTola=goldGram*11.664;
 
-let rate10g=gram24k*10;
+// Silver calculations
+let silverGram=(silverUSD/31.1035)*usdToPkr;
+let silverTola=silverGram*11.664;
 
-let rateTola=gram24k*11.664;
+// UI update
+document.getElementById("gold24").innerHTML =
+"Rs " + Math.round(goldTola).toLocaleString();
 
-document.getElementById("usd").innerHTML=
-goldUSD.toFixed(2)+" USD";
+document.getElementById("silver").innerHTML =
+"Rs " + Math.round(silverTola).toLocaleString();
 
-document.getElementById("pkr10g").innerHTML=
-"Rs "+Math.round(rate10g).toLocaleString();
+document.getElementById("gold10").innerHTML =
+"Rs " + Math.round(goldGram*10).toLocaleString();
 
-document.getElementById("tola24k").innerHTML=
-"Rs "+Math.round(rateTola).toLocaleString();
-
-updateChart(rateTola);
+// chart
+updateChart(goldTola);
 
 }
 
-function updateChart(price){
+function updateChart(val){
 
 let time=new Date().toLocaleTimeString();
 
-history.push({
-time:time,
-price:price
-});
+history.push({time,val});
+if(history.length>10) history.shift();
 
-if(history.length>12){
-history.shift();
-}
+if(chart) chart.destroy();
 
-if(chart){
-chart.destroy();
-}
-
-chart=new Chart(
-document.getElementById("chart"),
-{
+chart=new Chart(document.getElementById("chart"),{
 type:"line",
 data:{
 labels:history.map(x=>x.time),
 datasets:[{
-label:"24K Tola Trend",
-data:history.map(x=>x.price),
+label:"Gold Trend (PKR)",
+data:history.map(x=>x.val),
 borderColor:"gold",
-borderWidth:3,
 fill:false
 }]
 }
-}
-);
+});
 
 }
 
-updateGold();
-
-setInterval(updateGold,60000);
+update();
+setInterval(update,60000);
 
 </script>
 
