@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gold & Silver Rate PK Live</title>
+<title>Rawalpindi Sarafa Live</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -19,30 +19,25 @@ text-align:center;
 .header{
 background:#111827;
 padding:18px;
-font-size:24px;
+font-size:22px;
 font-weight:bold;
 color:gold;
 }
 
 .card{
 background:#1f2937;
-margin:12px auto;
-padding:18px;
+margin:10px auto;
+padding:16px;
 border-radius:12px;
 max-width:500px;
 width:90%;
 }
 
 .price{
-font-size:28px;
+font-size:26px;
 color:gold;
 font-weight:bold;
 margin-top:8px;
-}
-
-.small{
-color:#9ca3af;
-font-size:13px;
 }
 
 a{
@@ -50,7 +45,7 @@ display:inline-block;
 margin-top:10px;
 background:#25D366;
 color:white;
-padding:10px 18px;
+padding:10px 16px;
 border-radius:8px;
 text-decoration:none;
 font-weight:bold;
@@ -59,13 +54,6 @@ font-weight:bold;
 canvas{
 background:white;
 border-radius:10px;
-padding:10px;
-}
-
-.footer{
-margin-top:20px;
-font-size:13px;
-color:#9ca3af;
 padding:10px;
 }
 </style>
@@ -78,42 +66,35 @@ padding:10px;
 </div>
 
 <div class="card">
-🌍 Gold 24K (Per Tola)
-<div class="price" id="gold24">Loading...</div>
+🥇 Gold 24K (Tola)
+<div class="price" id="g24">Loading...</div>
 </div>
 
 <div class="card">
-🥈 Silver (Per Tola)
+🥈 Silver (Tola)
 <div class="price" id="silver">Loading...</div>
 </div>
 
 <div class="card">
-📊 Gold 10 Gram
-<div class="price" id="gold10">Loading...</div>
+🥇 Gold 22K (Tola)
+<div class="price" id="g22">Loading...</div>
 </div>
 
 <div class="card">
-📱 WhatsApp Updates
+🥇 Gold 21K (Tola)
+<div class="price" id="g21">Loading...</div>
+</div>
 
+<div class="card">
+📱 WhatsApp
 <br>
-
-<a href="https://wa.me/923115855885" target="_blank">
-📞 0311-5855885
-</a>
-
+<a href="https://wa.me/923115855885">0311-5855885</a>
 <br><br>
-
-<a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC" target="_blank">
-👥 Join Community
-</a>
+<a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC">Join Community</a>
 </div>
 
 <div class="card">
 <canvas id="chart"></canvas>
-</div>
-
-<div class="footer">
-Auto updated Gold & Silver Dashboard
 </div>
 
 <script>
@@ -121,7 +102,7 @@ Auto updated Gold & Silver Dashboard
 let history=[];
 let chart;
 
-// Safe fallback (API issues avoid crash)
+// safe gold API
 async function getGold(){
 try{
 let res=await fetch("https://api.metals.live/v1/spot/gold");
@@ -133,6 +114,7 @@ return 4300; // fallback USD
 }
 }
 
+// safe silver API
 async function getSilver(){
 try{
 let res=await fetch("https://api.metals.live/v1/spot/silver");
@@ -146,49 +128,56 @@ return 30; // fallback USD
 
 async function update(){
 
-let goldUSD=await getGold();
-let silverUSD=await getSilver();
+let goldUSD = await getGold();
+let silverUSD = await getSilver();
 
-const usdToPkr=285;
+const usdToPkr = 285;
 
-// Gold calculations
-let goldGram=(goldUSD/31.1035)*usdToPkr;
-let goldTola=goldGram*11.664;
+// gold per gram (24K)
+let goldGram = (goldUSD / 31.1035) * usdToPkr;
+let goldTola24 = goldGram * 11.664;
 
-// Silver calculations
-let silverGram=(silverUSD/31.1035)*usdToPkr;
-let silverTola=silverGram*11.664;
+// karat conversions
+let gold22 = goldTola24 * (22/24);
+let gold21 = goldTola24 * (21/24);
 
-// UI update
-document.getElementById("gold24").innerHTML =
-"Rs " + Math.round(goldTola).toLocaleString();
+// silver
+let silverGram = (silverUSD / 31.1035) * usdToPkr;
+let silverTola = silverGram * 11.664;
+
+// UI
+document.getElementById("g24").innerHTML =
+"Rs " + Math.round(goldTola24).toLocaleString();
+
+document.getElementById("g22").innerHTML =
+"Rs " + Math.round(gold22).toLocaleString();
+
+document.getElementById("g21").innerHTML =
+"Rs " + Math.round(gold21).toLocaleString();
 
 document.getElementById("silver").innerHTML =
 "Rs " + Math.round(silverTola).toLocaleString();
 
-document.getElementById("gold10").innerHTML =
-"Rs " + Math.round(goldGram*10).toLocaleString();
-
-// chart
-updateChart(goldTola);
+updateChart(goldTola24);
 
 }
 
 function updateChart(val){
 
-let time=new Date().toLocaleTimeString();
+let time = new Date().toLocaleTimeString();
 
 history.push({time,val});
-if(history.length>10) history.shift();
+
+if(history.length > 10) history.shift();
 
 if(chart) chart.destroy();
 
-chart=new Chart(document.getElementById("chart"),{
+chart = new Chart(document.getElementById("chart"),{
 type:"line",
 data:{
 labels:history.map(x=>x.time),
 datasets:[{
-label:"Gold Trend (PKR)",
+label:"Gold Trend",
 data:history.map(x=>x.val),
 borderColor:"gold",
 fill:false
