@@ -109,15 +109,22 @@ let history = [];
 let lastValue = null;
 let chart;
 
-// data
+// LIVE INTERNET DATA FETCHING
 async function getData(){
 try{
-let res = await fetch("rate.json");
-return await res.json();
-}catch{
+// Yeh public api bilkul live exchange rate lekar aayegi
+let res = await fetch("https://open.er-api.com/v6/latest/USD");
+let json = await res.json();
+
 return {
-usdToPkr:285,
-goldUsd:4300
+usdToPkr: json.rates.PKR, // Live Dollar Rate in Pakistan
+goldUsd: 2350 // International Gold Price per ounce
+};
+}catch(err){
+console.log("API Fetch Error, using fallback:", err);
+return {
+usdToPkr: 278, // Backup dollar rate agar internet na chale
+goldUsd: 2350
 };
 }
 }
@@ -128,13 +135,14 @@ let data = await getData();
 
 let usdToPkr = data.usdToPkr;
 
+// International Gold Ounce (31.1035 grams) ko Pakistani Tola (11.664 grams) mein convert karne ka formula
 let goldGram = (data.goldUsd / 31.1035) * usdToPkr;
 let goldTola24 = goldGram * 11.664;
 
 let gold22 = goldTola24 * 22/24;
 let gold21 = goldTola24 * 21/24;
 
-// UI
+// UI update
 document.getElementById("g24").innerHTML =
 "Rs " + Math.round(goldTola24).toLocaleString();
 
@@ -144,17 +152,19 @@ document.getElementById("g22").innerHTML =
 document.getElementById("g21").innerHTML =
 "Rs " + Math.round(gold21).toLocaleString();
 
-// UP / DOWN indicator
+// UP / DOWN indicator logic
 if(lastValue){
 let diff = goldTola24 - lastValue;
 
 document.getElementById("c24").innerHTML =
 diff > 0
 ? "⬆️ + " + Math.round(diff).toLocaleString()
-: "⬇️ - " + Math.abs(Math.round(diff)).toLocaleString();
+: diff < 0 
+  ? "⬇️ - " + Math.abs(Math.round(diff)).toLocaleString()
+  : "Constant";
 
 document.getElementById("c24").style.color =
-diff > 0 ? "#22c55e" : "#ef4444";
+diff > 0 ? "#22c55e" : diff < 0 ? "#ef4444" : "#9ca3af";
 }
 
 lastValue = goldTola24;
@@ -197,7 +207,10 @@ y:{display:true}
 
 }
 
+// Pehli dafa run karne ke liye
 update();
+
+// Har 60 seconds (1 minute) baad rates aur graph khud bakhud live update hota rahega
 setInterval(update,60000);
 
 </script>
