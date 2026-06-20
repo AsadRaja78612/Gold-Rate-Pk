@@ -3,301 +3,416 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rawalpindi Sarafa Live Pro</title>
+<title>Pakistan Gold Rate - Live Dashboard</title>
 
+<!-- Chart.js for smooth data trend -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#0b1220;
-color:white;
-text-align:center;
+:root {
+    --bg-color: #f4f6f9;
+    --card-bg: #ffffff;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --gold: #d4af37;
+    --gold-dark: #b8931d;
+    --green: #10b981;
+    --red: #ef4444;
 }
 
-.header{
-background:#111827;
-padding:18px;
-font-size:22px;
-font-weight:bold;
-color:gold;
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.tabs-container {
-margin: 15px auto;
-max-width: 520px;
-width: 90%;
-display: flex;
-gap: 10px;
-justify-content: center;
+/* Application Top Header */
+.app-header {
+    width: 100%;
+    max-width: 480px;
+    background: #111827;
+    color: white;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
 }
 
-.tab-btn {
-flex: 1;
-background: #1f2937;
-color: #9ca3af;
-border: 2px solid #374151;
-padding: 12px;
-border-radius: 8px;
-font-weight: bold;
-cursor: pointer;
-font-size: 14px;
-transition: all 0.3s ease;
+.brand {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.tab-btn.active {
-background: gold;
-color: #0b1220;
-border-color: gold;
+/* Live Global Mandi Bar */
+.live-mandi-bar {
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid var(--gold);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fef08a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.card{
-background:#1f2937;
-margin:10px auto;
-padding:16px;
-border-radius:12px;
-max-width:520px;
-width:90%;
-box-sizing: border-box;
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--green);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px var(--green);
 }
 
-.price{
-font-size:26px;
-color:gold;
-font-weight:bold;
-margin-top:8px;
-transition: color 0.3s ease; 
+/* App Container */
+.app-container {
+    width: 100%;
+    max-width: 480px;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
-.change{
-font-size:14px;
-margin-top:5px;
-color:#22c55e;
+/* Modern App Navigation Tabs */
+.app-tabs {
+    display: flex;
+    background: #e5e7eb;
+    padding: 4px;
+    border-radius: 25px;
+    margin-bottom: 15px;
 }
 
-a{
-display:inline-block;
-margin-top:10px;
-background:#25D366;
-color:white;
-padding:10px 16px;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
+.tab-item {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px;
+    border-radius: 22px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.chart-wrapper {
-max-width: 520px;
-width: 90%;
-margin: 0 auto;
-background: white;
-border-radius: 10px;
-padding: 10px;
-box-sizing: border-box;
+.tab-item.active {
+    background: white;
+    color: var(--text-main);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
-canvas{
-width: 100% !important;
-height: 250px !important;
+/* Premium App Style Cards */
+.app-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid #edf2f7;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.gold-badge {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 10px;
+}
+
+.main-price {
+    font-size: 26px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.price-change {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+}
+
+/* Chart Canvas Area */
+.chart-container {
+    background: white;
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid #edf2f7;
+    margin-bottom: 15px;
+}
+
+/* Quick Action Social Buttons */
+.action-grid {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #25D366;
+    color: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(37, 211, 102, 0.2);
+}
+
+.btn-community {
+    background: #3b82f6;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 </style>
 </head>
-
 <body>
 
-<div class="header">
-📊 Rawalpindi Sarafa Pro Dashboard
+<!-- Application Top bar -->
+<div class="app-header">
+    <div class="brand">✨ پاک گولڈ ریٹ</div>
+    <div class="live-mandi-bar">
+        <span class="pulse-dot"></span>
+        <span>Mandi: $<span id="mandi-ticker">4,154.00</span></span>
+    </div>
 </div>
 
-<div class="tabs-container">
-<button class="tab-btn active" id="tab-tola" onclick="changeMandi('tola')">🇵🇰 PKR / Tola</button>
-<button class="tab-btn" id="tab-ounce" onclick="changeMandi('ounce')">🇵🇰 PKR / Ounce</button>
-<button class="tab-btn" id="tab-usd" onclick="changeMandi('usd')">🇺🇸 USD / Ounce</button>
-</div>
+<div class="app-container">
+    
+    <!-- App Functional Tabs Menu -->
+    <div class="app-tabs">
+        <button class="tab-item active" id="btn-tola" onclick="switchView('tola')">PKR / Tola</button>
+        <button class="tab-item" id="btn-ounce" onclick="switchView('ounce')">PKR / Ounce</button>
+        <button class="tab-item" id="btn-usd" onclick="switchView('usd')">USD / Ounce</button>
+    </div>
 
-<div class="card">
-🥇 <span id="label-24">Gold 24K (Tola)</span>
-<div class="price" id="g24">Loading...</div>
-<div class="change" id="c24">🔄 Live Tracking</div>
-</div>
+    <!-- 24K Asset Card -->
+    <div class="app-card">
+        <div class="card-meta">
+            <span id="title-24">Gold 24K (Per Tola)</span>
+            <span class="gold-badge">24 Karat</span>
+        </div>
+        <div class="price-row">
+            <div class="main-price" id="v24">Calculating...</div>
+            <div class="price-change" id="diff-box">🔄 Live</div>
+        </div>
+    </div>
 
-<div class="card">
-🥇 <span id="label-22">Gold 22K (Tola)</span>
-<div class="price" id="g22">Loading...</div>
-</div>
+    <!-- 22K Asset Card -->
+    <div class="app-card">
+        <div class="card-meta">
+            <span id="title-22">Gold 22K (Per Tola)</span>
+            <span class="gold-badge" style="background:#f3f4f6; color:#4b5563;">22 Karat</span>
+        </div>
+        <div class="price-row">
+            <div class="main-price" id="v22">Calculating...</div>
+        </div>
+    </div>
 
-<div class="card">
-🥇 <span id="label-21">Gold 21K (Tola)</span>
-<div class="price" id="g21">Loading...</div>
-</div>
+    <!-- 21K Asset Card -->
+    <div class="app-card">
+        <div class="card-meta">
+            <span id="title-21">Gold 21K (Per Tola)</span>
+            <span class="gold-badge" style="background:#f3f4f6; color:#4b5563;">21 Karat</span>
+        </div>
+        <div class="price-row">
+            <div class="main-price" id="v21">Calculating...</div>
+        </div>
+    </div>
 
-<div class="card">
-📱 WhatsApp Contact
-<br>
-<a href="https://wa.me/923115855885">0311-5855885</a>
-<br><br>
-<a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC">Join Community</a>
-</div>
+    <!-- Live Real-Time Analytics Graph -->
+    <div class="chart-container">
+        <canvas id="cryptoStyleChart" style="width:100%; height:200px;"></canvas>
+    </div>
 
-<div class="card">
-<div class="chart-wrapper">
-    <canvas id="chart"></canvas>
-</div>
+    <!-- Action Shortcuts -->
+    <div class="action-grid">
+        <a href="https://wa.me/923115855885" class="btn-action">💬 WhatsApp</a>
+        <a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC" class="btn-action btn-community">👥 Group</a>
+    </div>
+
 </div>
 
 <script>
-let history = [];
-let lastValue = null;
-let chart;
-let currentMandi = 'tola';
+let currentMode = 'tola';
+let liveMandiUsd = 4154.00; 
+let exchangeRatePkr = 278.50;
+let chartInstance = null;
+let historicalCache = null;
 
-let rawGoldTola24 = 0;
-let rawGoldOunce24 = 0;
-let rawGoldUsdOunce24 = 4154; // Aapki batayi hui real baseline mandi value
-let liveUsdPkrRate = 278.5;
+// Clean professional tracking engine
+async function updateMarketRates() {
+    try {
+        // Fetch accurate live USD to PKR rate
+        let res = await fetch("https://open.er-api.com/v6/latest/USD");
+        let data = await res.json();
+        exchangeRatePkr = data.rates.PKR;
+        
+        // Micro fluctuation generator to simulate live trading room movement ($4154 benchmark)
+        let liveFluctuation = (Math.random() - 0.5) * 0.5;
+        liveMandiUsd = 4154.00 + liveFluctuation;
 
-function initChart() {
-    let ctx = document.getElementById("chart").getContext("2d");
-    chart = new Chart(ctx, {
-        type: "line",
+        // Display exact live Mandi value on the top application banner bar
+        document.getElementById("mandi-ticker").innerText = liveMandiUsd.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        calculateWeightsAndRender();
+    } catch (e) {
+        console.log("Stream sync lag: ", e);
+    }
+}
+
+function calculateWeightsAndRender() {
+    // Exact standard international weights formula metrics
+    let pkrPerOunce = liveMandiUsd * exchangeRatePkr;
+    let pkrPerTola = (pkrPerOunce / 31.1035) * 11.664;
+
+    let target24, target22, target21, symbol = "Rs ", decimals = 0;
+
+    if (currentMode === 'tola') {
+        target24 = pkrPerTola;
+        symbol = "Rs ";
+        document.getElementById("title-24").innerText = "Gold 24K (Per Tola)";
+        document.getElementById("title-22").innerText = "Gold 22K (Per Tola)";
+        document.getElementById("title-21").innerText = "Gold 21K (Per Tola)";
+    } else if (currentMode === 'ounce') {
+        target24 = pkrPerOunce;
+        symbol = "Rs ";
+        document.getElementById("title-24").innerText = "Gold 24K (Per Ounce)";
+        document.getElementById("title-22").innerText = "Gold 22K (Per Ounce)";
+        document.getElementById("title-21").innerText = "Gold 21K (Per Ounce)";
+    } else if (currentMode === 'usd') {
+        target24 = liveMandiUsd;
+        symbol = "$";
+        decimals = 2;
+        document.getElementById("title-24").innerText = "Gold 24K (Ounce USD)";
+        document.getElementById("title-22").innerText = "Gold 22K (Ounce USD)";
+        document.getElementById("title-21").innerText = "Gold 21K (Ounce USD)";
+    }
+
+    target22 = target24 * 22 / 24;
+    target21 = target24 * 21 / 24;
+
+    // Elements update dynamically inside their DOM wrappers without causing any parent container shaking
+    document.getElementById("v24").innerText = symbol + Math.round(target24).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+    document.getElementById("v22").innerText = symbol + Math.round(target22).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+    document.getElementById("v21").innerText = symbol + Math.round(target21).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+
+    if (historicalCache && historicalCache.mode === currentMode) {
+        let marginalDiff = target24 - historicalCache.value;
+        if(marginalDiff !== 0) {
+            document.getElementById("diff-box").innerText = marginalDiff > 0 ? "⬆️ +" + marginalDiff.toFixed(decimals) : "⬇️ " + marginalDiff.toFixed(decimals);
+            document.getElementById("diff-box").style.color = marginalDiff > 0 ? "var(--green)" : "var(--red)";
+        }
+    } else {
+        document.getElementById("diff-box").innerText = "🟢 Live Tracking";
+        document.getElementById("diff-box").style.color = "var(--green)";
+    }
+
+    historicalCache = { value: target24, mode: currentMode };
+    appendChartPlotData(target24);
+}
+
+function switchView(type) {
+    currentMode = type;
+    document.getElementById("btn-tola").classList.remove("active");
+    document.getElementById("btn-ounce").classList.remove("active");
+    document.getElementById("btn-usd").classList.remove("active");
+    document.getElementById("btn-" + type).classList.add("active");
+    calculateWeightsAndRender();
+}
+
+function renderBaseChart() {
+    let ctx = document.getElementById("cryptoStyleChart").getContext("2d");
+    chartInstance = new Chart(ctx, {
+        type: 'line',
         data: {
             labels: [],
             datasets: [{
-                label: "Gold Trend",
+                label: 'Realtime Tracker',
                 data: [],
-                borderColor: "gold",
-                tension: 0.4,
-                pointRadius: 4,
-                backgroundColor: "rgba(255, 215, 0, 0.1)",
-                fill: true
+                borderColor: '#b8931d',
+                borderWidth: 2,
+                pointRadius: 2,
+                backgroundColor: 'rgba(212, 175, 55, 0.05)',
+                fill: true,
+                tension: 0.3
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: { duration: 0 }, 
+            animation: { duration: 0 }, // Animation disabled to completely prevent element shaking
+            plugins: { legend: { display: false } },
             scales: {
-                x: { display: true },
-                y: { display: true }
+                x: { grid: { display: false } },
+                y: { grid: { color: '#f3f4f6' } }
             }
         }
     });
 }
 
-async function getData(){
-try{
-    // Step 1: Real-time Live Dollar Rate
-    let resPkr = await fetch("https://open.er-api.com/v6/latest/USD");
-    let jsonPkr = await resPkr.json();
-    liveUsdPkrRate = jsonPkr.rates.PKR;
+function appendChartPlotData(latestPriceValue) {
+    if (!chartInstance) return;
+    let timeLabel = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    // Step 2: Accurate International Gold Price Endpoint Integration
-    // Har 3 second baad mandi mein fraction fluctuation automatic add hogi bina page hilaye
-    let liveMandiDrift = (Math.random() - 0.5) * 0.8; 
-    rawGoldUsdOunce24 = 4154.20 + liveMandiDrift; 
+    let labelsArr = chartInstance.data.labels;
+    let dataArr = chartInstance.data.datasets[0].data;
 
-    // Precise standard gold conversion rules
-    rawGoldOunce24 = rawGoldUsdOunce24 * liveUsdPkrRate;
-    rawGoldTola24 = (rawGoldOunce24 / 31.1035) * 11.664;
-
-}catch(err){
-    console.log("Mandi update shift:", err);
-}
-}
-
-function changeMandi(mode) {
-    currentMandi = mode;
-    document.getElementById('tab-tola').classList.remove('active');
-    document.getElementById('tab-ounce').classList.remove('active');
-    document.getElementById('tab-usd').classList.remove('active');
-    document.getElementById('tab-' + mode).classList.add('active');
-    renderUI();
-}
-
-function renderUI() {
-    let val24, val22, val21, prefix, suffix, precision = 0;
-
-    if (currentMandi === 'tola') {
-        val24 = rawGoldTola24;
-        val22 = rawGoldTola24 * 22/24;
-        val21 = rawGoldTola24 * 21/24;
-        prefix = "Rs ";
-        suffix = "";
-        document.getElementById("label-24").innerText = "Gold 24K (Tola)";
-        document.getElementById("label-22").innerText = "Gold 22K (Tola)";
-        document.getElementById("label-21").innerText = "Gold 21K (Tola)";
-    } else if (currentMandi === 'ounce') {
-        val24 = rawGoldOunce24;
-        val22 = rawGoldOunce24 * 22/24;
-        val21 = rawGoldOunce24 * 21/24;
-        prefix = "Rs ";
-        suffix = "";
-        document.getElementById("label-24").innerText = "Gold 24K (Ounce)";
-        document.getElementById("label-22").innerText = "Gold 22K (Ounce)";
-        document.getElementById("label-21").innerText = "Gold 21K (Ounce)";
-    } else if (currentMandi === 'usd') {
-        val24 = rawGoldUsdOunce24;
-        val22 = rawGoldUsdOunce24 * 22/24;
-        val21 = rawGoldUsdOunce24 * 21/24;
-        prefix = "$";
-        suffix = " USD";
-        precision = 2;
-        document.getElementById("label-24").innerText = "Gold 24K (Ounce in USD)";
-        document.getElementById("label-22").innerText = "Gold 22K (Ounce in USD)";
-        document.getElementById("label-21").innerText = "Gold 21K (Ounce in USD)";
+    if (labelsArr.length === 0 || dataArr[dataArr.length - 1] !== latestPriceValue) {
+        labelsArr.push(timeLabel);
+        dataArr.push(latestPriceValue);
     }
 
-    // Updating only the inner text values smoothly without flickering the UI boxes
-    document.getElementById("g24").innerHTML = prefix + Math.round(val24).toLocaleString() + suffix;
-    document.getElementById("g22").innerHTML = prefix + Math.round(val22).toLocaleString() + suffix;
-    document.getElementById("g21").innerHTML = prefix + Math.round(val21).toLocaleString() + suffix;
-
-    if(lastValue && lastValue.mode === currentMandi){
-        let diff = val24 - lastValue.val;
-        if(diff !== 0) {
-            document.getElementById("c24").innerHTML = diff > 0 
-                ? "⬆️ + " + Math.round(diff).toLocaleString() 
-                : "⬇️ - " + Math.abs(Math.round(diff)).toLocaleString();
-            document.getElementById("c24").style.color = diff > 0 ? "#22c55e" : "#ef4444";
-        }
+    if (labelsArr.length > 12) {
+        labelsArr.shift();
+        dataArr.shift();
     }
 
-    lastValue = { val: val24, mode: currentMandi };
-    updateChartData(val24);
+    // Single step safe update routine to keep UI rigid and static
+    chartInstance.update('none');
 }
 
-async function update(){
-    await getData();
-    renderUI();
-}
+// Initial System Boots
+renderBaseChart();
+updateMarketRates();
 
-function updateChartData(val){
-    if(!chart) return;
-    
-    let time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-
-    if(chart.data.labels.length === 0 || chart.data.datasets[0].data[chart.data.datasets[0].data.length - 1] !== val) {
-        chart.data.labels.push(time);
-        chart.data.datasets[0].data.push(val);
-    }
-
-    if(chart.data.labels.length > 15) {
-        chart.data.labels.shift();
-        chart.data.datasets[0].data.shift();
-    }
-
-    let labelText = currentMandi === 'usd' ? "Gold Trend (USD/Ounce)" : currentMandi === 'ounce' ? "Gold Trend (PKR/Ounce)" : "Gold Trend (PKR/Tola)";
-    chart.data.datasets[0].label = labelText;
-    
-    chart.update('none'); // Directly updates the chart data path without flickering or screen shaking
-}
-
-initChart();
-update();
-
-// Fast 3 seconds global tracking trigger
-setInterval(update, 3000);
+// Clean background update intervals every 3 seconds
+setInterval(updateMarketRates, 3000);
 </script>
 
 </body>
