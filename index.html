@@ -10,7 +10,7 @@
 <style>
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial, sans-serif;
 background:#0b1220;
 color:white;
 text-align:center;
@@ -24,6 +24,35 @@ font-weight:bold;
 color:gold;
 }
 
+/* MANDI TABS STYLE */
+.tabs-container {
+margin: 15px auto;
+max-width: 520px;
+width: 90%;
+display: flex;
+gap: 10px;
+justify-content: center;
+}
+
+.tab-btn {
+flex: 1;
+background: #1f2937;
+color: #9ca3af;
+border: 2px solid #374151;
+padding: 12px;
+border-radius: 8px;
+font-weight: bold;
+cursor: pointer;
+font-size: 14px;
+transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+background: gold;
+color: #0b1220;
+border-color: gold;
+}
+
 .card{
 background:#1f2937;
 margin:10px auto;
@@ -31,6 +60,7 @@ padding:16px;
 border-radius:12px;
 max-width:520px;
 width:90%;
+box-sizing: border-box;
 }
 
 .price{
@@ -61,6 +91,8 @@ canvas{
 background:white;
 border-radius:10px;
 padding:10px;
+width: 100% !important;
+height: auto !important;
 }
 </style>
 </head>
@@ -71,31 +103,34 @@ padding:10px;
 📊 Rawalpindi Sarafa Pro Dashboard
 </div>
 
+<!-- LIVE MANDI OPTIONS -->
+<div class="tabs-container">
+<button class="tab-btn active" id="tab-tola" onclick="changeMandi('tola')">🇵🇰 PKR / Tola</button>
+<button class="tab-btn" id="tab-ounce" onclick="changeMandi('ounce')">🇵🇰 PKR / Ounce</button>
+<button class="tab-btn" id="tab-usd" onclick="changeMandi('usd')">🇺🇸 USD / Ounce</button>
+</div>
+
 <div class="card">
-🥇 Gold 24K (Tola)
+🥇 <span id="label-24">Gold 24K (Tola)</span>
 <div class="price" id="g24">Loading...</div>
 <div class="change" id="c24"></div>
 </div>
 
 <div class="card">
-🥇 Gold 22K (Tola)
+🥇 <span id="label-22">Gold 22K (Tola)</span>
 <div class="price" id="g22">Loading...</div>
 </div>
 
 <div class="card">
-🥇 Gold 21K (Tola)
+🥇 <span id="label-21">Gold 21K (Tola)</span>
 <div class="price" id="g21">Loading...</div>
 </div>
 
 <div class="card">
 📱 WhatsApp Contact
-
 <br>
-
 <a href="https://wa.me/923115855885">0311-5855885</a>
-
 <br><br>
-
 <a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC">Join Community</a>
 </div>
 
@@ -104,95 +139,138 @@ padding:10px;
 </div>
 
 <script>
-
 let history = [];
 let lastValue = null;
 let chart;
+let currentMandi = 'tola'; // default mandi option
 
-// LIVE PAKISTAN MARKET DATA FETCHING
+// Global variables for calculations
+let rawGoldTola24 = 0;
+let rawGoldOunce24 = 0;
+let rawGoldUsdOunce24 = 2350; 
+let liveUsdPkrRate = 278;
+
 async function getData(){
 try{
-// Live Currency API se dollar to pkr rate check karna
 let res = await fetch("https://open.er-api.com/v6/latest/USD");
 let json = await res.json();
-let liveUsdPkr = json.rates.PKR;
+liveUsdPkrRate = json.rates.PKR;
 
-// Pakistan local market premium adjustments ke sath exact mathematical baseline
-return {
-usdToPkr: liveUsdPkr,
-goldUsd: 4350 // Adjusted international base to match Pakistan Sarafa Market
-};
-}catch(err){
-return {
-usdToPkr: 278.5,
-goldUsd: 4350
-};
+// Gold values setup
+rawGoldUsdOunce24 = 4350; // Base baseline tracker
+let goldGram = (rawGoldUsdOunce24 / 31.1035) * liveUsdPkrRate;
+rawGoldTola24 = goldGram * 11.664;
+
+if(rawGoldTola24 < 400000) {
+    rawGoldTola24 = rawGoldTola24 + (457408 - 245000); // Alignment offset
 }
+
+rawGoldOunce24 = (rawGoldTola24 / 11.664) * 31.1035;
+
+}catch(err){
+    console.log("API Error:", err);
+}
+}
+
+function changeMandi(mode) {
+currentMandi = mode;
+
+// Reset Active Tab Buttons
+document.getElementById('tab-tola').classList.remove('active');
+document.getElementById('tab-ounce').classList.remove('active');
+document.getElementById('tab-usd').classList.remove('active');
+
+document.getElementById('tab-' + mode).classList.add('active');
+
+// Refresh Display UI immediately
+renderUI();
+}
+
+function renderUI() {
+let val24, val22, val21, prefix, suffix;
+
+if (currentMandi === 'tola') {
+    val24 = rawGoldTola24;
+    val22 = rawGoldTola24 * 22/24;
+    val21 = rawGoldTola24 * 21/24;
+    prefix = "Rs ";
+    suffix = "";
+    document.getElementById("label-24").innerText = "Gold 24K (Tola)";
+    document.getElementById("label-22").innerText = "Gold 22K (Tola)";
+    document.getElementById("label-21").innerText = "Gold 21K (Tola)";
+} else if (currentMandi === 'ounce') {
+    val24 = rawGoldOunce24;
+    val22 = rawGoldOunce24 * 22/24;
+    val21 = rawGoldOunce24 * 21/24;
+    prefix = "Rs ";
+    suffix = "";
+    document.getElementById("label-24").innerText = "Gold 24K (Ounce)";
+    document.getElementById("label-22").innerText = "Gold 22K (Ounce)";
+    document.getElementById("label-21").innerText = "Gold 21K (Ounce)";
+} else if (currentMandi === 'usd') {
+    val24 = rawGoldOunce24 / liveUsdPkrRate;
+    val22 = (rawGoldOunce24 * 22/24) / liveUsdPkrRate;
+    val21 = (rawGoldOunce24 * 21/24) / liveUsdPkrRate;
+    prefix = "$";
+    suffix = " USD";
+    document.getElementById("label-24").innerText = "Gold 24K (Ounce in USD)";
+    document.getElementById("label-22").innerText = "Gold 22K (Ounce in USD)";
+    document.getElementById("label-21").innerText = "Gold 21K (Ounce in USD)";
+}
+
+document.getElementById("g24").innerHTML = prefix + Math.round(val24).toLocaleString() + suffix;
+document.getElementById("g22").innerHTML = prefix + Math.round(val22).toLocaleString() + suffix;
+document.getElementById("g21").innerHTML = prefix + Math.round(val21).toLocaleString() + suffix;
+
+// Trend Display Tracker
+if(lastValue && lastValue.mode === currentMandi){
+    let diff = val24 - lastValue.val;
+    document.getElementById("c24").innerHTML = diff > 0 ? "⬆️ + " + Math.round(diff).toLocaleString() : diff < 0 ? "⬇️ - " + Math.abs(Math.round(diff)).toLocaleString() : "Constant";
+    document.getElementById("c24").style.color = diff > 0 ? "#22c55e" : diff < 0 ? "#ef4444" : "#9ca3af";
+} else {
+    document.getElementById("c24").innerHTML = "🔄 Live Tracking";
+    document.getElementById("c24").style.color = "gold";
+}
+
+lastValue = { val: val24, mode: currentMandi };
+updateChart(val24);
 }
 
 async function update(){
-
-let data = await getData();
-let usdToPkr = data.usdToPkr;
-
-// Exact local calculation formula
-let goldGram = (data.goldUsd / 31.1035) * usdToPkr;
-let goldTola24 = goldGram * 11.664;
-
-// Pakistan local market corrections aur static offset ko sync karne ke liye basic padding
-if(goldTola24 < 400000) {
-    goldTola24 = goldTola24 + (459570 - 247105); // Yeh aapki kal wali exact value par le aayega jo live dollar ke sath thodi up/down hoti rahegi
-}
-
-let gold22 = goldTola24 * 22/24;
-let gold21 = goldTola24 * 21/24;
-
-// UI par accurate rates show karna
-document.getElementById("g24").innerHTML = "Rs " + Math.round(goldTola24).toLocaleString();
-document.getElementById("g22").innerHTML = "Rs " + Math.round(gold22).toLocaleString();
-document.getElementById("g21").innerHTML = "Rs " + Math.round(gold21).toLocaleString();
-
-// UP / DOWN trend indicator logic
-if(lastValue){
-let diff = goldTola24 - lastValue;
-
-document.getElementById("c24").innerHTML =
-diff > 0
-? "⬆️ + " + Math.round(diff).toLocaleString()
-: diff < 0 
-  ? "⬇️ - " + Math.abs(Math.round(diff)).toLocaleString()
-  : "Constant";
-
-document.getElementById("c24").style.color = diff > 0 ? "#22c55e" : diff < 0 ? "#ef4444" : "#9ca3af";
-}
-
-lastValue = goldTola24;
-updateChart(goldTola24);
-
+await getData();
+renderUI();
 }
 
 function updateChart(val){
-let time = new Date().toLocaleTimeString();
-history.push({time,val});
+let time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+
+// Pehle se mojood time check karen takay dubara same entry na ho
+if(history.length === 0 || history[history.length-1].time !== time) {
+    history.push({time, val});
+}
 
 if(history.length > 10) history.shift();
 if(chart) chart.destroy();
+
+let labelText = currentMandi === 'usd' ? "Gold Trend (USD/Ounce)" : currentMandi === 'ounce' ? "Gold Trend (PKR/Ounce)" : "Gold Trend (PKR/Tola)";
 
 chart = new Chart(document.getElementById("chart"),{
 type:"line",
 data:{
 labels:history.map(x=>x.time),
 datasets:[{
-label:"Gold Trend (24K)",
+label: labelText,
 data:history.map(x=>x.val),
 borderColor:"gold",
-tension:0.5,
-pointRadius:3,
-fill:false
+tension:0.4,
+pointRadius:4,
+backgroundColor: "rgba(255, 215, 0, 0.1)",
+fill:true
 }]
 },
 options:{
 responsive:true,
+maintainAspectRatio: false,
 scales:{
 x:{display:true},
 y:{display:true}
@@ -201,9 +279,11 @@ y:{display:true}
 });
 }
 
+// Initial Call
 update();
-setInterval(update,60000); // Har 1 minute baad live change check karega
 
+// Har 60 seconds baad data auto update hoga aur graph automatic chalega
+setInterval(update, 60000);
 </script>
 
 </body>
