@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rawalpindi Sarafa Live</title>
+<title>Rawalpindi Sarafa Live Pro</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -29,7 +29,7 @@ background:#1f2937;
 margin:10px auto;
 padding:16px;
 border-radius:12px;
-max-width:500px;
+max-width:520px;
 width:90%;
 }
 
@@ -38,6 +38,12 @@ font-size:26px;
 color:gold;
 font-weight:bold;
 margin-top:8px;
+}
+
+.change{
+font-size:14px;
+margin-top:5px;
+color:#22c55e;
 }
 
 a{
@@ -51,12 +57,6 @@ text-decoration:none;
 font-weight:bold;
 }
 
-.footer{
-margin-top:15px;
-font-size:13px;
-color:#9ca3af;
-}
-
 canvas{
 background:white;
 border-radius:10px;
@@ -68,12 +68,13 @@ padding:10px;
 <body>
 
 <div class="header">
-📊 Rawalpindi Sarafa Bazar Live Rates
+📊 Rawalpindi Sarafa Pro Dashboard
 </div>
 
 <div class="card">
 🥇 Gold 24K (Tola)
 <div class="price" id="g24">Loading...</div>
+<div class="change" id="c24"></div>
 </div>
 
 <div class="card">
@@ -87,28 +88,15 @@ padding:10px;
 </div>
 
 <div class="card">
-🥈 Silver (Tola)
-<div class="price" id="silver">Loading...</div>
-</div>
-
-<div class="card">
 📱 WhatsApp Contact
 
 <br>
 
-<a href="https://wa.me/923115855885">
-📞 0311-5855885
-</a>
+<a href="https://wa.me/923115855885">0311-5855885</a>
 
 <br><br>
 
-<a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC">
-👥 Join Community
-</a>
-
-<div class="footer">
-Asad Raja | Connect for this number
-</div>
+<a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC">Join Community</a>
 </div>
 
 <div class="card">
@@ -117,10 +105,11 @@ Asad Raja | Connect for this number
 
 <script>
 
-let history=[];
+let history = [];
+let lastValue = null;
 let chart;
 
-// safe data
+// data
 async function getData(){
 try{
 let res = await fetch("rate.json");
@@ -128,8 +117,7 @@ return await res.json();
 }catch{
 return {
 usdToPkr:285,
-goldUsd:4300,
-silverUsd:30
+goldUsd:4300
 };
 }
 }
@@ -140,15 +128,11 @@ let data = await getData();
 
 let usdToPkr = data.usdToPkr;
 
-// GOLD
 let goldGram = (data.goldUsd / 31.1035) * usdToPkr;
 let goldTola24 = goldGram * 11.664;
+
 let gold22 = goldTola24 * 22/24;
 let gold21 = goldTola24 * 21/24;
-
-// SILVER (FIXED)
-let silverGram = (data.silverUsd / 31.1035) * usdToPkr;
-let silverTola = silverGram * 11.664;
 
 // UI
 document.getElementById("g24").innerHTML =
@@ -160,8 +144,20 @@ document.getElementById("g22").innerHTML =
 document.getElementById("g21").innerHTML =
 "Rs " + Math.round(gold21).toLocaleString();
 
-document.getElementById("silver").innerHTML =
-"Rs " + Math.round(silverTola).toLocaleString();
+// UP / DOWN indicator
+if(lastValue){
+let diff = goldTola24 - lastValue;
+
+document.getElementById("c24").innerHTML =
+diff > 0
+? "⬆️ + " + Math.round(diff).toLocaleString()
+: "⬇️ - " + Math.abs(Math.round(diff)).toLocaleString();
+
+document.getElementById("c24").style.color =
+diff > 0 ? "#22c55e" : "#ef4444";
+}
+
+lastValue = goldTola24;
 
 updateChart(goldTola24);
 
@@ -182,11 +178,20 @@ type:"line",
 data:{
 labels:history.map(x=>x.time),
 datasets:[{
-label:"Gold Trend (PKR)",
+label:"Gold Trend (24K)",
 data:history.map(x=>x.val),
 borderColor:"gold",
+tension:0.5,
+pointRadius:3,
 fill:false
 }]
+},
+options:{
+responsive:true,
+scales:{
+x:{display:true},
+y:{display:true}
+}
 }
 });
 
