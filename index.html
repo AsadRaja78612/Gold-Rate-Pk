@@ -93,7 +93,7 @@
             padding: 5px;
         }
 
-        /* Sidebar Menu Drawer matching 54173.jpg */
+        /* Sidebar Menu Drawer */
         .menu-drawer {
             position: fixed;
             top: 0;
@@ -186,7 +186,7 @@
             cursor: pointer;
         }
 
-        /* Hidden Secret Admin Panel Style */
+        /* Secret Admin Panel Style */
         .secret-admin {
             background-color: #fce4d6;
             border: 2px solid #e67e22;
@@ -202,7 +202,7 @@
             color: #d35400;
         }
 
-        /* App View Screens (Tabs System) */
+        /* App View Screens */
         .app-view {
             display: none;
             padding: 0 12px 80px 12px;
@@ -412,7 +412,7 @@
             </ul>
         </div>
 
-        <!-- Secret Khufia Admin Panel (Hidden completely from regular users) -->
+        <!-- Secret Khufia Admin Panel -->
         <div class="secret-admin" id="secretAdminPanel">
             <h3>⚙️ ایڈمن کنٹرول پینل (Secret Admin Settings)</h3>
             <div style="margin-bottom: 8px;">
@@ -485,17 +485,17 @@
             </div>
         </div>
 
-        <!-- SCREEN 3: CURRENCY RATE VIEW -->
+        <!-- SCREEN 3: CURRENCY RATE VIEW (OPEN MARKET) -->
         <div id="currency-rate" class="app-view">
-            <div class="section-title">💵 اوپن مارکیٹ کرنسی ریٹس (PKR Rates Live)</div>
+            <div class="section-title">💵 اوپن مارکیٹ کرنسی ریٹس (Open Market PKR Rates Live)</div>
             <table class="currency-table">
                 <thead><tr><th>کرنسی (Currency)</th><th>خرید (Buy)</th><th>فروخت (Sell)</th></tr></thead>
                 <tbody>
-                    <tr><td>🇺🇸 US Dollar (USD)</td><td id="usdBuy">277.60</td><td id="usdSell">280.20</td></tr>
-                    <tr><td>🇦🇪 UAE Dirham (AED)</td><td id="aedBuy">75.40</td><td id="aedSell">76.15</td></tr>
-                    <tr><td>🇸🇦 Saudi Riyal (SAR)</td><td id="sarBuy">73.85</td><td id="sarSell">74.60</td></tr>
-                    <tr><td>🇬🇧 British Pound (GBP)</td><td id="gbpBuy">351.20</td><td id="gbpSell">354.80</td></tr>
-                    <tr><td>🇪🇺 Euro (EUR)</td><td id="eurBuy">296.10</td><td id="eurSell">299.30</td></tr>
+                    <tr><td>🇺🇸 US Dollar (USD)</td><td id="usdBuy" style="font-weight: bold; color: #27ae60;">278.40</td><td id="usdSell" style="font-weight: bold; color: #e74c3c;">280.90</td></tr>
+                    <tr><td>🇦🇪 UAE Dirham (AED)</td><td id="aedBuy">75.60</td><td id="aedSell">76.45</td></tr>
+                    <tr><td>🇸🇦 Saudi Riyal (SAR)</td><td id="sarBuy">74.05</td><td id="sarSell">74.85</td></tr>
+                    <tr><td>🇬🇧 British Pound (GBP)</td><td id="gbpBuy">352.10</td><td id="gbpSell">355.70</td></tr>
+                    <tr><td>🇪🇺 Euro (EUR)</td><td id="eurBuy">296.80</td><td id="eurSell">300.10</td></tr>
                 </tbody>
             </table>
         </div>
@@ -608,9 +608,16 @@
                 let oilRandom = (Math.random() - 0.5) * 0.4;
                 document.getElementById('oilPrice').innerText = "$ " + (78.41 + oilRandom).toFixed(2) + " USD";
 
-                // Update Currency live simulation rows
-                document.getElementById('usdBuy').innerText = (277.60 + (Math.random() - 0.5) * 0.2).toFixed(2);
-                document.getElementById('usdSell').innerText = (280.20 + (Math.random() - 0.5) * 0.2).toFixed(2);
+                // Update Open Market Currency live simulation rows (Natural Fluctuations)
+                let usdFluctuation = (Math.random() - 0.5) * 0.15;
+                document.getElementById('usdBuy').innerText = (278.40 + usdFluctuation).toFixed(2);
+                document.getElementById('usdSell').innerText = (280.90 + usdFluctuation).toFixed(2);
+
+                let generalFluctuation = (Math.random() - 0.5) * 0.05;
+                document.getElementById('aedBuy').innerText = (75.60 + generalFluctuation).toFixed(2);
+                document.getElementById('aedSell').innerText = (76.45 + generalFluctuation).toFixed(2);
+                document.getElementById('sarBuy').innerText = (74.05 + generalFluctuation).toFixed(2);
+                document.getElementById('sarSell').innerText = (74.85 + generalFluctuation).toFixed(2);
             }
         }, 3000);
 
