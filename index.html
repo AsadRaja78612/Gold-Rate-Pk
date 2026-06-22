@@ -198,8 +198,37 @@
 
         .secret-admin h3 {
             font-size: 14px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #d35400;
+            border-bottom: 1px solid #e67e22;
+            padding-bottom: 4px;
+        }
+
+        .admin-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .admin-input-group label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #5d6d7e;
+        }
+
+        .admin-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .admin-input-row input {
+            width: 100%;
+            padding: 6px;
+            text-align: center;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
         /* App View Screens */
@@ -413,17 +442,48 @@
             </ul>
         </div>
 
-        <!-- Secret Khufia Admin Panel -->
+        <!-- Secret Khufia Admin Panel (Updated with Complete Metal Overrides) -->
         <div class="secret-admin" id="secretAdminPanel">
-            <h3>⚙️ ایڈمن کنٹرول پینل (Secret Admin Settings)</h3>
-            <div style="margin-bottom: 8px;">
+            <h3>⚙️ ایڈمن کنٹرول پینل (Mandi Controls)</h3>
+            <div style="margin-bottom: 12px;">
                 <label><input type="radio" name="mode" id="modeLive" checked onchange="setSystemMode('live')"> 🟢 Live Market (Automatic)</label><br>
-                <label><input type="radio" name="mode" id="modeManual" onchange="setSystemMode('manual')"> 🔴 Manual Override (Mandi Control)</label>
+                <label><input type="radio" name="mode" id="modeManual" onchange="setSystemMode('manual')"> 🔴 Manual Override (Full Control)</label>
             </div>
-            <div id="manualFields" style="display:none; gap:5px; flex-direction:column;">
-                <input type="number" id="manual24KBuy" placeholder="24K Buy Rate" value="442400" style="padding:5px; text-align:center;">
-                <input type="number" id="manual24KSell" placeholder="24K Sell Rate" value="443900" style="padding:5px; text-align:center;">
-                <button onclick="saveManualOverride()" style="background:#e67e22; color:white; border:none; padding:5px; cursor:pointer; font-weight:bold;">محفوظ کریں</button>
+            
+            <div id="manualFields" style="display:none; flex-direction:column;">
+                <div class="admin-input-group">
+                    <label>گولڈ 24K (خرید / فروخت):</label>
+                    <div class="admin-input-row">
+                        <input type="number" id="manual24KBuy" placeholder="Buy Rate" value="442400">
+                        <input type="number" id="manual24KSell" placeholder="Sell Rate" value="443900">
+                    </div>
+                </div>
+
+                <div class="admin-input-group">
+                    <label>چاندی / Silver (خرید / فروخت):</label>
+                    <div class="admin-input-row">
+                        <input type="number" id="manualSilverBuy" placeholder="Buy Rate" value="5480">
+                        <input type="number" id="manualSilverSell" placeholder="Sell Rate" value="5610">
+                    </div>
+                </div>
+
+                <div class="admin-input-group">
+                    <label>پلاٹینم / Platinum (خرید / فروخت):</label>
+                    <div class="admin-input-row">
+                        <input type="number" id="manualPlatBuy" placeholder="Buy Rate" value="168200">
+                        <input type="number" id="manualPlatSell" placeholder="Sell Rate" value="170400">
+                    </div>
+                </div>
+
+                <div class="admin-input-group">
+                    <label>پیلیڈیم / Palladium (خرید / فروخت):</label>
+                    <div class="admin-input-row">
+                        <input type="number" id="manualPallBuy" placeholder="Buy Rate" value="184600">
+                        <input type="number" id="manualPallSell" placeholder="Sell Rate" value="186900">
+                    </div>
+                </div>
+
+                <button onclick="saveManualOverride()" style="background:#e67e22; color:white; border:none; padding:8px; cursor:pointer; font-weight:bold; border-radius:4px; margin-top:5px;">تمام ریٹس محفوظ کریں</button>
             </div>
         </div>
 
@@ -613,10 +673,32 @@
             }
         }
 
+        // Updated manual save feature to update ALL selected metal cards instantly
         function saveManualOverride() {
+            // 1. Update Gold Base
             baseGoldPrice = parseFloat(document.getElementById('manual24KBuy').value);
-            updateGoldDisplay(baseGoldPrice, parseFloat(document.getElementById('manual24KSell').value));
-            alert("مینوئل ریٹس محفوظ کر دیے گئے ہیں!");
+            let sell24 = parseFloat(document.getElementById('manual24KSell').value);
+            updateGoldDisplay(baseGoldPrice, sell24);
+
+            // 2. Update Chandi / Silver Manual Rates
+            let silBuy = parseFloat(document.getElementById('manualSilverBuy').value);
+            let silSell = parseFloat(document.getElementById('manualSilverSell').value);
+            document.getElementById('silverBuy').innerText = "Rs " + silBuy.toLocaleString();
+            document.getElementById('silverSell').innerText = "Rs " + silSell.toLocaleString();
+
+            // 3. Update Platinum Manual Rates
+            let platBuy = parseFloat(document.getElementById('manualPlatBuy').value);
+            let platSell = parseFloat(document.getElementById('manualPlatSell').value);
+            document.getElementById('platBuy').innerText = "Rs " + platBuy.toLocaleString();
+            document.getElementById('platSell').innerText = "Rs " + platSell.toLocaleString();
+
+            // 4. Update Palladium Manual Rates
+            let pallBuy = parseFloat(document.getElementById('manualPallBuy').value);
+            let pallSell = parseFloat(document.getElementById('manualPallSell').value);
+            document.getElementById('pallBuy').innerText = "Rs " + pallBuy.toLocaleString();
+            document.getElementById('pallSell').innerText = "Rs " + pallSell.toLocaleString();
+
+            alert("تمام ریٹس کامیابی سے مینوئل موڈ پر لاک کر دیے گئے ہیں!");
         }
 
         // Dynamic Updates Engine (3 Seconds Tick Engine)
