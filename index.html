@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pakistan Gold Live - Premium Terminal</title>
+    <title>Pakistan Gold Rate Live</title>
 
     <!-- ========================================== -->
     <!-- GOOGLE ADSENSE VERIFICATION & AUTO ADS CODE -->
@@ -73,12 +73,13 @@
         }
 
         .app-bar .title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--accent);
             display: flex;
             align-items: center;
             gap: 8px;
+            font-family: system-ui, -apple-system, sans-serif;
         }
 
         .status-pill {
@@ -103,7 +104,7 @@
         }
 
         @keyframes pulse-anim {
-            0% { transform: scale(0.8); opacity: 0.5; }
+            0 { transform: scale(0.8); opacity: 0.5; }
             50% { transform: scale(1.3); opacity: 1; }
             100% { transform: scale(0.8); opacity: 0.5; }
         }
@@ -113,25 +114,13 @@
             padding: 16px;
         }
 
-        .system-banner {
-            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(212,175,55,0.05));
-            border: 1px solid rgba(16,185,129,0.2);
-            border-radius: var(--radius);
-            padding: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--green);
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
         .section-label {
             font-size: 12px;
             font-weight: 700;
             color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin: 16px 4px 8px 4px;
+            margin: 12px 4px 8px 4px;
         }
 
         /* Premium Application Grid Cards */
@@ -458,7 +447,7 @@
     
     <!-- Application Bar Head -->
     <div class="app-bar">
-        <div class="title"><i class="fa-solid fa-layer-group"></i> Gold Terminal</div>
+        <div class="title"><i class="fa-solid fa-coins"></i> پاکستان گولڈ ریٹ</div>
         <div class="status-pill">
             <span class="pulse-dot"></span>
             <span id="terminal-mode-txt">Live Mandi</span>
@@ -467,10 +456,6 @@
 
     <!-- Application Body Context Viewports -->
     <div class="app-content">
-        
-        <div class="system-banner" id="sys-ticker-banner">
-            Processing Engine Operational: 3s Multi-Feed Ticker Active
-        </div>
 
         <div class="section-label">🥇 Premium Gold Feeds</div>
 
@@ -691,8 +676,6 @@ function processCoreExecutionEngine() {
         computedMatrix.palladium = (globalCoreBenchmarks.palladium + (microFluctuationFactor * 0.6)) * globalPkrBaseExchange * tolaConversionUnit;
         computedMatrix.oil = globalCoreBenchmarks.oil + (microFluctuationFactor * 0.05);
 
-        document.getElementById("sys-ticker-banner").innerText = "Processing Engine Operational: 3s Multi-Feed Ticker Active";
-        document.getElementById("sys-ticker-banner").style.color = "var(--green)";
         document.getElementById("terminal-mode-txt").innerText = "Live Mandi";
     } else {
         computedMatrix.g24 = activeManualMemory.g24;
@@ -702,8 +685,6 @@ function processCoreExecutionEngine() {
         computedMatrix.palladium = activeManualMemory.palladium;
         computedMatrix.oil = activeManualMemory.oil;
 
-        document.getElementById("sys-ticker-banner").innerText = "System Configuration Warning: Manual Override Sequence Active";
-        document.getElementById("sys-ticker-banner").style.color = "#ea580c";
         document.getElementById("terminal-mode-txt").innerText = "Fixed Mode";
     }
 
