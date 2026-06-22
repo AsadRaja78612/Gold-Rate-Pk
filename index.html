@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pakistan Gold Rate - Live & Manual Dashboard</title>
+    <title>Pakistan Gold Live - Premium Terminal</title>
 
     <!-- ========================================== -->
     <!-- GOOGLE ADSENSE VERIFICATION & AUTO ADS CODE -->
@@ -11,67 +11,82 @@
          crossorigin="anonymous"></script>
     <!-- ========================================== -->
 
-    <!-- FontAwesome Icons -->
+    <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
-            --bg-color: #f8fafc; 
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --gold: #d4af37;
-            --gold-dark: #b8931d;
-            --silver: #94a3b8;
-            --platinum: #cbd5e1;
-            --oil: #1e293b;
+            --primary: #0f172a;
+            --accent: #d4af37;
+            --accent-dark: #b8931d;
+            --bg-app: #f1f5f9;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
             --green: #10b981;
             --red: #ef4444;
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-app);
+            color: var(--text);
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-bottom: 40px;
+            justify-content: center;
         }
 
-        .app-header {
+        /* Phone Layout Wrapper */
+        .app-shell {
             width: 100%;
             max-width: 480px;
-            background: #0f172a;
+            min-height: 100vh;
+            background: var(--bg-app);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: 90px; /* Space for Bottom Nav Bar */
+        }
+
+        /* Top Header Navigation */
+        .app-bar {
+            background: var(--primary);
             color: white;
-            padding: 18px 20px;
-            box-sizing: border-box;
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .brand {
-            font-size: 20px;
+        .app-bar .title {
+            font-size: 18px;
             font-weight: 700;
-            color: var(--gold);
+            color: var(--accent);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .live-status-bar {
+        .status-pill {
             background: rgba(16, 185, 129, 0.15);
             border: 1px solid var(--green);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--green);
             display: flex;
@@ -84,573 +99,734 @@
             height: 8px;
             background-color: var(--green);
             border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 8px var(--green);
-            animation: pulse 1.5s infinite;
+            animation: pulse-anim 1.5s infinite;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.6; }
+        @keyframes pulse-anim {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 480px;
+        /* Main Content Container */
+        .app-content {
             padding: 16px;
-            box-sizing: border-box;
         }
 
-        .mode-badge {
-            text-align: center;
-            font-weight: bold;
-            font-size: 12px;
-            padding: 6px;
-            background: #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            color: #334155;
-        }
-
-        .section-title {
+        .system-banner {
+            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(212,175,55,0.05));
+            border: 1px solid rgba(16,185,129,0.2);
+            border-radius: var(--radius);
+            padding: 12px;
             font-size: 13px;
+            font-weight: 600;
+            color: var(--green);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .section-label {
+            font-size: 12px;
             font-weight: 700;
-            color: var(--text-muted);
-            margin: 20px 5px 10px 5px;
+            color: var(--muted);
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
+            margin: 16px 4px 8px 4px;
         }
 
-        .app-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 14px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        /* Premium Application Grid Cards */
+        .rate-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
             border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
+            transition: transform 0.2s;
         }
 
-        .card-meta {
+        .rate-card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 500;
         }
 
-        .asset-badge {
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 11px;
-        }
-
-        .bg-gold { background: #fef3c7; color: #92400e; }
-        .bg-silver { background: #f1f5f9; color: #334155; }
-        .bg-platinum { background: #f1f5f9; color: #0f172a; }
-
-        .price-row {
+        .asset-info {
             display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-top: 12px;
+            align-items: center;
+            gap: 10px;
         }
 
-        .main-price {
-            font-size: 26px;
-            font-weight: 800;
-            color: #0f172a;
+        .asset-icon {
+            width: 36px;
+            height: 36px;
+            background: #f8fafc;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--muted);
+            font-size: 16px;
         }
 
-        .price-change {
-            font-size: 13px;
+        .rate-card.gold-type .asset-icon { background: #fef3c7; color: var(--accent-dark); }
+        .rate-card.silver-type .asset-icon { background: #f1f5f9; color: #475569; }
+        .rate-card.oil-type .asset-icon { background: #e2e8f0; color: var(--primary); }
+
+        .asset-name {
+            font-size: 15px;
             font-weight: 600;
         }
 
-        .chart-container {
-            background: white;
-            border-radius: 16px;
+        .asset-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: var(--muted);
+        }
+
+        .rate-card.gold-type .asset-badge { background: #fef3c7; color: #92400e; }
+
+        .card-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 14px;
+        }
+
+        .price-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .price-trend {
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Charts Component */
+        .chart-box {
+            background: var(--surface);
+            border-radius: var(--radius);
             padding: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
             border: 1px solid #e2e8f0;
             margin-bottom: 20px;
         }
 
-        /* Admin Dashboard UI */
-        .admin-box {
-            background: #f1f5f9;
-            border: 2px dashed #cbd5e1;
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 30px;
-            display: none;
-        }
-
-        .admin-box h3 {
-            margin-top: 0;
-            color: #0f172a;
-            font-size: 16px;
-        }
-
-        .toggle-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .btn-toggle {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            background: white;
-        }
-
-        .btn-toggle.active {
-            background: #0f172a;
-            color: white;
-            border-color: #0f172a;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group label {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .btn-save {
-            width: 100%;
-            padding: 12px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .admin-trigger-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 12px;
-            cursor: pointer;
-            margin-top: 20px;
-            text-decoration: underline;
-        }
-
-        /* Profile Grid Layout */
-        .contact-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        /* Profile Contact Module */
+        .profile-widget {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
             border: 1px solid #e2e8f0;
+            text-align: center;
         }
 
-        .owner-profile {
+        .profile-info {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 16px;
+            gap: 12px;
+            text-align: left;
+            margin-bottom: 14px;
         }
 
-        .owner-avatar {
-            width: 46px;
-            height: 46px;
+        .profile-img {
+            width: 48px;
+            height: 48px;
             background: #fef3c7;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: var(--gold-dark);
             font-size: 20px;
+            color: var(--accent-dark);
         }
 
-        .owner-info .name { font-size: 17px; font-weight: 700; color: #0f172a; }
-        .owner-info .role { font-size: 13px; color: var(--text-muted); }
+        .profile-meta .p-name { font-size: 16px; font-weight: 700; }
+        .profile-meta .p-sub { font-size: 12px; color: var(--muted); }
 
-        .action-grid { display: flex; gap: 12px; }
-        .btn-action {
+        .widget-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-widget {
             flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
-            padding: 14px;
-            background: #25D366;
+            gap: 6px;
             color: white;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
         }
-        .btn-community { background: #2563eb; }
+        .btn-wa { background: #25D366; }
+        .btn-tg { background: #2563eb; }
+
+        /* Bottom Application Bar Navigation Tab System */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            height: 70px;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.03);
+            z-index: 99;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item.special-admin {
+            color: #475569;
+        }
+
+        /* Native Application Modal (Popup) Layout System */
+        .app-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .app-modal.open {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-body {
+            width: 100%;
+            max-width: 480px;
+            background: var(--surface);
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            padding: 24px;
+            box-sizing: border-box;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .app-modal.open .modal-body {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .close-modal-btn {
+            background: #f1f5f9;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text);
+        }
+
+        /* Form Controls inside application UI components */
+        .app-input-group {
+            margin-bottom: 14px;
+        }
+
+        .app-input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .app-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .app-field:focus {
+            border-color: var(--primary);
+        }
+
+        .tab-switch {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .btn-action-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-<div class="app-header">
-    <div class="brand"><i class="fa-solid fa-coins"></i> پاکستان گولڈ ریٹ</div>
-    <div class="live-status-bar">
-        <span class="pulse-dot"></span>
-        <span id="mandi-status">Live Mandi</span>
+<div class="app-shell">
+    
+    <!-- Application Bar Head -->
+    <div class="app-bar">
+        <div class="title"><i class="fa-solid fa-layer-group"></i> Gold Terminal</div>
+        <div class="status-pill">
+            <span class="pulse-dot"></span>
+            <span id="terminal-mode-txt">Live Mandi</span>
+        </div>
     </div>
+
+    <!-- Application Body Context Viewports -->
+    <div class="app-content">
+        
+        <div class="system-banner" id="sys-ticker-banner">
+            Processing Engine Operational: 3s Multi-Feed Ticker Active
+        </div>
+
+        <div class="section-label">🥇 Premium Gold Feeds</div>
+
+        <!-- Gold 24K Card Component -->
+        <div class="rate-card gold-type">
+            <div class="card-header">
+                <div class="asset-info">
+                    <div class="asset-icon"><i class="fa-solid fa-coins"></i></div>
+                    <div class="asset-name">Gold 24K (Per Tola)</div>
+                </div>
+                <span class="asset-badge">24 Karat</span>
+            </div>
+            <div class="card-body">
+                <div class="price-display" id="v24">Calculating...</div>
+                <div class="price-trend" id="chg-24">--</div>
+            </div>
+        </div>
+
+        <!-- Gold 22K Card Component -->
+        <div class="rate-card gold-type">
+            <div class="card-header">
+                <div class="asset-info">
+                    <div class="asset-icon"><i class="fa-solid fa-circle-nodes"></i></div>
+                    <div class="asset-name">Gold 22K (Per Tola)</div>
+                </div>
+                <span class="asset-badge">22 Karat</span>
+            </div>
+            <div class="card-body">
+                <div class="price-display" id="v22">Calculating...</div>
+                <div class="price-trend" id="chg-22">--</div>
+            </div>
+        </div>
+
+        <div class="section-label">🥈 Commodities & Metals</div>
+
+        <!-- Silver Component -->
+        <div class="rate-card silver-type">
+            <div class="card-header">
+                <div class="asset-info">
+                    <div class="asset-icon"><i class="fa-solid fa-cubes"></i></div>
+                    <div class="asset-name">Silver (Chandi Tola)</div>
+                </div>
+                <span class="asset-badge">Spot Silver</span>
+            </div>
+            <div class="card-body">
+                <div class="price-display" id="v-silver">Calculating...</div>
+                <div class="price-trend" id="chg-silver">--</div>
+            </div>
+        </div>
+
+        <!-- Platinum Component -->
+        <div class="rate-card silver-type">
+            <div class="card-header">
+                <div class="asset-info">
+                    <div class="asset-icon"><i class="fa-solid fa-gem"></i></div>
+                    <div class="asset-name">Platinum Price</div>
+                </div>
+                <span class="asset-badge">Platinum</span>
+            </div>
+            <div class="card-body">
+                <div class="price-display" id="v-platinum">Calculating...</div>
+                <div class="price-trend" id="chg-platinum">--</div>
+            </div>
+        </div>
+
+        <!-- Palladium Component -->
+        <div class="rate-card silver-type">
+            <div class="card-header">
+                <div class="asset-info">
+                    <div class="asset-icon"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+                    <div class="asset-name">Palladium Rate</div>
+                </div>
+                <span class="asset-badge">Palladium</span>
+            </div>
+            <div class="card-body">
+                <div class="price-display" id="v-palladium">Calculating...</div>
+                <div class="price-trend" id="chg-palladium">--</div>
+            </div>
+        </div>
+
+        <div class="section-label">🛢️ Global Energy</div>
+
+        <!-- Crude Oil Component -->
+        <div class="rate-card oil-type">
+            <div class="card-header">
+                <div class="asset-info">
+                    <div class="asset-icon"><i class="fa-solid fa-droplet"></i></div>
+                    <div class="asset-name">Crude Oil (WTI Index)</div>
+                </div>
+                <span class="asset-badge">Per Barrel</span>
+            </div>
+            <div class="card-body">
+                <div class="price-display" id="v-oil">Calculating...</div>
+                <div class="price-trend" id="chg-oil">--</div>
+            </div>
+        </div>
+
+        <div class="section-label">📊 Dynamic Market Plot Analytics</div>
+        <div class="chart-box">
+            <canvas id="appMainChart" style="width:100%; height:180px;"></canvas>
+        </div>
+
+        <!-- Operator Widget -->
+        <div class="profile-widget">
+            <div class="profile-info">
+                <div class="profile-img"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="profile-meta">
+                    <div class="p-name">Raja Asad</div>
+                    <div class="p-sub">Rawalpindi Sarafa Market Platform</div>
+                </div>
+            </div>
+            <div class="widget-actions">
+                <a href="https://wa.me/923115855885" class="btn-widget btn-wa"><i class="fa-brands fa-whatsapp"></i> Chat Support</a>
+                <a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC" class="btn-widget btn-tg" target="_blank"><i class="fa-solid fa-users"></i> Join Group</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Application Modern Bottom Navigation Menu -->
+    <div class="nav-bar">
+        <div class="nav-item active"><i class="fa-solid fa-house"></i>Home</div>
+        <div class="nav-item"><i class="fa-solid fa-chart-simple"></i>Trends</div>
+        <div class="nav-item"><i class="fa-solid fa-bell"></i>Alerts</div>
+        <div class="nav-item special-admin" onclick="triggerOpenAuthModal()"><i class="fa-solid fa-gear"></i>Settings</div>
+    </div>
+
 </div>
 
-<div class="app-container">
-
-    <div class="mode-badge" id="current-mode-badge">System Status: Active Live Feeds</div>
-
-    <div class="section-title">🥇 Gold Market Rates (Tola)</div>
-
-    <!-- 24K Card -->
-    <div class="app-card">
-        <div class="card-meta">
-            <span>Gold 24K (Per Tola)</span>
-            <span class="asset-badge bg-gold">24 Karat</span>
+<!-- Application Sheet Modal UI Overlay -->
+<div class="app-modal" id="systemControlModal">
+    <div class="modal-body">
+        <div class="modal-header">
+            <h3>Terminal Setup Control</h3>
+            <button class="close-modal-btn" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="price-row">
-            <div class="main-price" id="v24">Loading...</div>
-            <div class="price-change" id="chg-24" style="color: var(--green);">🔄 Live</div>
-        </div>
-    </div>
 
-    <!-- 22K Card -->
-    <div class="app-card">
-        <div class="card-meta">
-            <span>Gold 22K (Per Tola)</span>
-            <span class="asset-badge bg-silver">22 Karat</span>
+        <!-- Password Validation Viewport -->
+        <div id="auth-password-gate">
+            <div class="app-input-group">
+                <label>Developer Security Pin</label>
+                <input type="password" id="sys-auth-pin" class="app-field" placeholder="Enter dashboard pin...">
+            </div>
+            <button class="btn-action-submit" onclick="verifySecureCredentials()">Validate Dashboard Access</button>
         </div>
-        <div class="price-row">
-            <div class="main-price" id="v22">Loading...</div>
-            <div class="price-change" id="chg-22" style="color: var(--green);">--</div>
-        </div>
-    </div>
 
-    <div class="section-title">🥈 Precious Metals</div>
+        <!-- Operational Override Content Terminal Inside Modal (Initially Hidden) -->
+        <div id="auth-panel-controls" style="display: none;">
+            <label style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase;">Select Engine Mode</label>
+            <div class="tab-switch">
+                <button class="tab-btn active" id="tab-live" onclick="toggleEngineMode('live')">Live Automated Feed</button>
+                <button class="tab-btn" id="tab-manual" onclick="toggleEngineMode('manual')">Manual Override</button>
+            </div>
 
-    <!-- Silver Card -->
-    <div class="app-card">
-        <div class="card-meta">
-            <span>Silver (Per Tola)</span>
-            <span class="asset-badge bg-silver">Chandi</span>
-        </div>
-        <div class="price-row">
-            <div class="main-price" id="v-silver">Loading...</div>
-            <div class="price-change" id="chg-silver" style="color: var(--green);">--</div>
-        </div>
-    </div>
-
-    <!-- Platinum Card -->
-    <div class="app-card">
-        <div class="card-meta">
-            <span>Platinum (Per Tola)</span>
-            <span class="asset-badge bg-platinum">Platinum</span>
-        </div>
-        <div class="price-row">
-            <div class="main-price" id="v-platinum">Loading...</div>
-            <div class="price-change" id="chg-platinum" style="color: var(--green);">--</div>
-        </div>
-    </div>
-
-    <!-- Palladium Card -->
-    <div class="app-card">
-        <div class="card-meta">
-            <span>Palladium (Per Tola)</span>
-            <span class="asset-badge bg-platinum">Palladium</span>
-        </div>
-        <div class="price-row">
-            <div class="main-price" id="v-palladium">Loading...</div>
-            <div class="price-change" id="chg-palladium" style="color: var(--green);">--</div>
-        </div>
-    </div>
-
-    <div class="section-title">🛢️ Energy Market</div>
-
-    <!-- Crude Oil Card -->
-    <div class="app-card">
-        <div class="card-meta">
-            <span>Crude Oil (WTI Petroleum)</span>
-            <span class="asset-badge bg-oil" style="background:#0f172a; color:white;">Per Barrel</span>
-        </div>
-        <div class="price-row">
-            <div class="main-price" id="v-oil">Loading...</div>
-            <div class="price-change" id="chg-oil" style="color: var(--green);">--</div>
-        </div>
-    </div>
-
-    <div class="section-title">📊 3-Second Real-Time Analytics</div>
-    <div class="chart-container">
-        <canvas id="cryptoStyleChart" style="width:100%; height:180px;"></canvas>
-    </div>
-
-    <!-- Contact Profile -->
-    <div class="contact-card">
-        <div class="owner-profile">
-            <div class="owner-avatar"><i class="fa-solid fa-user-tie"></i></div>
-            <div class="owner-info">
-                <div class="name">Raja Asad</div>
-                <div class="role">Rawalpindi Sarafa Market</div>
+            <div id="manual-forms-viewport" style="display: none;">
+                <div class="app-input-group">
+                    <label>Override Gold 24K (Rs)</label>
+                    <input type="number" id="m-val-g24" class="app-field">
+                </div>
+                <div class="app-input-group">
+                    <label>Override Silver (Rs)</label>
+                    <input type="number" id="m-val-silver" class="app-field">
+                </div>
+                <div class="app-input-group">
+                    <label>Override Platinum (Rs)</label>
+                    <input type="number" id="m-val-platinum" class="app-field">
+                </div>
+                <div class="app-input-group">
+                    <label>Override Palladium (Rs)</label>
+                    <input type="number" id="m-val-palladium" class="app-field">
+                </div>
+                <div class="app-input-group">
+                    <label>Override Crude Oil ($ USD)</label>
+                    <input type="number" step="0.01" id="m-val-oil" class="app-field">
+                </div>
+                <button class="btn-action-submit" style="background:var(--green);" onclick="processManualSaveExecution()">Commit Changes</button>
             </div>
         </div>
-        <div class="action-grid">
-            <a href="https://wa.me/923115855885" class="btn-action"><i class="fa-brands fa-whatsapp"></i> 0311-5855885</a>
-            <a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC" class="btn-action btn-community" target="_blank"><i class="fa-solid fa-users"></i> Join Group</a>
-        </div>
     </div>
-
-    <center>
-        <button class="admin-trigger-btn" onclick="openAdminDashboard()">🔐 Dashboard Admin Panel</button>
-    </center>
-
-    <!-- Hidden Admin Box Panel -->
-    <div class="admin-box" id="adminPanel">
-        <h3><i class="fa-solid fa-sliders"></i> Control Panel Dashboard</h3>
-        
-        <div class="form-group">
-            <label>System Mode Control:</label>
-            <div class="toggle-container">
-                <button class="btn-toggle active" id="mode-live" onclick="setSystemMode('live')">Live Market Feed</button>
-                <button class="btn-toggle" id="mode-manual" onclick="setSystemMode('manual')">Manual Override</button>
-            </div>
-        </div>
-
-        <div id="manual-inputs-container" style="display: none;">
-            <div class="form-group">
-                <label>Manual Gold 24K Per Tola (Rs):</label>
-                <input type="number" id="input-g24" value="275000">
-            </div>
-            <div class="form-group">
-                <label>Manual Silver Per Tola (Rs):</label>
-                <input type="number" id="input-silver" value="3450">
-            </div>
-            <div class="form-group">
-                <label>Manual Platinum Per Tola (Rs):</label>
-                <input type="number" id="input-platinum" value="145000">
-            </div>
-            <div class="form-group">
-                <label>Manual Palladium Per Tola (Rs):</label>
-                <input type="number" id="input-palladium" value="110000">
-            </div>
-            <div class="form-group">
-                <label>Manual Crude Oil Per Barrel ($ USD):</label>
-                <input type="number" step="0.01" id="input-oil" value="76.50">
-            </div>
-            <button class="btn-save" onclick="saveAdminRates()">Save & Apply Manual Rates</button>
-        </div>
-    </div>
-
 </div>
 
 <script>
-let systemMode = localStorage.getItem('sysMode') ? localStorage.getItem('sysMode') : 'live';
-let exchangeRatePkr = 278.50;
-let chartInstance = null;
+let activeMode = localStorage.getItem('opMode') ? localStorage.getItem('opMode') : 'live';
+let globalPkrBaseExchange = 278.50;
+let uiChartPlotReference = null;
 
-// Baseline benchmarks cached derived from livepriceofgold feed
-let basePrices = {
-    g24: 4195.08,
-    silver: 66.3960,
-    platinum: 1662.10,
-    palladium: 1266.34,
-    oil: 76.85
+// Baseline feed benchmarks setup
+let globalCoreBenchmarks = { g24: 4195.08, silver: 66.39, platinum: 1662.10, palladium: 1266.34, oil: 76.85 };
+let cachePointers = { g24: 0, g22: 0, silver: 0, platinum: 0, palladium: 0, oil: 0 };
+
+let activeManualMemory = {
+    g24: localStorage.getItem('man_g24') ? parseFloat(localStorage.getItem('man_g24')) : 275000,
+    silver: localStorage.getItem('man_silver') ? parseFloat(localStorage.getItem('man_silver')) : 3450,
+    platinum: localStorage.getItem('man_platinum') ? parseFloat(localStorage.getItem('man_platinum')) : 145000,
+    palladium: localStorage.getItem('man_palladium') ? parseFloat(localStorage.getItem('man_palladium')) : 110000,
+    oil: localStorage.getItem('man_oil') ? parseFloat(localStorage.getItem('man_oil')) : 76.50
 };
 
-let previousDisplayed = { g24: 0, g22: 0, silver: 0, platinum: 0, palladium: 0, oil: 0 };
-
-// Manual fallback memory store
-let manualRates = {
-    g24: localStorage.getItem('m_g24') ? parseFloat(localStorage.getItem('m_g24')) : 275000,
-    silver: localStorage.getItem('m_silver') ? parseFloat(localStorage.getItem('m_silver')) : 3450,
-    platinum: localStorage.getItem('m_platinum') ? parseFloat(localStorage.getItem('m_platinum')) : 145000,
-    palladium: localStorage.getItem('m_palladium') ? parseFloat(localStorage.getItem('m_palladium')) : 110000,
-    oil: localStorage.getItem('m_oil') ? parseFloat(localStorage.getItem('m_oil')) : 76.50
-};
-
-async function fetchForexBase() {
+async function executeForexFeedUpdate() {
     try {
-        let response = await fetch("https://open.er-api.com/v6/latest/USD");
-        let data = await response.json();
-        if(data && data.rates && data.rates.PKR) {
-            exchangeRatePkr = data.rates.PKR;
-        }
-    } catch (e) { console.log("Using cached forex base tier."); }
+        let r = await fetch("https://open.er-api.com/v6/latest/USD");
+        let d = await r.json();
+        if(d && d.rates && d.rates.PKR) globalPkrBaseExchange = d.rates.PKR;
+    } catch(err) { console.log("Using primary stored Forex layer configuration."); }
 }
 
-function processAndRenderEngine() {
-    let ozToTolaFactor = 11.664 / 31.1035;
-    let finalRates = {};
+function processCoreExecutionEngine() {
+    let tolaConversionUnit = 11.664 / 31.1035;
+    let computedMatrix = {};
 
-    if (systemMode === 'live') {
-        // Generate high speed micro fluctuations every 3 seconds to emulate active market matching feed tickers
-        let variation = (Math.random() - 0.5) * 0.5;
-        let currentGoldUsd = basePrices.g24 + (variation * 4);
-        let currentSilverUsd = basePrices.silver + (variation * 0.1);
-        let currentPlatUsd = basePrices.platinum + (variation * 0.8);
-        let currentPallUsd = basePrices.palladium + (variation * 0.6);
-        let currentOilUsd = basePrices.oil + (variation * 0.05);
+    if(activeMode === 'live') {
+        let microFluctuationFactor = (Math.random() - 0.5) * 0.4;
+        
+        computedMatrix.g24 = (globalCoreBenchmarks.g24 + (microFluctuationFactor * 4)) * globalPkrBaseExchange * tolaConversionUnit;
+        computedMatrix.g22 = computedMatrix.g24 * 22 / 24;
+        computedMatrix.silver = (globalCoreBenchmarks.silver + (microFluctuationFactor * 0.1)) * globalPkrBaseExchange * tolaConversionUnit;
+        computedMatrix.platinum = (globalCoreBenchmarks.platinum + (microFluctuationFactor * 0.8)) * globalPkrBaseExchange * tolaConversionUnit;
+        computedMatrix.palladium = (globalCoreBenchmarks.palladium + (microFluctuationFactor * 0.6)) * globalPkrBaseExchange * tolaConversionUnit;
+        computedMatrix.oil = globalCoreBenchmarks.oil + (microFluctuationFactor * 0.05);
 
-        finalRates.g24 = currentGoldUsd * exchangeRatePkr * ozToTolaFactor;
-        finalRates.g22 = finalRates.g24 * 22 / 24;
-        finalRates.silver = currentSilverUsd * exchangeRatePkr * ozToTolaFactor;
-        finalRates.platinum = currentPlatUsd * exchangeRatePkr * ozToTolaFactor;
-        finalRates.palladium = currentPallUsd * exchangeRatePkr * ozToTolaFactor;
-        finalRates.oil = currentOilUsd;
-
-        document.getElementById("current-mode-badge").innerText = "System Status: Active Live Feeds (3s Refresh)";
-        document.getElementById("current-mode-badge").style.background = "rgba(16, 185, 129, 0.1)";
-        document.getElementById("current-mode-badge").style.color = "var(--green)";
-        document.getElementById("mandi-status").innerText = "Live Mandi";
+        document.getElementById("sys-ticker-banner").innerText = "Processing Engine Operational: 3s Multi-Feed Ticker Active";
+        document.getElementById("sys-ticker-banner").style.color = "var(--green)";
+        document.getElementById("terminal-mode-txt").innerText = "Live Mandi";
     } else {
-        // Manual override processing engine injection
-        finalRates.g24 = manualRates.g24;
-        finalRates.g22 = finalRates.g24 * 22 / 24;
-        finalRates.silver = manualRates.silver;
-        finalRates.platinum = manualRates.platinum;
-        finalRates.palladium = manualRates.palladium;
-        finalRates.oil = manualRates.oil;
+        computedMatrix.g24 = activeManualMemory.g24;
+        computedMatrix.g22 = computedMatrix.g24 * 22 / 24;
+        computedMatrix.silver = activeManualMemory.silver;
+        computedMatrix.platinum = activeManualMemory.platinum;
+        computedMatrix.palladium = activeManualMemory.palladium;
+        computedMatrix.oil = activeManualMemory.oil;
 
-        document.getElementById("current-mode-badge").innerText = "System Status: Manual Override Control Active";
-        document.getElementById("current-mode-badge").style.background = "#ffedd5";
-        document.getElementById("current-mode-badge").style.color = "#ea580c";
-        document.getElementById("mandi-status").innerText = "Manual Fixed";
+        document.getElementById("sys-ticker-banner").innerText = "System Configuration Warning: Manual Override Sequence Active";
+        document.getElementById("sys-ticker-banner").style.color = "#ea580c";
+        document.getElementById("terminal-mode-txt").innerText = "Fixed Mode";
     }
 
-    // Direct UI updates with calculation differentials (+/- tracking indicators)
-    updateRowView("v24", "chg-24", finalRates.g24, previousDisplayed.g24, "Rs ");
-    updateRowView("v22", "chg-22", finalRates.g22, previousDisplayed.g22, "Rs ");
-    updateRowView("v-silver", "chg-silver", finalRates.silver, previousDisplayed.silver, "Rs ");
-    updateRowView("v-platinum", "chg-platinum", finalRates.platinum, previousDisplayed.platinum, "Rs ");
-    updateRowView("v-palladium", "chg-palladium", finalRates.palladium, previousDisplayed.palladium, "Rs ");
-    
-    // Oil render configuration
-    document.getElementById("v-oil").innerText = "$" + finalRates.oil.toFixed(2) + " USD";
-    let oilDiff = finalRates.oil - previousDisplayed.oil;
-    if(previousDisplayed.oil > 0 && oilDiff !== 0) {
-        document.getElementById("chg-oil").innerText = oilDiff > 0 ? "▲ +" + oilDiff.toFixed(2) : "▼ " + oilDiff.toFixed(2);
-        document.getElementById("chg-oil").style.color = oilDiff > 0 ? "var(--green)" : "var(--red)";
+    renderTargetRowView("v24", "chg-24", computedMatrix.g24, cachePointers.g24, "Rs ");
+    renderTargetRowView("v22", "chg-22", computedMatrix.g22, cachePointers.g22, "Rs ");
+    renderTargetRowView("v-silver", "chg-silver", computedMatrix.silver, cachePointers.silver, "Rs ");
+    renderTargetRowView("v-platinum", "chg-platinum", computedMatrix.platinum, cachePointers.platinum, "Rs ");
+    renderTargetRowView("v-palladium", "chg-palladium", computedMatrix.palladium, cachePointers.palladium, "Rs ");
+
+    document.getElementById("v-oil").innerText = "$" + computedMatrix.oil.toFixed(2) + " USD";
+    let oDelta = computedMatrix.oil - cachePointers.oil;
+    if(cachePointers.oil > 0 && oDelta !== 0) {
+        document.getElementById("chg-oil").innerHTML = oDelta > 0 ? `<span style="color:var(--green)"><i class="fa-solid fa-caret-up"></i> +${oDelta.toFixed(2)}</span>` : `<span style="color:var(--red)"><i class="fa-solid fa-caret-down"></i> ${oDelta.toFixed(2)}</span>`;
     }
 
-    // Save history pointers
-    previousDisplayed = { ...finalRates };
-    appendChartPlotData(finalRates.g24);
+    cachePointers = { ...computedMatrix };
+    pushDataPointToAnalyticsChart(computedMatrix.g24);
 }
 
-function updateRowView(valId, chgId, currentVal, prevVal, currencySymbol) {
-    document.getElementById(valId).innerText = currencySymbol + Math.round(currentVal).toLocaleString();
-    if(prevVal > 0) {
-        let diff = currentVal - prevVal;
-        if(diff !== 0) {
-            document.getElementById(chgId).innerText = diff > 0 ? "▲ +" + Math.round(diff).toLocaleString() : "▼ " + Math.round(diff).toLocaleString();
-            document.getElementById(chgId).style.color = diff > 0 ? "var(--green)" : "var(--red)";
+function renderTargetRowView(elementValId, elementChgId, valCurrent, valPrevious, scaleSymbol) {
+    document.getElementById(elementValId).innerText = scaleSymbol + Math.round(valCurrent).toLocaleString();
+    if(valPrevious > 0) {
+        let delta = valCurrent - valPrevious;
+        if(delta !== 0) {
+            document.getElementById(elementChgId).innerHTML = delta > 0 ? `<span style="color:var(--green)"><i class="fa-solid fa-caret-up"></i> +${Math.round(delta).toLocaleString()}</span>` : `<span style="color:var(--red)"><i class="fa-solid fa-caret-down"></i> ${Math.round(delta).toLocaleString()}</span>`;
         }
     } else {
-        document.getElementById(chgId).innerText = "🔄 Stable";
-        document.getElementById(chgId).style.color = "var(--text-muted)";
+        document.getElementById(elementChgId).innerHTML = `<span style="color:var(--muted)">🔄 Active</span>`;
     }
 }
 
-function openAdminDashboard() {
-    let pin = prompt("Admin Security Password Darj Karein:");
-    if (pin === "asad786") {
-        document.getElementById("adminPanel").style.display = "block";
-        document.getElementById("input-g24").value = Math.round(manualRates.g24);
-        document.getElementById("input-silver").value = Math.round(manualRates.silver);
-        document.getElementById("input-platinum").value = Math.round(manualRates.platinum);
-        document.getElementById("input-palladium").value = Math.round(manualRates.palladium);
-        document.getElementById("input-oil").value = manualRates.oil;
-        window.scrollTo(0, document.body.scrollHeight);
-    } else if (pin !== null) {
-        alert("Ghalat Password!");
+function triggerOpenAuthModal() {
+    document.getElementById("systemControlModal").classList.add("open");
+}
+
+function closeAuthModal() {
+    document.getElementById("systemControlModal").classList.remove("open");
+    document.getElementById("auth-password-gate").style.display = "block";
+    document.getElementById("auth-panel-controls").style.display = "none";
+    document.getElementById("sys-auth-pin").value = "";
+}
+
+function verifySecureCredentials() {
+    let inputPin = document.getElementById("sys-auth-pin").value;
+    if(inputPin === "asad786") {
+        document.getElementById("auth-password-gate").style.display = "none";
+        document.getElementById("auth-panel-controls").style.display = "block";
+        
+        document.getElementById("m-val-g24").value = Math.round(activeManualMemory.g24);
+        document.getElementById("m-val-silver").value = Math.round(activeManualMemory.silver);
+        document.getElementById("m-val-platinum").value = Math.round(activeManualMemory.platinum);
+        document.getElementById("m-val-palladium").value = Math.round(activeManualMemory.palladium);
+        document.getElementById("m-val-oil").value = activeManualMemory.oil;
+        
+        syncTabControlViewStates(activeMode);
+    } else {
+        alert("Security PIN authorization failed.");
     }
 }
 
-function setSystemMode(mode) {
-    systemMode = mode;
-    localStorage.setItem('sysMode', mode);
-    document.getElementById("mode-live").classList.remove("active");
-    document.getElementById("mode-manual").classList.remove("active");
-    
+function toggleEngineMode(targetMode) {
+    activeMode = targetMode;
+    localStorage.setItem('opMode', targetMode);
+    syncTabControlViewStates(targetMode);
+    processCoreExecutionEngine();
+}
+
+function syncTabControlViewStates(mode) {
+    document.getElementById("tab-live").classList.remove("active");
+    document.getElementById("tab-manual").classList.remove("active");
     if(mode === 'live') {
-        document.getElementById("mode-live").classList.add("active");
-        document.getElementById("manual-inputs-container").style.display = "none";
+        document.getElementById("tab-live").classList.add("active");
+        document.getElementById("manual-forms-viewport").style.display = "none";
     } else {
-        document.getElementById("mode-manual").classList.add("active");
-        document.getElementById("manual-inputs-container").style.display = "block";
+        document.getElementById("tab-manual").classList.add("active");
+        document.getElementById("manual-forms-viewport").style.display = "block";
     }
-    processAndRenderEngine();
 }
 
-function saveAdminRates() {
-    manualRates.g24 = parseFloat(document.getElementById("input-g24").value);
-    manualRates.silver = parseFloat(document.getElementById("input-silver").value);
-    manualRates.platinum = parseFloat(document.getElementById("input-platinum").value);
-    manualRates.palladium = parseFloat(document.getElementById("input-palladium").value);
-    manualRates.oil = parseFloat(document.getElementById("input-oil").value);
+function processManualSaveExecution() {
+    activeManualMemory.g24 = parseFloat(document.getElementById("m-val-g24").value);
+    activeManualMemory.silver = parseFloat(document.getElementById("m-val-silver").value);
+    activeManualMemory.platinum = parseFloat(document.getElementById("m-val-platinum").value);
+    activeManualMemory.palladium = parseFloat(document.getElementById("m-val-palladium").value);
+    activeManualMemory.oil = parseFloat(document.getElementById("m-val-oil").value);
 
-    localStorage.setItem('m_g24', manualRates.g24);
-    localStorage.setItem('m_silver', manualRates.silver);
-    localStorage.setItem('m_platinum', manualRates.platinum);
-    localStorage.setItem('m_palladium', manualRates.palladium);
-    localStorage.setItem('m_oil', manualRates.oil);
+    localStorage.setItem('man_g24', activeManualMemory.g24);
+    localStorage.setItem('man_silver', activeManualMemory.silver);
+    localStorage.setItem('man_platinum', activeManualMemory.platinum);
+    localStorage.setItem('man_palladium', activeManualMemory.palladium);
+    localStorage.setItem('man_oil', activeManualMemory.oil);
 
-    alert("Manual rates configure ho gaye hain!");
-    processAndRenderEngine();
+    alert("Configuration parameters updated in system runtime memory.");
+    closeAuthModal();
+    processCoreExecutionEngine();
 }
 
-function initChart() {
-    let ctx = document.getElementById("cryptoStyleChart").getContext("2d");
-    chartInstance = new Chart(ctx, {
+function initializeRenderCharts() {
+    let ctx = document.getElementById("appMainChart").getContext("2d");
+    uiChartPlotReference = new Chart(ctx, {
         type: 'line',
-        data: { labels: [], datasets: [{ data: [], borderColor: '#b8931d', borderWidth: 2, pointRadius: 1, backgroundColor: 'rgba(212, 175, 55, 0.02)', fill: true, tension: 0.2 }] },
+        data: { labels: [], datasets: [{ data: [], borderColor: '#b8931d', borderWidth: 2, pointRadius: 0, backgroundColor: 'rgba(212, 175, 55, 0.04)', fill: true, tension: 0.3 }] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { color: '#f1f5f9' } } } }
     });
 }
 
-function appendChartPlotData(latestPriceValue) {
-    if (!chartInstance) return;
-    let timeLabel = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    let labelsArr = chartInstance.data.labels;
-    let dataArr = chartInstance.data.datasets[0].data;
+function pushDataPointToAnalyticsChart(metricValue) {
+    if(!uiChartPlotReference) return;
+    let stamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    let l = uiChartPlotReference.data.labels;
+    let d = uiChartPlotReference.data.datasets[0].data;
 
-    labelsArr.push(timeLabel);
-    dataArr.push(latestPriceValue);
-
-    if (labelsArr.length > 15) {
-        labelsArr.shift();
-        dataArr.shift();
-    }
-    chartInstance.update('none');
+    l.push(stamp);
+    d.push(metricValue);
+    if(l.length > 12) { l.shift(); d.shift(); }
+    uiChartPlotReference.update('none');
 }
 
-// Initializing sequential run loops
-initChart();
-fetchForexBase();
-setSystemMode(systemMode);
-
-// Core engine runner loop set at exactly 3000ms interval (3-seconds)
-setInterval(processAndRenderEngine, 3000);
+// Ignition setup
+initializeRenderCharts();
+executeForexFeedUpdate();
+processCoreExecutionEngine();
+setInterval(processCoreExecutionEngine, 3000);
 </script>
 
 </body>
