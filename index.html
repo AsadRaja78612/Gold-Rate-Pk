@@ -246,7 +246,8 @@
 
         .badge-gold { background-color: #fef9e7; color: #b7950b; }
         .badge-silver { background-color: #f2f3f4; color: #5d6d7e; }
-        .badge-premium { background-color: #ebf5fb; color: #2e86c1; }
+        .badge-platinum { background-color: #ebf5fb; color: #2e86c1; }
+        .badge-palladium { background-color: #f4ecf7; color: #8e44ad; }
 
         .price-grid {
             display: grid;
@@ -343,7 +344,7 @@
             display: none;
         }
 
-        /* Oil Card */
+        /* Oil/Silver Mandi Card */
         .oil-card {
             background: linear-gradient(135deg, #111c24 0%, #1f313f 100%);
             color: white;
@@ -454,19 +455,42 @@
                 </div>
             </div>
 
-            <div class="section-title">🥈 دیگر لائیو قیمتی دھاتیں</div>
+            <div class="section-title">🥈 چاندی، پلاٹینم اور پیلیڈیم لائیو ریٹس</div>
+            
             <div class="metal-card">
                 <div class="card-header"><span style="font-weight:bold;">چاندی (فی تولہ)</span><span class="badge badge-silver">Silver / Chandi</span></div>
                 <div class="price-grid">
-                    <div class="price-box"><div class="price-value buy" id="silverBuy">Rs 5,420</div></div>
-                    <div class="price-box"><div class="price-value sell" id="silverSell">Rs 5,550</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="silverBuy">Rs 5,480</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="silverSell">Rs 5,610</div></div>
                 </div>
             </div>
 
-            <div class="section-title">🛢️ خام تیل انٹرنیشنل مارکیٹ</div>
-            <div class="oil-card">
-                <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span>خام تیل (Crude Oil WTI)</span><span style="color:#2ecc71; font-weight:bold;">Live 3s</span></div>
-                <div style="font-size:22px; text-align:center; font-weight:bold; color:#f1c40f;" id="oilPrice">$ 78.41 USD</div>
+            <div class="metal-card">
+                <div class="card-header"><span style="font-weight:bold;">پلاٹینم (فی تولہ)</span><span class="badge badge-platinum">Platinum</span></div>
+                <div class="price-grid">
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="platBuy">Rs 168,200</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="platSell">Rs 170,400</div></div>
+                </div>
+            </div>
+
+            <div class="metal-card">
+                <div class="card-header"><span style="font-weight:bold;">پیلیڈیم (فی تولہ)</span><span class="badge badge-palladium">Palladium</span></div>
+                <div class="price-grid">
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="pallBuy">Rs 184,600</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="pallSell">Rs 186,900</div></div>
+                </div>
+            </div>
+
+            <div class="section-title">⚙️ انٹرنیشنل کموڈٹی مارکیٹ لائیو</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="oil-card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;"><span>عالمی چاندی (Spot)</span><span style="color:#2ecc71;">Live</span></div>
+                    <div style="font-size:18px; text-align:center; font-weight:bold; color:#ffffff;" id="silverInternational">$ 67.20 USD</div>
+                </div>
+                <div class="oil-card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;"><span>خام تیل (WTI)</span><span style="color:#2ecc71;">Live</span></div>
+                    <div style="font-size:18px; text-align:center; font-weight:bold; color:#f1c40f;" id="oilPrice">$ 78.41 USD</div>
+                </div>
             </div>
         </div>
 
@@ -598,7 +622,7 @@
         // Dynamic Updates Engine (3 Seconds Tick Engine)
         setInterval(() => {
             if (systemMode === "live") {
-                // Simulating live active mandi engine fluctuator
+                // Simulating live active mandi engine fluctuator for Gold
                 let randomness = (Math.random() - 0.5) * 150;
                 let activeBuy = Math.round(442400 + randomness);
                 let activeSell = Math.round(activeBuy + 1500);
@@ -607,6 +631,26 @@
                 // Update Oil Prices Live
                 let oilRandom = (Math.random() - 0.5) * 0.4;
                 document.getElementById('oilPrice').innerText = "$ " + (78.41 + oilRandom).toFixed(2) + " USD";
+
+                // Update International Silver Mandi Spot Live around $67
+                let silverIntRandom = (Math.random() - 0.5) * 0.3;
+                let currentSilverInt = 67.20 + silverIntRandom;
+                document.getElementById('silverInternational').innerText = "$ " + currentSilverInt.toFixed(2) + " USD";
+
+                // Update Local PKR Silver Price based on $67 international market
+                let localSilverBase = Math.round(5480 + (silverIntRandom * 40)); 
+                document.getElementById('silverBuy').innerText = "Rs " + localSilverBase.toLocaleString();
+                document.getElementById('silverSell').innerText = "Rs " + (localSilverBase + 130).toLocaleString();
+
+                // Dynamic calculations for Platinum and Palladium
+                let genericMetalRandom = (Math.random() - 0.5) * 100;
+                let activePlatBuy = Math.round(168200 + genericMetalRandom);
+                document.getElementById('platBuy').innerText = "Rs " + activePlatBuy.toLocaleString();
+                document.getElementById('platSell').innerText = "Rs " + (activePlatBuy + 2200).toLocaleString();
+
+                let activePallBuy = Math.round(184600 + (genericMetalRandom * 1.2));
+                document.getElementById('pallBuy').innerText = "Rs " + activePallBuy.toLocaleString();
+                document.getElementById('pallSell').innerText = "Rs " + (activePallBuy + 2300).toLocaleString();
 
                 // Update Open Market Currency live simulation rows (Natural Fluctuations)
                 let usdFluctuation = (Math.random() - 0.5) * 0.15;
@@ -633,11 +677,6 @@
             // 21K Calculation Engine
             document.getElementById('g21Buy').innerText = "Rs " + Math.round(buy24 * 21 / 24).toLocaleString();
             document.getElementById('g21Sell').innerText = "Rs " + Math.round(sell24 * 21 / 24).toLocaleString();
-
-            // Silver tracking fluctuator
-            let silverBase = Math.round(5420 + (buy24 - 442400) * 0.01);
-            document.getElementById('silverBuy').innerText = "Rs " + silverBase.toLocaleString();
-            document.getElementById('silverSell').innerText = "Rs " + (silverBase + 130).toLocaleString();
         }
 
         // Zakat Core Calculation Logic
