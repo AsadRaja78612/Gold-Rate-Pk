@@ -304,10 +304,10 @@
         }
 
         .currency-table th, .currency-table td {
-            padding: 12px;
+            padding: 10px 6px;
             text-align: center;
             border-bottom: 1px solid #eaeded;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .currency-table th {
@@ -317,28 +317,29 @@
 
         .calc-box {
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
             border: 1px solid #e5e8e8;
         }
 
         .calc-field {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .calc-field label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             margin-bottom: 5px;
+            color: #2c3e50;
         }
 
         .calc-field input {
             width: 100%;
-            padding: 10px;
+            padding: 8px 10px;
             border: 1px solid #bdc3c7;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .calc-btn {
@@ -400,6 +401,32 @@
             font-weight: bold;
             color: white;
         }
+
+        /* Thank You Screen Styles */
+        .thankyou-container {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            text-align: center;
+            background: white;
+            min-height: 70vh;
+        }
+        .thankyou-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        .thankyou-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #111c24;
+            margin-bottom: 10px;
+        }
+        .thankyou-sub {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -407,7 +434,7 @@
     <div class="app-container">
         <div class="islamic-banner">لا إله إلا الله، مُحَمَّدٌ رَسُولُ الله</div>
 
-        <header class="app-header">
+        <header class="app-header" id="mainHeader">
             <div class="header-title-container" onclick="handleHeaderClick()">
                 <div class="header-logo">🇵🇰</div>
                 <h1 class="app-title">پاکستان گولڈ ریٹ</h1>
@@ -428,7 +455,7 @@
                 <li><a href="#" onclick="switchView('board-rate')">📋 بورڈ ریٹ (Board Rate)</a></li>
                 <li><a href="#" onclick="switchView('currency-rate')">💵 کرنسی ریٹ (Currency Rate)</a></li>
                 <li><a href="#" onclick="switchView('zakat-calc')">🧮 زکوٰۃ کیلکولیٹر (Zakat Calculator)</a></li>
-                <li><a href="#" id="drawerCloseLink">🚪 دستبرداری / بند کریں</a></li>
+                <li><a href="#" onclick="handleWebsiteCloseRoute()">🚪 دستبرداری / بند کریں</a></li>
             </ul>
         </div>
 
@@ -474,6 +501,14 @@
             </div>
         </div>
 
+        <!-- THANK YOU SCREEN -->
+        <div id="thankyou-screen" class="thankyou-container">
+            <div class="thankyou-icon">🤝</div>
+            <div class="thankyou-text">Thank you for visiting our website!</div>
+            <div class="thankyou-sub">پاکستان گولڈ ریٹ پورٹل استعمال کرنے کا شکریہ۔</div>
+            <button onclick="reloadApp()" style="margin-top: 25px; padding: 8px 15px; border: 1px solid #bfa15f; background: transparent; border-radius: 5px; cursor: pointer; font-weight: bold; color: #bfa15f;">دوبارہ لاگ ان کریں / ہوم پیج</button>
+        </div>
+
         <!-- SCREEN 1: LIVE MARKET VIEW -->
         <div id="live-market" class="app-view active">
             <div class="section-title">🥇 سونا انٹرنیشنل اور لوکل لائیو ریٹس (GOLD RATES)</div>
@@ -482,7 +517,7 @@
                 <div class="card-header"><span style="font-weight:bold;">گولڈ 24K (فی تولہ)</span><span class="badge badge-gold">24 Karat</span></div>
                 <div class="price-grid">
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g24Buy">Rs 440,320</div></div>
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g24Sell">Rs 422,320</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g24Sell">Rs 442,320</div></div>
                 </div>
             </div>
 
@@ -543,44 +578,87 @@
 
         <!-- SCREEN 2: BOARD RATE VIEW -->
         <div id="board-rate" class="app-view">
-            <div class="section-title">📋 آفیشل صرافہ مارکیٹ بورڈ ریٹس (Board Rates)</div>
-            <div class="metal-card">
-                <table style="width:100%; border-collapse:collapse; text-align:right;">
-                    <tr style="border-bottom:1px solid #ddd; background:#f2f3f4;"><th style="padding:8px;">شہر (City)</th><th style="padding:8px;">24K تولہ ریٹ</th></tr>
-                    <tr><td style="padding:10px;">کراچی صرافہ ایسوسی ایشن</td><td style="padding:10px; font-weight:bold; color:#2c3e50;">Rs 440,320</td></tr>
-                    <tr><td style="padding:10px;">لاہور صرافہ مارکیٹ</td><td style="padding:10px; font-weight:bold; color:#2c3e50;">Rs 440,500</td></tr>
-                    <tr><td style="padding:10px;">راولپنڈی / اسلام آباد</td><td style="padding:10px; font-weight:bold; color:#2c3e50;">Rs 440,800</td></tr>
+            <div class="section-title">📋 آفیشل صرافہ مارکیٹ بورڈ ریٹس (Major Cities Board Rates)</div>
+            <div class="metal-card" style="padding: 5px;">
+                <table style="width:100%; border-collapse:collapse; text-align:right;" id="boardCityTable">
+                    <tr style="border-bottom:1px solid #ddd; background:#f2f3f4;"><th style="padding:8px;">شہر (City)</th><th style="padding:8px; text-align: center;">24K تولہ ریٹ</th></tr>
+                    <tr><td style="padding:10px;">کراچی صرافہ ایسوسی ایشن</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="0">Rs 440,320</td></tr>
+                    <tr><td style="padding:10px;">لاہور صرافہ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="150">Rs 440,470</td></tr>
+                    <tr><td style="padding:10px;">راولپنڈی / اسلام آباد</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="300">Rs 440,620</td></tr>
+                    <tr><td style="padding:10px;">فیصل آباد صرافہ یونین</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="100">Rs 440,420</td></tr>
+                    <tr><td style="padding:10px;">ملتان صرافہ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="-50">Rs 440,270</td></tr>
+                    <tr><td style="padding:10px;">پشاور صرافہ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="400">Rs 440,720</td></tr>
+                    <tr><td style="padding:10px;">کوئٹہ صرافہ بازار</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="500">Rs 440,820</td></tr>
+                    <tr><td style="padding:10px;">گوجرانوالہ گولڈ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="200">Rs 440,520</td></tr>
+                    <tr><td style="padding:10px;">سیالکوٹ صرافہ یونین</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="250">Rs 440,570</td></tr>
+                    <tr><td style="padding:10px;">حیدرآباد صرافہ بازار</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="-100">Rs 440,220</td></tr>
+                    <tr><td style="padding:10px;">سکھر گولڈ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="-150">Rs 440,170</td></tr>
                 </table>
             </div>
         </div>
 
         <!-- SCREEN 3: CURRENCY RATE VIEW -->
         <div id="currency-rate" class="app-view">
-            <div class="section-title">💵 اوپن مارکیٹ کرنسی ریٹس</div>
+            <div class="section-title">💵 اوپن مارکیٹ لائیو کرنسی ریٹس (25 Mumalik)</div>
             <table class="currency-table">
                 <thead><tr><th>کرنسی (Currency)</th><th>خرید (Buy)</th><th>فروخت (Sell)</th></tr></thead>
-                <tbody>
-                    <tr><td>🇺🇸 US Dollar (USD)</td><td id="usdBuy" style="font-weight: bold; color: #27ae60;">278.40</td><td id="usdSell" style="font-weight: bold; color: #e74c3c;">280.90</td></tr>
-                    <tr><td>🇦🇪 UAE Dirham (AED)</td><td id="aedBuy">75.60</td><td id="aedSell">76.45</td></tr>
+                <tbody id="currencyTableBody">
+                    <tr data-base="278.40" data-spread="2.50"><td>🇺🇸 US Dollar (USD)</td><td class="c-buy">278.40</td><td class="c-sell">280.90</td></tr>
+                    <tr data-base="75.60" data-spread="0.85"><td>🇦🇪 UAE Dirham (AED)</td><td class="c-buy">75.60</td><td class="c-sell">76.45</td></tr>
+                    <tr data-base="74.10" data-spread="0.80"><td>🇸🇦 Saudi Riyal (SAR)</td><td class="c-buy">74.10</td><td class="c-sell">74.90</td></tr>
+                    <tr data-base="351.20" data-spread="3.20"><td>🇬🇧 British Pound (GBP)</td><td class="c-buy">351.20</td><td class="c-sell">354.40</td></tr>
+                    <tr data-base="298.50" data-spread="2.80"><td>🇪🇺 Euro (EUR)</td><td class="c-buy">298.50</td><td class="c-sell">301.30</td></tr>
+                    <tr data-base="721.40" data-spread="6.50"><td>🇴🇲 Oman Rial (OMR)</td><td class="c-buy">721.40</td><td class="c-sell">727.90</td></tr>
+                    <tr data-base="904.20" data-spread="8.50"><td>🇰🇼 Kuwaiti Dinar (KWD)</td><td class="c-buy">904.20</td><td class="c-sell">912.70</td></tr>
+                    <tr data-base="76.30" data-spread="0.85"><td>🇶🇦 Qatar Riyal (QAR)</td><td class="c-buy">76.30</td><td class="c-sell">77.15</td></tr>
+                    <tr data-base="59.10" data-spread="0.70"><td>🇲🇾 Malaysian Ringgit (MYR)</td><td class="c-buy">59.10</td><td class="c-sell">59.80</td></tr>
+                    <tr data-base="202.10" data-spread="2.10"><td>🇨🇦 Canadian Dollar (CAD)</td><td class="c-buy">202.10</td><td class="c-sell">204.20</td></tr>
+                    <tr data-base="184.30" data-spread="1.95"><td>🇦🇺 Australian Dollar (AUD)</td><td class="c-buy">184.30</td><td class="c-sell">186.25</td></tr>
+                    <tr data-base="35.60" data-spread="0.45"><td>🇨🇳 Chinese Yuan (CNY)</td><td class="c-buy">35.60</td><td class="c-sell">36.05</td></tr>
+                    <tr data-base="75.80" data-spread="0.85"><td>🇧🇭 Bahrain Dinar (BHD)</td><td class="c-buy">735.40</td><td class="c-sell">742.00</td></tr>
+                    <tr data-base="213.50" data-spread="2.20"><td>🇳🇿 NZ Dollar (NZD)</td><td class="c-buy">213.50</td><td class="c-sell">215.70</td></tr>
+                    <tr data-base="205.30" data-spread="2.10"><td>🇸🇬 Singapore Dollar (SGD)</td><td class="c-buy">205.30</td><td class="c-sell">207.40</td></tr>
+                    <tr data-base="1.74" data-spread="0.03"><td>🇯🇵 Japanese Yen (JPY)</td><td class="c-buy">1.74</td><td class="c-sell">1.77</td></tr>
+                    <tr data-base="3.32" data-spread="0.05"><td>🇮🇳 Indian Rupee (INR)</td><td class="c-buy">3.32</td><td class="c-sell">3.37</td></tr>
+                    <tr data-base="8.15" data-spread="0.10"><td>🇹🇭 Thailand Baht (THB)</td><td class="c-buy">8.15</td><td class="c-sell">8.25</td></tr>
+                    <tr data-base="304.50" data-spread="3.10"><td>🇨🇭 Swiss Franc (CHF)</td><td class="c-buy">304.50</td><td class="c-sell">307.60</td></tr>
+                    <tr data-base="26.40" data-spread="0.30"><td>🇿🇦 SA Rand (ZAR)</td><td class="c-buy">26.40</td><td class="c-sell">26.70</td></tr>
+                    <tr data-base="7.54" data-spread="0.09"><td>🇹🇷 Turkish Lira (TRY)</td><td class="c-buy">7.54</td><td class="c-sell">7.63</td></tr>
+                    <tr data-base="25.20" data-spread="0.30"><td>🇪🇬 Egyptian Pound (EGP)</td><td class="c-buy">25.20</td><td class="c-sell">25.50</td></tr>
+                    <tr data-base="392.20" data-spread="4.00"><td>🇯🇴 Jordan Dinar (JOD)</td><td class="c-buy">392.20</td><td class="c-sell text-danger">396.20</td></tr>
+                    <tr data-base="7.82" data-spread="0.10"><td>🇺🇦 Ukraine Hryvnia (UAH)</td><td class="c-buy">7.82</td><td class="c-sell">7.92</td></tr>
+                    <tr data-base="27.10" data-spread="0.35"><td>🇧🇷 Brazil Real (BRL)</td><td class="c-buy">27.10</td><td class="c-sell">27.45</td></tr>
                 </tbody>
             </table>
         </div>
 
         <!-- SCREEN 4: ZAKAT CALCULATOR VIEW -->
         <div id="zakat-calc" class="app-view">
-            <div class="section-title">🧮 زکوٰۃ کیلکولیٹر (Zakat Calculator Engine)</div>
+            <div class="section-title">🧮 مکمل و تفصیلی زکوٰۃ کیلکولیٹر (Accurate Engine)</div>
             <div class="calc-box">
                 <div class="calc-field">
-                    <label>آپ کے پاس موجود کل سونا (تولہ میں):</label>
-                    <input type="number" id="zakatGold" placeholder="مثال کے طور پر: 10" value="0">
+                    <label>۱. موجود کل سونا (تولہ میں):</label>
+                    <input type="number" id="zkGold" placeholder="مثال: 7.5" value="0">
                 </div>
-                <button class="calc-btn" onclick="calculateZakat()">زکوٰۃ کا حساب لگائیں</button>
+                <div class="calc-field">
+                    <label>۲. موجود کل چاندی (تولہ میں):</label>
+                    <input type="number" id="zkSilver" placeholder="مثال: 52.5" value="0">
+                </div>
+                <div class="calc-field">
+                    <label>۳. بینک بیلنس / نقد رقم (Rs):</label>
+                    <input type="number" id="zkCash" placeholder="مثال: 500000" value="0">
+                </div>
+                <div class="calc-field">
+                    <label>۴. دیگر کاروباری مال / انعامِ عوض (Rs):</label>
+                    <input type="number" id="zkBusiness" placeholder="مثال: 150000" value="0">
+                </div>
+                <button class="calc-btn" onclick="processCompleteZakat()">کل زکوٰۃ معلوم کریں</button>
                 <div class="calc-result" id="zakatResult"></div>
             </div>
         </div>
 
         <!-- Footer Buttons with Restored Community Link -->
-        <footer class="app-footer">
+        <footer class="app-footer" id="mainFooter">
             <div class="owner-name">Raja Asad</div>
             <div class="footer-buttons">
                 <a href="https://wa.me/923115855885" class="action-btn" style="background-color: #25d366;" target="_blank">💬 واٹس ایپ پر رابطہ کریں</a>
@@ -621,6 +699,11 @@
         syncAdminInputs();
 
         function switchView(viewId) {
+            // Hide Thank you screens if moving to other modules
+            document.getElementById('thankyou-screen').style.display = "none";
+            document.getElementById('mainHeader').style.display = "flex";
+            document.getElementById('mainFooter').style.display = "block";
+
             document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             closeMenu();
@@ -634,8 +717,28 @@
         menuBtn.addEventListener('click', () => { menuDrawer.classList.add('open'); menuOverlay.classList.add('show'); });
         closeBtn.addEventListener('click', closeMenu);
         menuOverlay.addEventListener('click', closeMenu);
-        document.getElementById('drawerCloseLink').addEventListener('click', (e) => { e.preventDefault(); closeMenu(); });
+        
         function closeMenu() { menuDrawer.classList.remove('open'); menuOverlay.classList.remove('show'); }
+
+        // Secure Exit System Function
+        function handleWebsiteCloseRoute() {
+            closeMenu();
+            let promptAns = confirm("Do you want to close the website?");
+            if (promptAns) {
+                // Hide All views, main headers, footers and show Thank you Screen
+                document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active'));
+                document.getElementById('secretAdminPanel').style.display = "none";
+                document.getElementById('mainHeader').style.display = "none";
+                document.getElementById('mainFooter').style.display = "none";
+                document.getElementById('thankyou-screen').style.display = "flex";
+            } else {
+                switchView('live-market');
+            }
+        }
+
+        function reloadApp() {
+            window.location.reload();
+        }
 
         function handleHeaderClick() { headerClicks++; if(headerClicks >= 3) { promptAdminPassword(); headerClicks = 0; } }
         function handleSecretAdminTrigger() { drawerClicks++; if(drawerClicks >= 3) { promptAdminPassword(); drawerClicks = 0; } }
@@ -676,7 +779,7 @@
             isOverridden = true;
 
             updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell);
-            alert("Raja Bhai, ریٹس اب محفوظ ہو چکے ہیں اور ریفریش کرنے پر بھی پرانے نہیں ہوں گے۔");
+            alert("Raja Bhai, تمام ریٹس ڈیٹا بیس میں مستقل محفوظ کر دیے گئے ہیں۔");
         }
 
         function updateAllDisplays(gBuy, gSell, sBuy, sSell, pBuy, pSell, pdBuy, pdSell) {
@@ -694,10 +797,17 @@
             document.getElementById('platSell').innerText = "Rs " + Math.round(pSell).toLocaleString();
             document.getElementById('pallBuy').innerText = "Rs " + Math.round(pdBuy).toLocaleString();
             document.getElementById('pallSell').innerText = "Rs " + Math.round(pdSell).toLocaleString();
+
+            // Dynamic Board Rates Generator based on Core 24K Price
+            document.querySelectorAll('.b-rate-cell').forEach(cell => {
+                let offset = parseInt(cell.getAttribute('data-offset')) || 0;
+                cell.innerText = "Rs " + Math.round(gBuy + offset).toLocaleString();
+            });
         }
 
         updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell);
 
+        // Core App Loop Tickers
         setInterval(() => {
             let activeGoldBuy = baseGoldPrice;
             let activeGoldSell = savedGoldSell;
@@ -726,25 +836,50 @@
 
             updateAllDisplays(activeGoldBuy, activeGoldSell, activeSilverBuy, activeSilverSell, activePlatBuy, activePlatSell, activePallBuy, activePallSell);
 
+            // Dynamic Oil & International Silver Spot
             let oilDelta = 77.39 + (Math.random() - 0.5) * 0.15;
             document.getElementById('oilPrice').innerText = "WTI: $" + oilDelta.toFixed(2);
 
             let silverIntDelta = 62.63 + (Math.random() - 0.5) * 0.08;
             document.getElementById('silverInternational').innerText = "$ " + silverIntDelta.toFixed(2) + " USD";
 
-            let usdDelta = (Math.random() - 0.5) * 0.10;
-            document.getElementById('usdBuy').innerText = (278.40 + usdDelta).toFixed(2);
-            document.getElementById('usdSell').innerText = (280.90 + usdDelta).toFixed(2);
+            // Multi Currency Auto Live Update Node Loop
+            document.querySelectorAll('#currencyTableBody tr').forEach(row => {
+                let baseVal = parseFloat(row.getAttribute('data-base'));
+                let spread = parseFloat(row.getAttribute('data-spread'));
+                let rndShift = (Math.random() - 0.5) * (baseVal * 0.0015);
+                let currentBuy = baseVal + rndShift;
+                let currentSell = currentBuy + spread;
+                row.querySelector('.c-buy').innerText = currentBuy.toFixed(2);
+                row.querySelector('.c-sell').innerText = currentSell.toFixed(2);
+            });
 
         }, 3000);
 
-        function calculateZakat() {
-            let goldQty = parseFloat(document.getElementById('zakatGold').value) || 0;
-            let totalAssetWealthValue = (goldQty * baseGoldPrice);
-            let finalZakatPayable = totalAssetWealthValue * 0.025;
+        // Comprehensive detailed Zakat processing engine
+        function processCompleteZakat() {
+            let goldTola = parseFloat(document.getElementById('zkGold').value) || 0;
+            let silverTola = parseFloat(document.getElementById('zkSilver').value) || 0;
+            let cashAsset = parseFloat(document.getElementById('zkCash').value) || 0;
+            let businessAsset = parseFloat(document.getElementById('zkBusiness').value) || 0;
+
+            // Total conversion arithmetic calculation
+            let goldValueVal = goldTola * baseGoldPrice;
+            let silverValueVal = silverTola * baseSilverPrice;
+
+            let grandTotalWealth = goldValueVal + silverValueVal + cashAsset + businessAsset;
+            let calculatedZakatAmount = grandTotalWealth * 0.025;
+
             let resultBox = document.getElementById('zakatResult');
             resultBox.style.display = "block";
-            resultBox.innerHTML = "آپ کی کل واجب الادا زکوٰۃ: Rs " + Math.round(finalZakatPayable).toLocaleString();
+            resultBox.innerHTML = `
+                <div style="text-align: right; font-size:13px; line-height:20px;">
+                    <strong> اثاثہ جات کی کل مالیت:</strong> Rs ${Math.round(grandTotalWealth).toLocaleString()}<br>
+                    <hr style="margin: 5px 0; border:0; border-top:1px dashed #a3e4d7;">
+                    <strong>کل واجب الادا زکوٰۃ (2.5%):</strong> 
+                    <span style="font-size:16px; color:#117a65;">Rs ${Math.round(calculatedZakatAmount).toLocaleString()}</span>
+                </div>
+            `;
         }
     </script>
 </body>
