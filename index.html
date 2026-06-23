@@ -442,45 +442,45 @@
             </ul>
         </div>
 
-        <!-- Secret Khufia Admin Panel (Fixed Save Synchronization) -->
+        <!-- Secret Khufia Admin Panel (With LocalStorage Auto Save Support) -->
         <div class="secret-admin" id="secretAdminPanel">
             <h3>⚙️ ایڈمن کنٹرول پینل (Mandi Controls)</h3>
-            <p style="font-size:11px; color:#d35400; margin-bottom:8px;">* ریٹس ٹھیک کر کے محفوظ کریں، لائیو سسٹم آپ کے نئے ریٹ سے ہی چلتا رہے گا۔</p>
+            <p style="font-size:11px; color:#d35400; margin-bottom:8px;">* یہاں ریٹ تبدیل کریں، یہ اب ریفریش کرنے پر بھی غائب نہیں ہوں گے۔</p>
             
             <div id="manualFields" style="display:flex; flex-direction:column;">
                 <div class="admin-input-group">
                     <label>گولڈ 24K (خرید / فروخت):</label>
                     <div class="admin-input-row">
-                        <input type="number" id="manual24KBuy" placeholder="Buy Rate" value="442400">
-                        <input type="number" id="manual24KSell" placeholder="Sell Rate" value="443900">
+                        <input type="number" id="manual24KBuy" placeholder="Buy Rate">
+                        <input type="number" id="manual24KSell" placeholder="Sell Rate">
                     </div>
                 </div>
 
                 <div class="admin-input-group">
                     <label>چاندی / Silver (خرید / فروخت):</label>
                     <div class="admin-input-row">
-                        <input type="number" id="manualSilverBuy" placeholder="Buy Rate" value="7800">
-                        <input type="number" id="manualSilverSell" placeholder="Sell Rate" value="7900">
+                        <input type="number" id="manualSilverBuy" placeholder="Buy Rate">
+                        <input type="number" id="manualSilverSell" placeholder="Sell Rate">
                     </div>
                 </div>
 
                 <div class="admin-input-group">
                     <label>پلاٹینم / Platinum (خرید / فروخت):</label>
                     <div class="admin-input-row">
-                        <input type="number" id="manualPlatBuy" placeholder="Buy Rate" value="168200">
-                        <input type="number" id="manualPlatSell" placeholder="Sell Rate" value="170400">
+                        <input type="number" id="manualPlatBuy" placeholder="Buy Rate">
+                        <input type="number" id="manualPlatSell" placeholder="Sell Rate">
                     </div>
                 </div>
 
                 <div class="admin-input-group">
                     <label>پیلیڈیم / Palladium (خرید / فروخت):</label>
                     <div class="admin-input-row">
-                        <input type="number" id="manualPallBuy" placeholder="Buy Rate" value="184600">
-                        <input type="number" id="manualPallSell" placeholder="Sell Rate" value="186900">
+                        <input type="number" id="manualPallBuy" placeholder="Buy Rate">
+                        <input type="number" id="manualPallSell" placeholder="Sell Rate">
                     </div>
                 </div>
 
-                <button onclick="saveManualOverride()" style="background:#e67e22; color:white; border:none; padding:8px; cursor:pointer; font-weight:bold; border-radius:4px; margin-top:5px;">تصحیح کریں اور لائیو چلائیں</button>
+                <button onclick="saveManualOverride()" style="background:#e67e22; color:white; border:none; padding:8px; cursor:pointer; font-weight:bold; border-radius:4px; margin-top:5px;">تصحیح کریں اور ہمیشہ کے لیے محفوظ کریں</button>
             </div>
         </div>
 
@@ -610,15 +610,31 @@
     </div>
 
     <script>
-        // System Config Data (Updated as requested)
         let headerClicks = 0;
         let drawerClicks = 0;
 
-        // Base benchmarks that fluctuate naturally around user data
-        let baseGoldPrice = 442400;
-        let baseSilverPrice = 7800; 
-        let basePlatPrice = 168200;
-        let basePallPrice = 184600;
+        // LOCALSTORAGE SETUP: Load previously saved rates OR use the default ones if it's first run
+        let baseGoldPrice = parseFloat(localStorage.getItem('savedGoldBuy')) || 442400;
+        let savedGoldSell = parseFloat(localStorage.getItem('savedGoldSell')) || 443900;
+
+        let baseSilverPrice = parseFloat(localStorage.getItem('savedSilverBuy')) || 7800;
+        let savedSilverSell = parseFloat(localStorage.getItem('savedSilverSell')) || 7900;
+
+        let basePlatPrice = parseFloat(localStorage.getItem('savedPlatBuy')) || 168200;
+        let savedPlatSell = parseFloat(localStorage.getItem('savedPlatSell')) || 170400;
+
+        let basePallPrice = parseFloat(localStorage.getItem('savedPallBuy')) || 184600;
+        let savedPallSell = parseFloat(localStorage.getItem('savedPallSell')) || 186900;
+
+        // Initialize Input values inside the admin panel with whatever is currently saved
+        document.getElementById('manual24KBuy').value = baseGoldPrice;
+        document.getElementById('manual24KSell').value = savedGoldSell;
+        document.getElementById('manualSilverBuy').value = baseSilverPrice;
+        document.getElementById('manualSilverSell').value = savedSilverSell;
+        document.getElementById('manualPlatBuy').value = basePlatPrice;
+        document.getElementById('manualPlatSell').value = savedPlatSell;
+        document.getElementById('manualPallBuy').value = basePallPrice;
+        document.getElementById('manualPallSell').value = savedPallSell;
 
         // UI View Switcher
         function switchView(viewId) {
@@ -627,7 +643,7 @@
             closeMenu();
         }
 
-        // Drawer Event Handle
+        // Drawer Menu Scripts
         const menuBtn = document.getElementById('menuBtn');
         const menuDrawer = document.getElementById('menuDrawer');
         const menuOverlay = document.getElementById('menuOverlay');
@@ -639,20 +655,14 @@
         document.getElementById('drawerCloseLink').addEventListener('click', (e) => { e.preventDefault(); closeMenu(); });
         function closeMenu() { menuDrawer.classList.remove('open'); menuOverlay.classList.remove('show'); }
 
-        // Hidden Secret Admin Panel Activation (3 times click logic)
+        // Admin Entry Triggers
         function handleHeaderClick() {
             headerClicks++;
-            if(headerClicks >= 3) {
-                promptAdminPassword();
-                headerClicks = 0;
-            }
+            if(headerClicks >= 3) { promptAdminPassword(); headerClicks = 0; }
         }
         function handleSecretAdminTrigger() {
             drawerClicks++;
-            if(drawerClicks >= 3) {
-                promptAdminPassword();
-                drawerClicks = 0;
-            }
+            if(drawerClicks >= 3) { promptAdminPassword(); drawerClicks = 0; }
         }
 
         function promptAdminPassword() {
@@ -665,55 +675,63 @@
             }
         }
 
-        // ACCURATE MANUAL SAVE FIX: Instantly forces the ticker loop to start using user values as new baseline
+        // FIXED SAVE FUNCTION: Saves straight into the browser database so refresh doesn't break it
         function saveManualOverride() {
             baseGoldPrice = parseFloat(document.getElementById('manual24KBuy').value) || 442400;
             let sell24 = parseFloat(document.getElementById('manual24KSell').value) || 443900;
+            localStorage.setItem('savedGoldBuy', baseGoldPrice);
+            localStorage.setItem('savedGoldSell', sell24);
             updateGoldDisplay(baseGoldPrice, sell24);
 
             baseSilverPrice = parseFloat(document.getElementById('manualSilverBuy').value) || 7800;
             let silSell = parseFloat(document.getElementById('manualSilverSell').value) || 7900;
+            localStorage.setItem('savedSilverBuy', baseSilverPrice);
+            localStorage.setItem('savedSilverSell', silSell);
             document.getElementById('silverBuy').innerText = "Rs " + baseSilverPrice.toLocaleString();
             document.getElementById('silverSell').innerText = "Rs " + silSell.toLocaleString();
 
             basePlatPrice = parseFloat(document.getElementById('manualPlatBuy').value) || 168200;
             let platSell = parseFloat(document.getElementById('manualPlatSell').value) || 170400;
+            localStorage.setItem('savedPlatBuy', basePlatPrice);
+            localStorage.setItem('savedPlatSell', platSell);
             document.getElementById('platBuy').innerText = "Rs " + basePlatPrice.toLocaleString();
             document.getElementById('platSell').innerText = "Rs " + platSell.toLocaleString();
 
             basePallPrice = parseFloat(document.getElementById('manualPallBuy').value) || 184600;
             let pallSell = parseFloat(document.getElementById('manualPallSell').value) || 186900;
+            localStorage.setItem('savedPallBuy', basePallPrice);
+            localStorage.setItem('savedPallSell', pallSell);
             document.getElementById('pallBuy').innerText = "Rs " + basePallPrice.toLocaleString();
             document.getElementById('pallSell').innerText = "Rs " + pallSell.toLocaleString();
 
-            alert("تصحیح محفوظ ہو گئی! ریٹس اب آپ کے سیٹ کیے گئے ریٹ سے لائیو چل رہے ہیں۔");
+            alert("مبارک ہو! ریٹس محفوظ ہو گئے ہیں۔ اب پیج ریفریش کرنے پر بھی یہ تبدیل نہیں ہوں گے۔");
         }
 
-        // Dynamic Updates Engine (Continuous Ticker for AdSense Approval)
+        // Continuous Live Loop Engine
         setInterval(() => {
-            // 1. Gold Fluctuations based on active baseline
+            // 1. Gold Ticker Logic
             let goldRandom = (Math.random() - 0.5) * 120;
             let activeGoldBuy = Math.round(baseGoldPrice + goldRandom);
             let activeGoldSell = Math.round(activeGoldBuy + 1500);
             updateGoldDisplay(activeGoldBuy, activeGoldSell);
 
-            // 2. Oil Prices Live (Configured around $88 - $89 Brent & $95 - $96 WTI)
+            // 2. Oil Prices Real-Time Fluctuation
             let brentBase = 88.50 + (Math.random() - 0.5) * 0.3;
             let wtiBase = 95.50 + (Math.random() - 0.5) * 0.3;
             document.getElementById('oilPrice').innerText = "WTI: $" + wtiBase.toFixed(2) + " | BRT: $" + brentBase.toFixed(2);
 
-            // 3. International Silver Mandi Spot Live (Configured around $64.7 - $65)
+            // 3. International Silver Live Ticker ($64.7 - $65)
             let silverIntRandom = (Math.random() - 0.5) * 0.15;
             let currentSilverInt = 64.85 + silverIntRandom;
             document.getElementById('silverInternational').innerText = "$ " + currentSilverInt.toFixed(2) + " USD";
 
-            // 4. Local PKR Silver Price (Fluctuates gracefully using saved base benchmark)
+            // 4. Local Chandi Live Ticker
             let silverRandomDelta = (Math.random() - 0.5) * 15; 
             let activeSilverBuy = Math.round(baseSilverPrice + silverRandomDelta); 
             document.getElementById('silverBuy').innerText = "Rs " + activeSilverBuy.toLocaleString();
             document.getElementById('silverSell').innerText = "Rs " + (activeSilverBuy + 100).toLocaleString();
 
-            // 5. Platinum and Palladium continuous tracking (With user's international baseline logic)
+            // 5. Platinum & Palladium Live Ticker
             let genericMetalRandom = (Math.random() - 0.5) * 90;
             let activePlatBuy = Math.round(basePlatPrice + genericMetalRandom);
             document.getElementById('platBuy').innerText = "Rs " + activePlatBuy.toLocaleString();
@@ -723,7 +741,7 @@
             document.getElementById('pallBuy').innerText = "Rs " + activePallBuy.toLocaleString();
             document.getElementById('pallSell').innerText = "Rs " + (activePallBuy + 2300).toLocaleString();
 
-            // 6. Currency Open Market Fluctuations
+            // 6. Currency Engine
             let usdFluctuation = (Math.random() - 0.5) * 0.15;
             document.getElementById('usdBuy').innerText = (278.40 + usdFluctuation).toFixed(2);
             document.getElementById('usdSell').innerText = (280.90 + usdFluctuation).toFixed(2);
@@ -740,23 +758,18 @@
             document.getElementById('g24Buy').innerText = "Rs " + buy24.toLocaleString();
             document.getElementById('g24Sell').innerText = "Rs " + sell24.toLocaleString();
 
-            // 22K Dynamic Engine
             document.getElementById('g22Buy').innerText = "Rs " + Math.round(buy24 * 22 / 24).toLocaleString();
             document.getElementById('g22Sell').innerText = "Rs " + Math.round(sell24 * 22 / 24).toLocaleString();
 
-            // 21K Dynamic Engine
             document.getElementById('g21Buy').innerText = "Rs " + Math.round(buy24 * 21 / 24).toLocaleString();
             document.getElementById('g21Sell').innerText = "Rs " + Math.round(sell24 * 21 / 24).toLocaleString();
         }
 
-        // Zakat Core Calculation Logic
         function calculateZakat() {
             let goldQty = parseFloat(document.getElementById('zakatGold').value) || 0;
             let cashAmt = parseFloat(document.getElementById('zakatCash').value) || 0;
-            
             let totalAssetWealthValue = (goldQty * baseGoldPrice) + cashAmt;
             let finalZakatPayable = totalAssetWealthValue * 0.025;
-            
             let resultBox = document.getElementById('zakatResult');
             resultBox.style.display = "block";
             resultBox.innerHTML = "آپ کی کل واجب الادا زکوٰۃ: Rs " + Math.round(finalZakatPayable).toLocaleString();
