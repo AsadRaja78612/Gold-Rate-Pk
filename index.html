@@ -579,11 +579,12 @@
             </div>
         </div>
 
-        <!-- Footer -->
+        <!-- Footer Buttons with Restored Community Link -->
         <footer class="app-footer">
             <div class="owner-name">Raja Asad</div>
             <div class="footer-buttons">
                 <a href="https://wa.me/923115855885" class="action-btn" style="background-color: #25d366;" target="_blank">💬 واٹس ایپ پر رابطہ کریں</a>
+                <a href="https://chat.whatsapp.com/BxItrwWas1UJImX291hRDC" class="action-btn" style="background-color: #3498db;" target="_blank">📢 آفیشل کمیونٹی گروپ جوائن کریں</a>
             </div>
             <div style="font-size:11px; color:#7f8c8d; margin-top:12px;">All Rights Reserved By Ourum @ 2026<br>www.PakGold.net</div>
         </footer>
@@ -593,7 +594,6 @@
         let headerClicks = 0;
         let drawerClicks = 0;
 
-        // CHECK SECURE STORAGE ON BOOT (Screenshots are now hardcoded fallback values)
         let isOverridden = localStorage.getItem('isOverridden') === 'true';
 
         let baseGoldPrice = parseFloat(localStorage.getItem('savedGoldBuy')) || 440320;
@@ -608,7 +608,6 @@
         let basePallPrice = parseFloat(localStorage.getItem('savedPallBuy')) || 130401;
         let savedPallSell = parseFloat(localStorage.getItem('savedPallSell')) || 131901;
 
-        // Force UI Input Initialization
         function syncAdminInputs() {
             document.getElementById('manual24KBuy').value = baseGoldPrice;
             document.getElementById('manual24KSell').value = savedGoldSell;
@@ -621,14 +620,12 @@
         }
         syncAdminInputs();
 
-        // UI View Switcher
         function switchView(viewId) {
             document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             closeMenu();
         }
 
-        // Drawer Control Scripts
         const menuBtn = document.getElementById('menuBtn');
         const menuDrawer = document.getElementById('menuDrawer');
         const menuOverlay = document.getElementById('menuOverlay');
@@ -640,7 +637,6 @@
         document.getElementById('drawerCloseLink').addEventListener('click', (e) => { e.preventDefault(); closeMenu(); });
         function closeMenu() { menuDrawer.classList.remove('open'); menuOverlay.classList.remove('show'); }
 
-        // Hidden Authentication System
         function handleHeaderClick() { headerClicks++; if(headerClicks >= 3) { promptAdminPassword(); headerClicks = 0; } }
         function handleSecretAdminTrigger() { drawerClicks++; if(drawerClicks >= 3) { promptAdminPassword(); drawerClicks = 0; } }
 
@@ -655,7 +651,6 @@
             }
         }
 
-        // PERSISTENT LOCK SYSTEM: Saves updates and flags manual override active status
         function saveManualOverride() {
             baseGoldPrice = parseFloat(document.getElementById('manual24KBuy').value) || 440320;
             savedGoldSell = parseFloat(document.getElementById('manual24KSell').value) || 442320;
@@ -680,13 +675,11 @@
             localStorage.setItem('isOverridden', 'true');
             isOverridden = true;
 
-            // Direct DOM UI Update Immediately
             updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell);
-            alert("Raja Bhai, ریٹس اب ڈیٹا بیس (LocalStorage) میں پکے لاک ہو چکے ہیں اور ریفریش کرنے پر بھی پرانے نہیں ہوں گے۔");
+            alert("Raja Bhai, ریٹس اب محفوظ ہو چکے ہیں اور ریفریش کرنے پر بھی پرانے نہیں ہوں گے۔");
         }
 
         function updateAllDisplays(gBuy, gSell, sBuy, sSell, pBuy, pSell, pdBuy, pdSell) {
-            // Gold
             document.getElementById('g24Buy').innerText = "Rs " + Math.round(gBuy).toLocaleString();
             document.getElementById('g24Sell').innerText = "Rs " + Math.round(gSell).toLocaleString();
             document.getElementById('g22Buy').innerText = "Rs " + Math.round(gBuy * 22 / 24).toLocaleString();
@@ -694,21 +687,17 @@
             document.getElementById('g21Buy').innerText = "Rs " + Math.round(gBuy * 21 / 24).toLocaleString();
             document.getElementById('g21Sell').innerText = "Rs " + Math.round(gSell * 21 / 24).toLocaleString();
 
-            // Chandi
             document.getElementById('silverBuy').innerText = "Rs " + Math.round(sBuy).toLocaleString();
             document.getElementById('silverSell').innerText = "Rs " + Math.round(sSell).toLocaleString();
 
-            // Platinum & Palladium
             document.getElementById('platBuy').innerText = "Rs " + Math.round(pBuy).toLocaleString();
             document.getElementById('platSell').innerText = "Rs " + Math.round(pSell).toLocaleString();
             document.getElementById('pallBuy').innerText = "Rs " + Math.round(pdBuy).toLocaleString();
             document.getElementById('pallSell').innerText = "Rs " + Math.round(pdSell).toLocaleString();
         }
 
-        // Render Initial Rates instantly on load
         updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell);
 
-        // CONTINUOUS SYSTEM ENGINE LOOP
         setInterval(() => {
             let activeGoldBuy = baseGoldPrice;
             let activeGoldSell = savedGoldSell;
@@ -719,7 +708,6 @@
             let activePallBuy = basePallPrice;
             let activePallSell = savedPallSell;
 
-            // Apply minor ticks ONLY if admin hasn't set custom strict overrides
             if (!isOverridden) {
                 let goldRandom = (Math.random() - 0.5) * 80;
                 activeGoldBuy = Math.round(baseGoldPrice + goldRandom);
@@ -736,10 +724,8 @@
                 activePallSell = Math.round(activePallBuy + 1500);
             }
 
-            // Sync Dynamic Changes Safely
             updateAllDisplays(activeGoldBuy, activeGoldSell, activeSilverBuy, activeSilverSell, activePlatBuy, activePlatSell, activePallBuy, activePallSell);
 
-            // Independent Tickers
             let oilDelta = 77.39 + (Math.random() - 0.5) * 0.15;
             document.getElementById('oilPrice').innerText = "WTI: $" + oilDelta.toFixed(2);
 
