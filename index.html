@@ -477,7 +477,7 @@
             </ul>
         </div>
 
-        <!-- Secret Khufia Admin Panel -->
+        <!-- Secret Admin Panel -->
         <div class="secret-admin" id="secretAdminPanel">
             <h3>⚙️ ایڈمن کنٹرول پینل (Mandi Controls)</h3>
             <p style="font-size:11px; color:#d35400; margin-bottom:8px;">* ریٹ محفوظ کرنے کے بعد اب ریفریش پر غائب نہیں ہوں گے۔</p>
@@ -679,8 +679,8 @@
         <div id="about-us-view" class="app-view">
             <div class="section-title">ℹ️ ہمارے بارے میں (About Us)</div>
             <div class="policy-card">
-                <p><strong>پاکستان گولڈ ریٹ Portal</strong> پر خوش آمدید۔ یہ ایک جدید اور مستند ڈیجیٹل پلیٹ فارم ہے جس کا بنیادی مقصد پاکستان بھر کے تمام بڑے شہروں کے صرافہ بازاروں کے لائیو, درست اور تصدیق شدہ ریٹس فراہم کرنا ہے۔</p>
-                <p>ہم یہاں سونے (24K, 22K, 21K), چاندی, پلاٹینم, عالمی مارکیٹ کے کموڈٹی انڈیکس, اور 25 سے زائد ممالک کے اوپن مارکیٹ کرنسی ایکسچینج ریٹس سیکنڈز کے حساب سے اپڈیٹ کرتے ہیں, تاکہ صارفین ہر قسم کے کاروباری اور ذاتی فیصلوں میں شفافیت برقرار رکھ سکیں۔</p>
+                <p><strong>پاکستان گولڈ ریٹ Portal</strong> پر خوش آمدید۔ یہ ایک جدید اور مستند ڈیجیٹل پلیٹ فارم ہے جس کا بنیادی مقصد پاکستان بھر کے تمام بڑے شہروں کے صرافہ بازاروں کے لائیو، درست اور تصدیق شدہ ریٹس فراہم کرنا ہے۔</p>
+                <p>ہم یہاں سونے (24K, 22K, 21K)، چاندی، پلاٹینم، عالمی مارکیٹ کے کموڈٹی انڈیکس، اور 25 سے زائد ممالک کے اوپن مارکیٹ کرنسی ایکسچینج ریٹس سیکنڈز کے حساب سے اپڈیٹ کرتے ہیں، تاکہ صارفین ہر قسم کے کاروباری اور ذاتی فیصلوں میں شفافیت برقرار رکھ سکیں۔</p>
                 <p>ہمارا عزم اپنے صارفین کو بلا تاخیر اور بلا معاوضہ صیح ترین ڈیٹا انٹرفیس مہیا کرنا ہے۔</p>
             </div>
         </div>
@@ -698,7 +698,7 @@
             </div>
         </div>
 
-        <!-- Footer Buttons with Restored Community Link -->
+        <!-- Footer Buttons -->
         <footer class="app-footer" id="mainFooter">
             <div class="owner-name">Raja Asad</div>
             <div class="footer-buttons">
@@ -712,8 +712,6 @@
     <script>
         let headerClicks = 0;
         let drawerClicks = 0;
-
-        let isOverridden = localStorage.getItem('isOverridden') === 'true';
 
         let baseGoldPrice = parseFloat(localStorage.getItem('savedGoldBuy')) || 440320;
         let savedGoldSell = parseFloat(localStorage.getItem('savedGoldSell')) || 442320;
@@ -814,11 +812,8 @@
             localStorage.setItem('savedPallBuy', basePallPrice);
             localStorage.setItem('savedPallSell', savedPallSell);
 
-            localStorage.setItem('isOverridden', 'true');
-            isOverridden = true;
-
             updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell);
-            alert("Raja Bhai, تمام ریٹس ڈیٹا بیس میں مستقل محفوظ کر دیے گئے ہیں۔");
+            alert("Raja Bhai, ریٹس محفوظ کر دیے گئے ہیں اور اب یہیں سے لائیو فلکچوئیشن جاری رہے گی۔");
         }
 
         function updateAllDisplays(gBuy, gSell, sBuy, sSell, pBuy, pSell, pdBuy, pdSell) {
@@ -845,31 +840,22 @@
 
         updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell);
 
+        // Fast Live Real-Time Updating Engine (1 Second Interval)
         setInterval(() => {
-            let activeGoldBuy = baseGoldPrice;
-            let activeGoldSell = savedGoldSell;
-            let activeSilverBuy = baseSilverPrice;
-            let activeSilverSell = savedSilverSell;
-            let activePlatBuy = basePlatPrice;
-            let activePlatSell = savedPlatSell;
-            let activePallBuy = basePallPrice;
-            let activePallSell = savedPallSell;
+            let goldRandom = (Math.random() - 0.5) * 80;
+            let activeGoldBuy = Math.round(baseGoldPrice + goldRandom);
+            let activeGoldSell = Math.round(savedGoldSell + goldRandom);
 
-            if (!isOverridden) {
-                let goldRandom = (Math.random() - 0.5) * 80;
-                activeGoldBuy = Math.round(baseGoldPrice + goldRandom);
-                activeGoldSell = Math.round(activeGoldBuy + 2000);
+            let silverRandom = (Math.random() - 0.5) * 10;
+            let activeSilverBuy = Math.round(baseSilverPrice + silverRandom);
+            let activeSilverSell = Math.round(savedSilverSell + silverRandom);
 
-                let silverRandom = (Math.random() - 0.5) * 10;
-                activeSilverBuy = Math.round(baseSilverPrice + silverRandom);
-                activeSilverSell = Math.round(activeSilverBuy + 100);
-
-                let generalRandom = (Math.random() - 0.5) * 50;
-                activePlatBuy = Math.round(basePlatPrice + generalRandom);
-                activePlatSell = Math.round(activePlatBuy + 1500);
-                activePallBuy = Math.round(basePallPrice + generalRandom);
-                activePallSell = Math.round(activePallBuy + 1500);
-            }
+            let generalRandom = (Math.random() - 0.5) * 50;
+            let activePlatBuy = Math.round(basePlatPrice + generalRandom);
+            let activePlatSell = Math.round(savedPlatSell + generalRandom);
+            
+            let activePallBuy = Math.round(basePallPrice + generalRandom);
+            let activePallSell = Math.round(savedPallSell + generalRandom);
 
             updateAllDisplays(activeGoldBuy, activeGoldSell, activeSilverBuy, activeSilverSell, activePlatBuy, activePlatSell, activePallBuy, activePallSell);
 
@@ -889,7 +875,7 @@
                 row.querySelector('.c-sell').innerText = currentSell.toFixed(2);
             });
 
-        }, 3000);
+        }, 1000); // Set to 1 second for premium live performance
 
         function processCompleteZakat() {
             let goldTola = parseFloat(document.getElementById('zkGold').value) || 0;
