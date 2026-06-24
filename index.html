@@ -43,6 +43,17 @@
             letter-spacing: 0.5px;
         }
 
+        .live-time-bar {
+            background-color: #1a252f;
+            color: #bfa15f;
+            text-align: center;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            border-bottom: 1px solid #2c3e50;
+            direction: ltr;
+        }
+
         .app-header {
             background-color: #111c24;
             color: #ffffff;
@@ -260,6 +271,12 @@
             margin-bottom: 12px;
         }
 
+        .badge-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .badge {
             font-size: 11px;
             padding: 3px 8px;
@@ -271,6 +288,13 @@
         .badge-silver { background-color: #f2f3f4; color: #5d6d7e; }
         .badge-platinum { background-color: #ebf5fb; color: #2e86c1; }
         .badge-palladium { background-color: #f4ecf7; color: #8e44ad; }
+        
+        .badge-live {
+            background-color: #e8f8f5;
+            color: #27ae60;
+            font-size: 10px;
+            border: 1px solid #a3e4d7;
+        }
 
         .price-grid {
             display: grid;
@@ -402,7 +426,6 @@
             color: white;
         }
 
-        /* Policy Pages Styles for Google AdSense */
         .policy-card {
             background: #ffffff;
             border: 1px solid #e5e8e8;
@@ -418,7 +441,6 @@
             color: #2c3e50;
         }
 
-        /* Thank You Screen Styles */
         .thankyou-container {
             display: none;
             flex-direction: column;
@@ -449,6 +471,7 @@
 
     <div class="app-container">
         <div class="islamic-banner">لا إله إلا الله، مُحَمَّدٌ رَسُولُ الله</div>
+        <div class="live-time-bar" id="topLiveTimer">Loading Pakistan Standard Time...</div>
 
         <header class="app-header" id="mainHeader">
             <div class="header-title-container" onclick="handleHeaderClick()">
@@ -479,7 +502,7 @@
 
         <!-- Secret Admin Panel -->
         <div class="secret-admin" id="secretAdminPanel">
-            <h3>⚙️ ایڈمن کنٹرول پینل (Mandi Controls)</h3>
+            <h3>⚙️ ایڈمن کنٹرول پینل (Mandi Controls) <span id="adminTimer" style="font-size:11px; float:left; color:#e67e22;"></span></h3>
             <p style="font-size:11px; color:#d35400; margin-bottom:8px;">* ریٹ محفوظ کرنے کے بعد اب ریفریش پر غائب نہیں ہوں گے۔</p>
             
             <div id="manualFields" style="display:flex; flex-direction:column;">
@@ -515,6 +538,15 @@
                     </div>
                 </div>
 
+                <!-- DUAL GLOBAL CONTROLS IN ADMIN PANEL -->
+                <div class="admin-input-group" style="background: #fdf2e9; padding: 6px; border-radius: 6px; border: 1px dashed #e67e22;">
+                    <label style="color: #b9770e;">⚙️ عالمی منڈی ریٹس (USD):</label>
+                    <div class="admin-input-row">
+                        <input type="number" step="0.01" id="manualOil" placeholder="Crude Oil Price">
+                        <input type="number" step="0.01" id="manualSilverInt" placeholder="Global Silver Spot">
+                    </div>
+                </div>
+
                 <button onclick="saveManualOverride()" style="background:#e67e22; color:white; border:none; padding:8px; cursor:pointer; font-weight:bold; border-radius:4px; margin-top:5px;">تصحیح کریں اور محفوظ کریں</button>
             </div>
         </div>
@@ -532,7 +564,13 @@
             <div class="section-title">🥇 سونا انٹرنیشنل اور لوکل لائیو ریٹس (GOLD RATES)</div>
             
             <div class="metal-card">
-                <div class="card-header"><span style="font-weight:bold;">گولڈ 24K (فی تولہ)</span><span class="badge badge-gold">24 Karat</span></div>
+                <div class="card-header">
+                    <span style="font-weight:bold;">گولڈ 24K (فی تولہ)</span>
+                    <div class="badge-container">
+                        <span class="badge badge-live card-timer-node">Live</span>
+                        <span class="badge badge-gold">24 Karat</span>
+                    </div>
+                </div>
                 <div class="price-grid">
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g24Buy">Rs 440,320</div></div>
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g24Sell">Rs 442,320</div></div>
@@ -540,7 +578,13 @@
             </div>
 
             <div class="metal-card">
-                <div class="card-header"><span style="font-weight:bold;">گولڈ 22K (فی تولہ)</span><span class="badge badge-gold">22 Karat</span></div>
+                <div class="card-header">
+                    <span style="font-weight:bold;">گولڈ 22K (فی تولہ)</span>
+                    <div class="badge-container">
+                        <span class="badge badge-live card-timer-node">Live</span>
+                        <span class="badge badge-gold">22 Karat</span>
+                    </div>
+                </div>
                 <div class="price-grid">
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g22Buy">Rs 403,627</div></div>
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g22Sell">Rs 405,460</div></div>
@@ -548,7 +592,13 @@
             </div>
 
             <div class="metal-card">
-                <div class="card-header"><span style="font-weight:bold;">گولڈ 21K (فی تولہ)</span><span class="badge badge-gold">21 Karat</span></div>
+                <div class="card-header">
+                    <span style="font-weight:bold;">گولڈ 21K (فی تولہ)</span>
+                    <div class="badge-container">
+                        <span class="badge badge-live card-timer-node">Live</span>
+                        <span class="badge badge-gold">21 Karat</span>
+                    </div>
+                </div>
                 <div class="price-grid">
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g21Buy">Rs 385,280</div></div>
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g21Sell">Rs 387,030</div></div>
@@ -558,7 +608,13 @@
             <div class="section-title">🥈 چاندی، پلاٹینم اور پیلیڈیم لائیو ریٹس</div>
             
             <div class="metal-card">
-                <div class="card-header"><span style="font-weight:bold;">چاندی (فی تولہ)</span><span class="badge badge-silver">Silver / Chandi</span></div>
+                <div class="card-header">
+                    <span style="font-weight:bold;">چاندی (فی تولہ)</span>
+                    <div class="badge-container">
+                        <span class="badge badge-live card-timer-node">Live</span>
+                        <span class="badge badge-silver">Silver / Chandi</span>
+                    </div>
+                </div>
                 <div class="price-grid">
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="silverBuy">Rs 7,255</div></div>
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="silverSell">Rs 7,355</div></div>
@@ -566,7 +622,13 @@
             </div>
 
             <div class="metal-card">
-                <div class="card-header"><span style="font-weight:bold;">پلاٹینم (فی تولہ)</span><span class="badge badge-platinum">Platinum</span></div>
+                <div class="card-header">
+                    <span style="font-weight:bold;">پلاٹینم (فی تولہ)</span>
+                    <div class="badge-container">
+                        <span class="badge badge-live card-timer-node">Live</span>
+                        <span class="badge badge-platinum">Platinum</span>
+                    </div>
+                </div>
                 <div class="price-grid">
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="platBuy">Rs 171,739</div></div>
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="platSell">Rs 173,239</div></div>
@@ -574,7 +636,13 @@
             </div>
 
             <div class="metal-card">
-                <div class="card-header"><span style="font-weight:bold;">پیلیڈیم (فی تولہ)</span><span class="badge badge-palladium">Palladium</span></div>
+                <div class="card-header">
+                    <span style="font-weight:bold;">پیلیڈیم (فی تولہ)</span>
+                    <div class="badge-container">
+                        <span class="badge badge-live card-timer-node">Live</span>
+                        <span class="badge badge-palladium">Palladium</span>
+                    </div>
+                </div>
                 <div class="price-grid">
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="pallBuy">Rs 130,401</div></div>
                     <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="pallSell">Rs 131,901</div></div>
@@ -584,11 +652,11 @@
             <div class="section-title">⚙️ انٹرنیشنل کموڈٹی مارکیٹ لائیو</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="oil-card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;"><span>عالمی چاندی (Spot)</span><span style="color:#2ecc71;">Live</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;"><span>عالمی چاندی (Spot)</span><span style="color:#2ecc71;" class="card-timer-node">Live</span></div>
                     <div style="font-size:18px; text-align:center; font-weight:bold; color:#ffffff;" id="silverInternational">$ 62.63 USD</div>
                 </div>
                 <div class="oil-card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;"><span>خام تیل (WTI)</span><span style="color:#2ecc71;">Live</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;"><span>خام تیل (WTI)</span><span style="color:#2ecc71;" class="card-timer-node">Live</span></div>
                     <div style="font-size:15px; text-align:center; font-weight:bold; color:#f1c40f;" id="oilPrice">WTI: $77.39</div>
                 </div>
             </div>
@@ -627,7 +695,7 @@
                     <tr data-base="351.20" data-spread="3.20"><td>🇬🇧 British Pound (GBP)</td><td class="c-buy">351.20</td><td class="c-sell">354.40</td></tr>
                     <tr data-base="298.50" data-spread="2.80"><td>🇪🇺 Euro (EUR)</td><td class="c-buy">298.50</td><td class="c-sell">301.30</td></tr>
                     <tr data-base="721.40" data-spread="6.50"><td>🇴🇲 Oman Rial (OMR)</td><td class="c-buy">721.40</td><td class="c-sell">727.90</td></tr>
-                    <tr data-base="904.20" data-spread="8.50"><td>🇰🇼 Kuwaiti Dinar (KWD)</td><td class="c-buy">904.20</td><td class="c-sell">912.70</td></tr>
+                    <tr data-base="904.20" data-spread="8.50"><td>🇰運行 Kuwaiti Dinar (KWD)</td><td class="c-buy">904.20</td><td class="c-sell">912.70</td></tr>
                     <tr data-base="76.30" data-spread="0.85"><td>🇶🇦 Qatar Riyal (QAR)</td><td class="c-buy">76.30</td><td class="c-sell">77.15</td></tr>
                     <tr data-base="59.10" data-spread="0.70"><td>🇲🇾 Malaysian Ringgit (MYR)</td><td class="c-buy">59.10</td><td class="c-sell">59.80</td></tr>
                     <tr data-base="202.10" data-spread="2.10"><td>🇨🇦 Canadian Dollar (CAD)</td><td class="c-buy">202.10</td><td class="c-sell">204.20</td></tr>
@@ -675,7 +743,7 @@
             </div>
         </div>
 
-        <!-- NEW ADSENSE POLICY VIEW: ABOUT US -->
+        <!-- ABOUT US -->
         <div id="about-us-view" class="app-view">
             <div class="section-title">ℹ️ ہمارے بارے میں (About Us)</div>
             <div class="policy-card">
@@ -685,7 +753,7 @@
             </div>
         </div>
 
-        <!-- NEW ADSENSE POLICY VIEW: CONTACT US -->
+        <!-- CONTACT US -->
         <div id="contact-us-view" class="app-view">
             <div class="section-title">📞 رابطہ کریں (Contact Us)</div>
             <div class="policy-card" style="text-align: center;">
@@ -725,6 +793,9 @@
         let basePallPrice = parseFloat(localStorage.getItem('savedPallBuy')) || 130401;
         let savedPallSell = parseFloat(localStorage.getItem('savedPallSell')) || 131901;
 
+        let baseOilPrice = parseFloat(localStorage.getItem('savedOilPrice')) || 77.39;
+        let baseSilverIntPrice = parseFloat(localStorage.getItem('savedSilverIntPrice')) || 62.63;
+
         function syncAdminInputs() {
             document.getElementById('manual24KBuy').value = baseGoldPrice;
             document.getElementById('manual24KSell').value = savedGoldSell;
@@ -734,6 +805,9 @@
             document.getElementById('manualPlatSell').value = savedPlatSell;
             document.getElementById('manualPallBuy').value = basePallPrice;
             document.getElementById('manualPallSell').value = savedPallSell;
+            
+            document.getElementById('manualOil').value = baseOilPrice;
+            document.getElementById('manualSilverInt').value = baseSilverIntPrice;
         }
         syncAdminInputs();
 
@@ -812,11 +886,16 @@
             localStorage.setItem('savedPallBuy', basePallPrice);
             localStorage.setItem('savedPallSell', savedPallSell);
 
-            updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell);
-            alert("Raja Bhai, ریٹس محفوظ کر دیے گئے ہیں اور اب یہیں سے لائیو فلکچوئیشن جاری رہے گی۔");
+            baseOilPrice = parseFloat(document.getElementById('manualOil').value) || 77.39;
+            baseSilverIntPrice = parseFloat(document.getElementById('manualSilverInt').value) || 62.63;
+            localStorage.setItem('savedOilPrice', baseOilPrice);
+            localStorage.setItem('savedSilverIntPrice', baseSilverIntPrice);
+
+            updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell, baseOilPrice, baseSilverIntPrice);
+            alert("Raja Bhai, تمام ریٹس بشمول پٹرولیم و عالمی منڈی محفوظ کر دیے گئے ہیں!");
         }
 
-        function updateAllDisplays(gBuy, gSell, sBuy, sSell, pBuy, pSell, pdBuy, pdSell) {
+        function updateAllDisplays(gBuy, gSell, sBuy, sSell, pBuy, pSell, pdBuy, pdSell, oilP, silIntP) {
             document.getElementById('g24Buy').innerText = "Rs " + Math.round(gBuy).toLocaleString();
             document.getElementById('g24Sell').innerText = "Rs " + Math.round(gSell).toLocaleString();
             document.getElementById('g22Buy').innerText = "Rs " + Math.round(gBuy * 22 / 24).toLocaleString();
@@ -836,12 +915,28 @@
                 let offset = parseInt(cell.getAttribute('data-offset')) || 0;
                 cell.innerText = "Rs " + Math.round(gBuy + offset).toLocaleString();
             });
+
+            if(oilP) document.getElementById('oilPrice').innerText = "WTI: $" + oilP.toFixed(2);
+            if(silIntP) document.getElementById('silverInternational').innerText = "$ " + silIntP.toFixed(2) + " USD";
         }
 
-        updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell);
+        updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell, baseOilPrice, baseSilverIntPrice);
 
-        // Fast Live Real-Time Updating Engine (1 Second Interval)
         setInterval(() => {
+            // Live Clock and Pony Second Updates
+            let now = new Date();
+            let options = { timeZone: 'Asia/Karachi', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            let paktTimeStr = now.toLocaleString('en-US', options);
+            
+            document.getElementById('topLiveTimer').innerText = "🇵🇰 PKT Live: " + paktTimeStr;
+            document.getElementById('adminTimer').innerText = "⏱️ " + now.toLocaleTimeString();
+
+            let currentSec = now.getSeconds();
+            document.querySelectorAll('.card-timer-node').forEach(node => {
+                node.innerText = "Live (" + currentSec + "s)";
+            });
+
+            // Auto Fluctuation Engine
             let goldRandom = (Math.random() - 0.5) * 80;
             let activeGoldBuy = Math.round(baseGoldPrice + goldRandom);
             let activeGoldSell = Math.round(savedGoldSell + goldRandom);
@@ -857,12 +952,12 @@
             let activePallBuy = Math.round(basePallPrice + generalRandom);
             let activePallSell = Math.round(savedPallSell + generalRandom);
 
-            updateAllDisplays(activeGoldBuy, activeGoldSell, activeSilverBuy, activeSilverSell, activePlatBuy, activePlatSell, activePallBuy, activePallSell);
+            updateAllDisplays(activeGoldBuy, activeGoldSell, activeSilverBuy, activeSilverSell, activePlatBuy, activePlatSell, activePallBuy, activePallSell, null, null);
 
-            let oilDelta = 77.39 + (Math.random() - 0.5) * 0.15;
+            let oilDelta = baseOilPrice + (Math.random() - 0.5) * 0.15;
             document.getElementById('oilPrice').innerText = "WTI: $" + oilDelta.toFixed(2);
 
-            let silverIntDelta = 62.63 + (Math.random() - 0.5) * 0.08;
+            let silverIntDelta = baseSilverIntPrice + (Math.random() - 0.5) * 0.08;
             document.getElementById('silverInternational').innerText = "$ " + silverIntDelta.toFixed(2) + " USD";
 
             document.querySelectorAll('#currencyTableBody tr').forEach(row => {
@@ -875,7 +970,7 @@
                 row.querySelector('.c-sell').innerText = currentSell.toFixed(2);
             });
 
-        }, 1000); // Set to 1 second for premium live performance
+        }, 1000);
 
         function processCompleteZakat() {
             let goldTola = parseFloat(document.getElementById('zkGold').value) || 0;
