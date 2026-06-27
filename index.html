@@ -128,6 +128,7 @@
             box-shadow: -5px 0 15px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
         }
 
         .menu-drawer.open {
@@ -184,10 +185,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 20px;
+            padding: 14px 20px;
             color: #ecf0f1;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 15px;
             border-bottom: 1px solid #2c3e50;
             transition: background 0.2s;
         }
@@ -454,6 +455,14 @@
             font-size: 14px;
             color: #2c3e50;
         }
+        .policy-card h2 {
+            font-size: 16px;
+            color: #111c24;
+            margin-bottom: 10px;
+            margin-top: 15px;
+            border-right: 3px solid #bfa15f;
+            padding-right: 8px;
+        }
 
         .thankyou-container {
             display: none;
@@ -510,6 +519,10 @@
                 <li><a href="#" onclick="switchView('zakat-calc')">🧮 زکوٰۃ کیلکولیٹر (Zakat Calculator)</a></li>
                 <li><a href="#" onclick="switchView('about-us-view')">ℹ️ ہمارے بارے میں (About Us)</a></li>
                 <li><a href="#" onclick="switchView('contact-us-view')">📞 رابطہ کریں (Contact Us)</a></li>
+                <!-- AdSense Required Legal Pages Links -->
+                <li><a href="#" onclick="switchView('privacy-policy-view')">🛡️ پرائیویسی پالیسی (Privacy Policy)</a></li>
+                <li><a href="#" onclick="switchView('terms-view')">📜 شرائط و ضوابط (Terms & Conditions)</a></li>
+                <li><a href="#" onclick="switchView('disclaimer-view')">⚠️ دستبرداری (Disclaimer)</a></li>
                 <li><a href="#" onclick="handleWebsiteCloseRoute()">🚪 دستبرداری / بند کریں</a></li>
             </ul>
         </div>
@@ -776,6 +789,38 @@
                     <p style="margin: 8px 0; font-size: 14px;"><strong>📧 ای میل رابطہ:</strong> rajaasadali5855@gmail.com</p>
                     <p style="margin: 8px 0; font-size: 14px; direction: ltr; text-align: right;"><strong>💬 واٹس ایپ سپورٹ:</strong> +923115855885</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- ADSENSE SCREEN 1: PRIVACY POLICY -->
+        <div id="privacy-policy-view" class="app-view">
+            <div class="section-title">🛡️ پرائیویسی پالیسی (Privacy Policy)</div>
+            <div class="policy-card">
+                <p>ہم اپنے صارفین کی پرائیویسی کا احترام کرتے ہیں۔ ہماری اس ویب سائٹ پر صارفین کا کوئی بھی حساس یا ذاتی ڈیٹا محفوظ نہیں کیا جاتا۔</p>
+                <h2>کوکیز اور اشتہارات</h2>
+                <p>ہماری ویب سائٹ صارفین کے تجربے کو بہتر بنانے اور ٹریفک کا تجزیہ کرنے کے لیے گوگل اینالیٹکس (Google Analytics) کا استعمال کرتی ہے۔ اس کے علاوہ، گوگل ایڈسینس (Google AdSense) تھرڈ پارٹی کوکیز کا استعمال کر کے صارفین کو ان کی دلچسپی کے مطابق اشتہارات دکھاتا ہے۔</p>
+                <p>صارفین چاہیں تو اپنے براؤزر کی سیٹنگز سے کوکیز کو بند کر سکتے ہیں۔</p>
+            </div>
+        </div>
+
+        <!-- ADSENSE SCREEN 2: TERMS AND CONDITIONS -->
+        <div id="terms-view" class="app-view">
+            <div class="section-title">📜 شرائط و ضوابط (Terms & Conditions)</div>
+            <div class="policy-card">
+                <p>پاکستان گولڈ ریٹ پورٹل پر خوش آمدید۔ اس ویب سائٹ کو استعمال کرنے کا مطلب ہے کہ آپ ہماری درج ذیل شرائط کو تسلیم کرتے ہیں:</p>
+                <h2>ویب سائٹ کا استعمال</h2>
+                <p>۱. اس ویب سائٹ پر فراہم کردہ تمام ڈیٹا اور ریٹس صرف معلومات عامہ کے لیے ہیں۔</p>
+                <p>۲. کسی بھی تجارتی اور کاروباری فائدے یا نقصان کی ذمہ داری ویب سائٹ انتظامیہ پر عائد نہیں ہوگی۔</p>
+                <p>۳. ویب سائٹ کے کوڈ یا ڈیٹا کو بلا اجازت کاپی کرنا یا نقصان پہنچانا قانونی جرم ہے۔</p>
+            </div>
+        </div>
+
+        <!-- ADSENSE SCREEN 3: DISCLAIMER -->
+        <div id="disclaimer-view" class="app-view">
+            <div class="section-title">⚠️ دستبرداری (Disclaimer)</div>
+            <div class="policy-card">
+                <p><strong>نوٹ اور دستبرداری:</strong> اس ویب سائٹ پر سونے، چاندی اور کرنسی کے ریٹس لائیو انٹرنیشنل مارکیٹ اور مقامی صرافہ منڈیوں کے مطابق دکھائے جاتے ہیں۔</p>
+                <p>تاہم، بین الاقوامی مارکیٹ میں اتار چڑھاؤ کی وجہ سے کسی بھی وقت ریٹس میں معمولی فرق آ سکتا ہے۔ اس لیے ہم اپنے تمام صارفین کو سختی سے مشورہ دیتے ہیں کہ کوئی بھی بڑی خرید و فروخت یا کاروباری سودا کرنے سے پہلے اپنے قریبی صرافہ بازار یا سنار سے آفیشل ریٹ کی تصدیق لازمی کر لیں۔ ہماری ویب سائٹ کسی بھی قسم کے کاروباری نقصان کی ذمہ دار نہیں ہوگی۔</p>
             </div>
         </div>
 
