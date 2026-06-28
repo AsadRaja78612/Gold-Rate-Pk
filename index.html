@@ -1,22 +1,6 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-    <!-- 1. MANDI RATES SETTING (Raja Bhai, jab bhi naye rates lagane hon, bas yahan numbers badal diya karein) -->
-    <script>
-      window.MANDI_RATES = {
-         gold24kBuy:   440320,  // یہاں 24K سونا خرید ریٹ لکھیں
-         gold24kSell:  442320,  // یہاں 24K سونا فروخت ریٹ لکھیں
-         silverBuy:    7255,    // یہاں چاندی خرید ریٹ لکھیں
-         silverSell:   7355,    // یہاں چاندی فروخت ریٹ لکھیں
-         platinumBuy:  171739,  // یہاں پلاٹینم خرید ریٹ لکھیں
-         platinumSell: 173239,  // یہاں پلاٹینم فروخت ریٹ لکھیں
-         palladiumBuy: 130401,  // یہاں پیلیڈیم خرید ریٹ لکھیں
-         palladiumSell:131901,  // یہاں پیلیڈیم فروخت ریٹ لکھیں
-         oilPriceUSD:  77.39,   // خام تیل کا ریٹ (USD)
-         silverIntUSD: 62.63    // عالمی چاندی کا ریٹ (USD)
-      };
-    </script>
-
     <!-- Anti-Cache Control: Facebook aur mobile browsers par ghalat rate aane se rokta hai -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -546,7 +530,7 @@
         <!-- Secret Admin Panel -->
         <div class="secret-admin" id="secretAdminPanel">
             <h3>⚙️ ایڈمن کنٹرول پینل (Mandi Controls) <span id="adminTimer" style="font-size:11px; float:left; color:#e67e22;"></span></h3>
-            <p style="font-size:11px; color:#d35400; margin-bottom:8px;">* عارضی ٹیسٹنگ کے لیے ریٹس بدلیں (اصل تبدیلی اوپر کوڈ فائل میں ہوگی)۔</p>
+            <p style="font-size:11px; color:#d35400; margin-bottom:8px;">* ریٹ محفوظ کرنے کے بعد اب ریفریش پر غائب نہیں ہوں گے۔</p>
             
             <div id="manualFields" style="display:flex; flex-direction:column;">
                 <div class="admin-input-group">
@@ -589,7 +573,7 @@
                     </div>
                 </div>
 
-                <button onclick="saveManualOverride()" style="background:#e67e22; color:white; border:none; padding:8px; cursor:pointer; font-weight:bold; border-radius:4px; margin-top:5px;">ٹیسٹ ریٹس چلائیں</button>
+                <button onclick="saveManualOverride()" style="background:#e67e22; color:white; border:none; padding:8px; cursor:pointer; font-weight:bold; border-radius:4px; margin-top:5px;">تصحیح کریں اور محفوظ کریں</button>
             </div>
         </div>
 
@@ -614,8 +598,8 @@
                     </div>
                 </div>
                 <div class="price-grid">
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g24Buy">Rs --</div></div>
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g24Sell">Rs --</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g24Buy">Rs 440,320</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g24Sell">Rs 442,320</div></div>
                 </div>
             </div>
 
@@ -628,8 +612,8 @@
                     </div>
                 </div>
                 <div class="price-grid">
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g22Buy">Rs --</div></div>
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g22Sell">Rs --</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g22Buy">Rs 403,627</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g22Sell">Rs 405,460</div></div>
                 </div>
             </div>
 
@@ -642,8 +626,8 @@
                     </div>
                 </div>
                 <div class="price-grid">
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g21Buy">Rs --</div></div>
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g21Sell">Rs --</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="g21Buy">Rs 385,280</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="g21Sell">Rs 387,030</div></div>
                 </div>
             </div>
 
@@ -658,8 +642,8 @@
                     </div>
                 </div>
                 <div class="price-grid">
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="silverBuy">Rs --</div></div>
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="silverSell">Rs --</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="silverBuy">Rs 7,255</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="silverSell">Rs 7,355</div></div>
                 </div>
             </div>
 
@@ -672,8 +656,8 @@
                     </div>
                 </div>
                 <div class="price-grid">
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="platBuy">Rs --</div></div>
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="platSell">Rs --</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="platBuy">Rs 171,739</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="platSell">Rs 173,239</div></div>
                 </div>
             </div>
 
@@ -686,8 +670,8 @@
                     </div>
                 </div>
                 <div class="price-grid">
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="pallBuy">Rs --</div></div>
-                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="pallSell">Rs --</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">خرید (Purchase)</div><div class="price-value buy" id="pallBuy">Rs 130,401</div></div>
+                    <div class="price-box"><div style="font-size:12px; color:#7f8c8d;">فروخت (Sell)</div><div class="price-value sell" id="pallSell">Rs 131,901</div></div>
                 </div>
             </div>
 
@@ -695,11 +679,11 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="oil-card">
                     <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;"><span>عالمی چاندی (Spot)</span><span style="color:#2ecc71;" class="card-timer-node">Live</span></div>
-                    <div style="font-size:18px; text-align:center; font-weight:bold; color:#ffffff;" id="silverInternational">$ -- USD</div>
+                    <div style="font-size:18px; text-align:center; font-weight:bold; color:#ffffff;" id="silverInternational">$ 62.63 USD</div>
                 </div>
                 <div class="oil-card">
                     <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px;"><span>خام تیل (WTI)</span><span style="color:#2ecc71;" class="card-timer-node">Live</span></div>
-                    <div style="font-size:15px; text-align:center; font-weight:bold; color:#f1c40f;" id="oilPrice">WTI: $--</div>
+                    <div style="font-size:15px; text-align:center; font-weight:bold; color:#f1c40f;" id="oilPrice">WTI: $77.39</div>
                 </div>
             </div>
         </div>
@@ -710,17 +694,17 @@
             <div class="metal-card" style="padding: 5px;">
                 <table style="width:100%; border-collapse:collapse; text-align:right;" id="boardCityTable">
                     <tr style="border-bottom:1px solid #ddd; background:#f2f3f4;"><th style="padding:8px;">شہر (City)</th><th style="padding:8px; text-align: center;">24K تولہ ریٹ</th></tr>
-                    <tr><td style="padding:10px;">کراچی صرافہ ایسوسی ایشن</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="0">Rs --</td></tr>
-                    <tr><td style="padding:10px;">لاہور صرافہ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="150">Rs --</td></tr>
-                    <tr><td style="padding:10px;">راولپنڈی / اسلام آباد</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="300">Rs --</td></tr>
-                    <tr><td style="padding:10px;">فیصل آباد صرافہ یونین</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="100">Rs --</td></tr>
-                    <tr><td style="padding:10px;">ملتان صرافہ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="-50">Rs --</td></tr>
-                    <tr><td style="padding:10px;">پشاور صرافہ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="400">Rs --</td></tr>
-                    <tr><td style="padding:10px;">کوئٹہ صرافہ بازار</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="500">Rs --</td></tr>
-                    <tr><td style="padding:10px;">گوجرانوالہ گولڈ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="200">Rs --</td></tr>
-                    <tr><td style="padding:10px;">سیالکوٹ صرافہ یونین</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="250">Rs --</td></tr>
-                    <tr><td style="padding:10px;">حیدرآباد صرافہ بازار</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="-100">Rs --</td></tr>
-                    <tr><td style="padding:10px;">سکھر گولڈ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="-150">Rs --</td></tr>
+                    <tr><td style="padding:10px;">کراچی صرافہ ایسوسی ایشن</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="0">Rs 440,320</td></tr>
+                    <tr><td style="padding:10px;">لاہور صرافہ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="150">Rs 440,470</td></tr>
+                    <tr><td style="padding:10px;">راولپنڈی / اسلام آباد</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="300">Rs 440,620</td></tr>
+                    <tr><td style="padding:10px;">فیصل آباد صرافہ یونین</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="100">Rs 440,420</td></tr>
+                    <tr><td style="padding:10px;">ملتان صرافہ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="-50">Rs 440,270</td></tr>
+                    <tr><td style="padding:10px;">پشاور صرافہ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="400">Rs 440,720</td></tr>
+                    <tr><td style="padding:10px;">کوئٹہ صرافہ بازار</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="500">Rs 440,820</td></tr>
+                    <tr><td style="padding:10px;">گوجرانوالہ گولڈ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="200">Rs 440,520</td></tr>
+                    <tr><td style="padding:10px;">سیالکوٹ صرافہ یونین</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="250">Rs 440,570</td></tr>
+                    <tr><td style="padding:10px;">حیدرآباد صرافہ بازار</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="-100">Rs 440,220</td></tr>
+                    <tr><td style="padding:10px;">سکھر گولڈ مارکیٹ</td><td style="padding:10px; text-align:center; font-weight:bold; color:#2c3e50;" class="b-rate-cell" data-offset="-150">Rs 440,170</td></tr>
                 </table>
             </div>
         </div>
@@ -800,7 +784,7 @@
             <div class="section-title">📞 رابطہ کریں (Contact Us)</div>
             <div class="policy-card" style="text-align: center;">
                 <p style="font-size: 16px; font-weight: bold; margin-bottom: 15px;">Raja Asad</p>
-                <p>اگر آپ کے پاس ہماری ویب سائٹ, ریٹس یا اشتہارات سے متعلق کوئی भी سوال یا تجویز ہے, تو آپ بلا جھجھک ہم سے رابطہ کر سکتے ہیں۔ ہماری ٹیم آپ کی رہنمائی کے لیے ہمہ وقت تیار ہے۔</p>
+                <p>اگر آپ کے پاس ہماری ویب سائٹ, ریٹس یا اشتہارات سے متعلق کوئی بھی سوال یا تجویز ہے, تو آپ بلا جھجھک ہم سے رابطہ کر سکتے ہیں۔ ہماری ٹیم آپ کی رہنمائی کے لیے ہمہ وقت تیار ہے۔</p>
                 <div style="margin-top: 20px; background: #f8f9f9; padding: 15px; border-radius: 8px; border: 1px dashed #bdc3c7; text-align: right;">
                     <p style="margin: 8px 0; font-size: 14px;"><strong>📧 ای میل رابطہ:</strong> rajaasadali5855@gmail.com</p>
                     <p style="margin: 8px 0; font-size: 14px; direction: ltr; text-align: right;"><strong>💬 واٹس ایپ سپورٹ:</strong> +923115855885</p>
@@ -855,17 +839,20 @@
         let headerClicks = 0;
         let drawerClicks = 0;
 
-        // 2. MASTER GLOBAL SYNC ENGINE (Raja Bhai, ye direct window setup se data pick kar raha hai jo browser/Facebook sab par same dikhega)
-        let baseGoldPrice = window.MANDI_RATES.gold24kBuy;
-        let savedGoldSell = window.MANDI_RATES.gold24kSell;
-        let baseSilverPrice = window.MANDI_RATES.silverBuy;
-        let savedSilverSell = window.MANDI_RATES.silverSell;
-        let basePlatPrice = window.MANDI_RATES.platinumBuy;
-        let savedPlatSell = window.MANDI_RATES.platinumSell;
-        let basePallPrice = window.MANDI_RATES.palladiumBuy;
-        let savedPallSell = window.MANDI_RATES.palladiumSell;
-        let baseOilPrice = window.MANDI_RATES.oilPriceUSD;
-        let baseSilverIntPrice = window.MANDI_RATES.silverIntUSD;
+        let baseGoldPrice = parseFloat(localStorage.getItem('savedGoldBuy')) || 440320;
+        let savedGoldSell = parseFloat(localStorage.getItem('savedGoldSell')) || 442320;
+
+        let baseSilverPrice = parseFloat(localStorage.getItem('savedSilverBuy')) || 7255;
+        let savedSilverSell = parseFloat(localStorage.getItem('savedSilverSell')) || 7355;
+
+        let basePlatPrice = parseFloat(localStorage.getItem('savedPlatBuy')) || 171739;
+        let savedPlatSell = parseFloat(localStorage.getItem('savedPlatSell')) || 173239;
+
+        let basePallPrice = parseFloat(localStorage.getItem('savedPallBuy')) || 130401;
+        let savedPallSell = parseFloat(localStorage.getItem('savedPallSell')) || 131901;
+
+        let baseOilPrice = parseFloat(localStorage.getItem('savedOilPrice')) || 77.39;
+        let baseSilverIntPrice = parseFloat(localStorage.getItem('savedSilverIntPrice')) || 62.63;
 
         function syncAdminInputs() {
             document.getElementById('manual24KBuy').value = baseGoldPrice;
@@ -876,6 +863,7 @@
             document.getElementById('manualPlatSell').value = savedPlatSell;
             document.getElementById('manualPallBuy').value = basePallPrice;
             document.getElementById('manualPallSell').value = savedPallSell;
+            
             document.getElementById('manualOil').value = baseOilPrice;
             document.getElementById('manualSilverInt').value = baseSilverIntPrice;
         }
@@ -936,19 +924,33 @@
         }
 
         function saveManualOverride() {
-            baseGoldPrice = parseFloat(document.getElementById('manual24KBuy').value) || window.MANDI_RATES.gold24kBuy;
-            savedGoldSell = parseFloat(document.getElementById('manual24KSell').value) || window.MANDI_RATES.gold24kSell;
-            baseSilverPrice = parseFloat(document.getElementById('manualSilverBuy').value) || window.MANDI_RATES.silverBuy;
-            savedSilverSell = parseFloat(document.getElementById('manualSilverSell').value) || window.MANDI_RATES.silverSell;
-            basePlatPrice = parseFloat(document.getElementById('manualPlatBuy').value) || window.MANDI_RATES.platinumBuy;
-            savedPlatSell = parseFloat(document.getElementById('manualPlatSell').value) || window.MANDI_RATES.platinumSell;
-            basePallPrice = parseFloat(document.getElementById('manualPallBuy').value) || window.MANDI_RATES.palladiumBuy;
-            savedPallSell = parseFloat(document.getElementById('manualPallSell').value) || window.MANDI_RATES.palladiumSell;
-            baseOilPrice = parseFloat(document.getElementById('manualOil').value) || window.MANDI_RATES.oilPriceUSD;
-            baseSilverIntPrice = parseFloat(document.getElementById('manualSilverInt').value) || window.MANDI_RATES.silverIntUSD;
+            baseGoldPrice = parseFloat(document.getElementById('manual24KBuy').value) || 440320;
+            savedGoldSell = parseFloat(document.getElementById('manual24KSell').value) || 442320;
+            localStorage.setItem('savedGoldBuy', baseGoldPrice);
+            localStorage.setItem('savedGoldSell', savedGoldSell);
+
+            baseSilverPrice = parseFloat(document.getElementById('manualSilverBuy').value) || 7255;
+            savedSilverSell = parseFloat(document.getElementById('manualSilverSell').value) || 7355;
+            localStorage.setItem('savedSilverBuy', baseSilverPrice);
+            localStorage.setItem('savedSilverSell', savedSilverSell);
+
+            basePlatPrice = parseFloat(document.getElementById('manualPlatBuy').value) || 171739;
+            savedPlatSell = parseFloat(document.getElementById('manualPlatSell').value) || 173239;
+            localStorage.setItem('savedPlatBuy', basePlatPrice);
+            localStorage.setItem('savedPlatSell', savedPlatSell);
+
+            basePallPrice = parseFloat(document.getElementById('manualPallBuy').value) || 130401;
+            savedPallSell = parseFloat(document.getElementById('manualPallSell').value) || 131901;
+            localStorage.setItem('savedPallBuy', basePallPrice);
+            localStorage.setItem('savedPallSell', savedPallSell);
+
+            baseOilPrice = parseFloat(document.getElementById('manualOil').value) || 77.39;
+            baseSilverIntPrice = parseFloat(document.getElementById('manualSilverInt').value) || 62.63;
+            localStorage.setItem('savedOilPrice', baseOilPrice);
+            localStorage.setItem('savedSilverIntPrice', baseSilverIntPrice);
 
             updateAllDisplays(baseGoldPrice, savedGoldSell, baseSilverPrice, savedSilverSell, basePlatPrice, savedPlatSell, basePallPrice, savedPallSell, baseOilPrice, baseSilverIntPrice);
-            alert("Raja Bhai, یہ عارضی ریٹس اس سیشن کے لیے رن ہو گئے ہیں! مستقل طور پر بدلنے کے لیے کوڈ کے اوپر 'WTI_RATES' میں اپڈیٹ کریں!");
+            alert("Raja Bhai, تمام ریٹس بشمول پٹرولیم و عالمی منڈی محفوظ کر دیے گئے ہیں!");
         }
 
         function updateAllDisplays(gBuy, gSell, sBuy, sSell, pBuy, pSell, pdBuy, pdSell, oilP, silIntP) {
